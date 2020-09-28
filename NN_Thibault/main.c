@@ -3,15 +3,15 @@
  *
  *       Filename:  main.c
  *
- *    Description:  
+ *    Description:  Main of the OCR projet
  *
  *        Version:  1.0
  *        Created:  27/09/2020 18:56:00
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  YOUR NAME (), 
- *   Organization:  
+ *         Author: Thibault Boutet, 
+ *   Organization: None
  *
  * =====================================================================================
  */

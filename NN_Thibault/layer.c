@@ -47,7 +47,7 @@ void calcActv(layer Layer, layer previousLayer)
 
 		for(int j = 0; j<previousLayer.nbNeu;j++) //the number of weights of a neuron is the number of neuron of the previous layer
 		{
-			sumWeights += neu.weights[j] * previousLayer.neu[j].activation;
+			sumWeights += neu.weights[i] * previousLayer.neu[j].activation;
 		}
 
 		Layer.neu[i].activation = sigmoid(sumWeights + neu.bias);

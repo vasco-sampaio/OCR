@@ -27,7 +27,7 @@ int main()
 
 {
 	srand(time(NULL));
-/*   
+/*     
 	   neuron neu = createNeuron(50);
 	printf("This neuron as %f activation %ld weights and %f bias \n",neu.activation,sizeof(neu.weights),neu.bias);
 
@@ -45,8 +45,8 @@ int main()
 	
 		printf("weights %i: %f\n",j,neu.weights[j]);
 	}
-*/	
-/*   neuralNetwork test = initNN(2,2,1);
+	
+   neuralNetwork test = initNN(2,2,1);
 	printLayer(test.hiddensTab);
 	test.inputsTab.neu[0].activation = 0;
 	test.inputsTab.neu[1].activation = 1;
@@ -56,8 +56,8 @@ int main()
 	printf("Output of the NN: ");
 	calcActv(test.outputTab,test.hiddensTab);
 	printLayer(test.outputTab);
-*/
 
+*/
 	neuralNetwork Xor = initNN(2,2,1);
 	train(Xor);
 	return 0;

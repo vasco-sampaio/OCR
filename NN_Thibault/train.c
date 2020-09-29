@@ -60,20 +60,22 @@ void train(neuralNetwork nn)
 {
 	int i  = 0;
 	float *inputs = calloc(2,sizeof(float));
-	while(i <= 1000)
+	while(i <= 100000)
 	{
-		int rd = (int) rand() % 3;
+		printf("Epoch n°%i \n ",i);
+		int rd = (int) rand() % 4;
 		inputs[0] = training_inputs[rd][0];
 		inputs[1] = training_inputs[rd][1];
 		float outputsExp = trainingOutputs[rd];
 		nn.inputsTab.neu[0].activation = inputs[0];
 		nn.inputsTab.neu[1].activation = inputs[1];
+		printLayer(nn.inputsTab);
 		calcActv(nn.hiddensTab, nn.inputsTab);
 		calcActv(nn.outputTab,nn.hiddensTab);
 
 		float *deltaO = deltaOutput(nn.outputTab,outputsExp);
 		float *deltaH = deltaHiddens(nn.hiddensTab,deltaO,nn.outputTab);
-		updateNeuron(nn.inputsTab,nn.outputTab,nn.hiddensTab,deltaH,deltaO,0.1,rd);
+		updateNeuron(nn.inputsTab,nn.outputTab,nn.hiddensTab,deltaH,deltaO,0.8,rd);
 		printf("Value expected: %f, got %f error: %f \n ",outputsExp,nn.outputTab.neu[0].activation,outputsExp-nn.outputTab.neu[0].activation);
 		i++;
 	}

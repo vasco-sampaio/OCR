@@ -16,19 +16,23 @@
  * =====================================================================================
  */
 #include <stdio.h>
+#include <time.h>
 #include "neuron.c"
 #include "layer.c"
 #include "nn.c"
 
 int main()
+
 {
-	neuron neu = createNeuron(50);
+	srand(time(NULL));
+/*   
+	   neuron neu = createNeuron(50);
 	printf("This neuron as %f activation %ld weights and %f bias \n",neu.activation,sizeof(neu.weights),neu.bias);
 
 	layer lay = createLayer(10);
 	printf("Successfully create a layer with %i neuron", lay.nbNeu);
 	
-	neuralNetwork nn = initNN(2,1,1);
+	neuralNetwork nn = initNN(700,200,36); //test for OCR network
 	initLayer(lay,2);
 	
 	for(int i = 0; i< lay.nbNeu;i++)
@@ -39,6 +43,16 @@ int main()
 	
 		printf("weights %i: %f\n",j,neu.weights[j]);
 	}
-	
+*/	
+	neuralNetwork test = initNN(2,2,1);
+	printLayer(test.hiddensTab);
+	test.inputsTab.neu[0].activation = 0;
+	test.inputsTab.neu[1].activation = 1;
+	printf("Calcul of activation:\n  ");
+	calcActv(test.hiddensTab,test.inputsTab);
+	printLayer(test.hiddensTab);
+	printf("Output of the NN: ");
+	calcActv(test.outputTab,test.hiddensTab);
+	printLayer(test.outputTab);
 	return 0;
 }

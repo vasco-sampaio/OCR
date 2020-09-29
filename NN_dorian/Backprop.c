@@ -39,4 +39,17 @@ double *backpropLayer(double *layer, double *nextWeights, double *nextLayerError
 }
 
 
-void applyBackprop(double *layer, double *delta, double *inputs, double *weights, double *biases, int layerSize, int inputSize)
+// Apply the changes of backpropagation to a layer, modifying weights and biases
+void applyBackprop(double *delta, double *inputs, double *weights, double *biases, int layerSize, int inputSize, double learningRate)
+{
+	for(int i = 0; i < layerSize; i++)
+	{
+		*(biases + i) += *(delta + i) * learningRate;
+
+		for(int j = 0; j < inputSize; j++)
+		{
+
+		*(weights + j + i * inputSize) = *(inputs + j) * *(delta + i) * learningRate;
+		}
+	}
+}

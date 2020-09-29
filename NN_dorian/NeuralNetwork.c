@@ -144,13 +144,16 @@ void train(int trainingSetSize, double *inputs, double *expectedOutputs)
 		for(int i = 0; i < trainingSetSize; ++i)
 		{
 			int index = *(indexes + i);	
-			
+		
+			double curInput = *(inputs + index * nbInputs);
+			double curOutput = *(expectedOutputs + index * nbOutputs);
+
 			// At first, compute the given entries
 			computeValue((inputs + index * trainingSetSize));
 
 
 			// Get the error of the output layer
-			double *deltaOutput = backpropOutput(outputLayerNodes, nbOutputs, (expectedOutputs + index));
+			double *deltaOutput = backpropOutput(outputLayerNodes, nbOutputs, &curOutput);
 
 			// Get the error of the hidden layer
 			double *deltaHidden = backpropLayer(hiddenLayerNodes, outputLayerWeights, deltaOutput, nbHiddens, nbOutputs);
@@ -159,7 +162,7 @@ void train(int trainingSetSize, double *inputs, double *expectedOutputs)
 			applyBackprop(deltaOutput, hiddenLayerNodes, outputLayerWeights, outputLayerBiases, nbOutputs, nbHiddens, learningRate);
 
 			// Apply the changes to the hidden laye
-			applyBackprop(deltaHidden, (inputs + index * trainingSetSize), hiddenLayerWeights, hiddenLayerBiases, nbHiddens, nbInputs, learningRate);
+			applyBackprop(deltaHidden, &curInput, hiddenLayerWeights, hiddenLayerBiases, nbHiddens, nbInputs, learningRate);
 
 			free(deltaOutput);
 			free(deltaHidden);

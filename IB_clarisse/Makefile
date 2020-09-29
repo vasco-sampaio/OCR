@@ -10,13 +10,15 @@ EXEC=main
 
 all: $(EXEC)
 
-main: pixel_functions.o grayscale.o main.o
+main: pixel_functions.o grayscale.o threshold.o main.o
 
 pixel_functions.o: pixel_functions.c pixel_functions.h
 
 grayscale.o: grayscale.c pixel_functions.h
 
-main.o: main.c pixel_functions.h grayscale.h
+threshold.o: threshold.c pixel_functions.h
+
+main.o: main.c pixel_functions.h grayscale.h threshold.h
 
 clean:
 	${RM} *.o

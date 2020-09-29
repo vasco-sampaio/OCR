@@ -2,6 +2,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "grayscale.h"
+#include "threshold.h"
 #include "pixel_functions.h"
 
 int main()
@@ -15,6 +16,10 @@ int main()
   image_surface = IMG_Load("test_image.jpg");
 
   toGrayscale(image_surface);
+
+  SDL_Surface *image_surface2 = IMG_Load("test.bmp");
+
+  binarize(image_surface2);
   
   return 0;
 }

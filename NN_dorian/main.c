@@ -19,6 +19,14 @@ int main()
 
 	train(trainingSetSize, inputs, outputs);
 
+	printNetwork();
+
+	computeValue((inputs));
+	printf("%f\n", *outputLayerNodes);
+	computeValue((inputs + 2));
+	printf("%f\n", *outputLayerNodes);
+	computeValue((inputs + 4));
+	printf("%f\n", *outputLayerNodes);
 	computeValue((inputs + 6));
-	printf("%f", *outputLayerNodes);
+	printf("%f\n", *outputLayerNodes);
 }

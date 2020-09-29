@@ -8,4 +8,7 @@ void train(int trainSetSize, double *inputs, double *outputs);
 
 double *outputLayerNodes;
 
+
+void printNetwork();
+
 # endif //__NEURALNETWORK_H__

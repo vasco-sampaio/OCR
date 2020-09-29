@@ -8,11 +8,11 @@ typedef struct neuralNetwork_t
 	int hiddens;
 	int outputs;
 
-	float *inputsTab; //array of inputs
-	layer hiddensTab; 
-	float *outputsTab; //array of outputs
+	layer inputsTab; //array of inputs
+	layer hiddensTab; //layer of hidden layer
+	layer outputTab; //layer of outputs
 }neuralNetwork;
 
-neuralNetwork initNN(int inputs, int hiddens, int outputs);
+neuralNetwork initNN(int inputs, int hiddens, int outputs); 
 
 #endif

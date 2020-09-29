@@ -19,6 +19,9 @@ int main()
 
 	train(trainingSetSize, inputs, outputs);
 
+	computeValue((inputs));
+	computeValue((inputs + 2));
+	computeValue((inputs + 4));
 	computeValue((inputs + 6));
 	printf("%f", *outputLayerNodes);
 }

@@ -26,13 +26,42 @@ double *hiddenLayerBiases, *outputLayerBiases;
 double *hiddenLayerWeights, *outputLayerWeights;
 
 // enable prints
-int ptr = 0;
+int ptr = 1;
 
+// Prints the weights and biases of the network
+void printNetwork()
+{
+// hidden Layer
+	for(int i = 0; i < nbHiddens; ++i)
+	{
+		printf("hidden Neuron %i:\n", i);
+		printf("bias : %f\n", *(hiddenLayerBiases + i));
+		
+		for(int j = 0; j < nbInputs; ++j) { printf("weight (%i,%i) : %f\n", i, j, *(hiddenLayerWeights + i * nbInputs + j)); }
+
+		printf("\n");
+	}
+
+	// output Layer
+	for(int i = 0; i < nbOutputs; ++i)
+	{
+		printf("output Neuron %i:\n", i);
+		printf("bias : %f\n", *(outputLayerBiases + i));
+		
+		for(int j = 0; j < nbHiddens; ++j) { printf("weight (%i,%i) : %f\n", i, j, *(outputLayerWeights + i * nbHiddens + j)); }
+
+		printf("OUTPUT VAL: %f\n", *(outputLayerNodes + i));
+
+		printf("\n");
+	}
+}
 
 //Inits the variables of the NN
 void initNeuralNetwork(int inputSize, int hiddenSize, int outputSize)
 {
+	// Set the rand() function's seed 
 	srand(time(NULL));
+
 	// Set the sizes of the layers
 	nbInputs = inputSize;
 	nbHiddens = hiddenSize;
@@ -52,32 +81,26 @@ void initNeuralNetwork(int inputSize, int hiddenSize, int outputSize)
 	// hidden Layer
 	for(int i = 0; i < nbHiddens; ++i)
 	{
-		printf("hidden Neuron %i:\n", i);
 		*(hiddenLayerBiases + i) = initWeight();
-		printf("bias : %f\n", *(hiddenLayerBiases + i));
 		
 		for(int j = 0; j < nbInputs; ++j)
 		{
 			*(hiddenLayerWeights + i * nbInputs + j) = initWeight();
-			printf("weight (%i,%i) : %f\n", i, j, *(hiddenLayerWeights + i * nbInputs + j));  
 		}
-		printf("\n");
 	}
 
 	// output Layer
 	for(int i = 0; i < nbOutputs; ++i)
 	{
-		printf("output Neuron %i:\n", i);
 		*(outputLayerBiases + i) = initWeight();
-		printf("bias : %f\n", *(outputLayerBiases + i));
 		
 		for(int j = 0; j < nbHiddens; ++j)
 		{
 			*(outputLayerWeights + i * nbHiddens + j) = initWeight();
-			printf("weight (%i,%i) : %f\n", i, j, *(outputLayerWeights + i * nbHiddens + j));  
 		}
-		printf("\n");
 	}
+
+	printNetwork();
 }
 
 // Compute layer's activations with given inputs
@@ -109,29 +132,25 @@ void computeValue(double *inputValues)
 
 	//Process the output layer 
 	processLayer(nbOutputs, nbHiddens, outputLayerWeights, outputLayerBiases, outputLayerNodes, hiddenLayerNodes);
+
 }
 
 void train(int trainingSetSize, double *inputs, double *expectedOutputs)
 {
 	for(int n = 0; n < epochs; n++)
 	{
-		if(n % 200 == 0 && ptr){printf("\ntraining stage at: %i\n",n);}
 		int *indexes = shuffledList(trainingSetSize);
 		
 		for(int i = 0; i < trainingSetSize; ++i)
 		{
 			int index = *(indexes + i);	
 			
-			
-			
-			computeValue((inputs + index));
-		if(n%200 == 0 && ptr)
-			{
-				printf("testing with:\n%f\n%f\nexpected: %f\ngot: %f\n", *(inputs + index * nbInputs), *(inputs + index * nbInputs + 1), *(expectedOutputs + index * nbOutputs), *(outputLayerNodes));
-			}
+			// At first, compute the given entries
+			computeValue((inputs + index * trainingSetSize));
+
 
 			// Get the error of the output layer
-			double *deltaOutput = backpropOutput(outputLayerNodes, nbOutputs, expectedOutputs);
+			double *deltaOutput = backpropOutput(outputLayerNodes, nbOutputs, (expectedOutputs + index));
 
 			// Get the error of the hidden layer
 			double *deltaHidden = backpropLayer(hiddenLayerNodes, outputLayerWeights, deltaOutput, nbHiddens, nbOutputs);
@@ -140,7 +159,7 @@ void train(int trainingSetSize, double *inputs, double *expectedOutputs)
 			applyBackprop(deltaOutput, hiddenLayerNodes, outputLayerWeights, outputLayerBiases, nbOutputs, nbHiddens, learningRate);
 
 			// Apply the changes to the hidden laye
-			applyBackprop(deltaHidden, (inputs + index), hiddenLayerWeights, hiddenLayerBiases, nbHiddens, nbInputs, learningRate);
+			applyBackprop(deltaHidden, (inputs + index * trainingSetSize), hiddenLayerWeights, hiddenLayerBiases, nbHiddens, nbInputs, learningRate);
 
 			free(deltaOutput);
 			free(deltaHidden);

@@ -5,9 +5,9 @@ CFLAGS = -Wall -Wextra -std=c99 -O2
 # grant access to the math.h lib
 LDLIBS = -lm 
 
-main: NeuralNetwork.o Utility.o main.o
+main: NeuralNetwork.o Utility.o main.o Backprop.o
 
 clean:
 	${RM} main
-	${RM} NeuralNetwork.o Utility.o main.o 
+	${RM} NeuralNetwork.o Utility.o main.o Backprop.o 
 # END

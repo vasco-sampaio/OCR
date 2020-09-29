@@ -7,11 +7,14 @@
 
 # include "Utility.h"
 # include "NeuralNetwork.h"
+# include "Backprop.h"
+
 # include <stdlib.h>
 # include <math.h>
 
 
 static const int epochs = 10000;
+static const double learningRate = 0.05;
 
 
 static int nbInputs, nbHiddens, nbOutputs;
@@ -83,7 +86,7 @@ void computeValue(double *inputValues)
 	processLayer(nbOutputs, nbHiddens, outputLayerWeights, outputLayerBiases, outputLayerNodes, hiddenLayerNodes);
 }
 
-void train(int trainingSetSize, double *inputs, double *outputs)
+void train(int trainingSetSize, double *inputs, double *expectedOutputs)
 {
 	for(int n = 0; n < epochs; n++)
 	{
@@ -94,6 +97,15 @@ void train(int trainingSetSize, double *inputs, double *outputs)
 			int index = *(indexes + i);	
 			
 			// TODO : backprop
+			computeValue((inputs + index));
+
+			// Get the error of the output layer
+			double *deltaOutput = backpropOutput(outputLayerNodes, nbOutputs, expectedOutputs);
+
+			// Get the error of the hidden layer
+			double *deltaHidden = backpropLayer(hiddenLayerNodes, outputLayerWeights, deltaOutput, nbHiddens, nbOutputs);
+
+			
 		}
 	}
 }

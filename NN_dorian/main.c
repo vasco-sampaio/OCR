@@ -1,10 +1,6 @@
-# include "NeuralNetwork.h"
-# include "Utility.h"
-# include "Backprop.h"
+# include "neuralNetwork.h"
 
-# include <stdlib.h>
 # include <stdio.h>
-# include <time.h>
 
 static const int trainingSetSize = 4;
 double training_inputs[8] = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
@@ -14,19 +10,20 @@ double *outputs = training_outputs;
 
 int main()
 {
-	srand(time(NULL));
-	initNeuralNetwork(2, 2, 1);
+	initNeuralNetwork(2,2,1);
 
-	train(trainingSetSize, inputs, outputs);
+	printNetwork();
+	
+	trainNetwork(trainingSetSize, training_inputs, training_outputs);
 
 	printNetwork();
 
-	computeValue((inputs));
-	printf("%f\n", *outputLayerNodes);
-	computeValue((inputs + 2));
-	printf("%f\n", *outputLayerNodes);
-	computeValue((inputs + 4));
-	printf("%f\n", *outputLayerNodes);
-	computeValue((inputs + 6));
-	printf("%f\n", *outputLayerNodes);
+	computeNetwork((inputs));
+	printf("Testing with:\n%f\n%f\ngot : %f\n",*(inputs), *(inputs + 1), *outputAct);
+	computeNetwork((inputs + 2));
+	printf("Testing with:\n%f\n%f\ngot : %f\n",*(inputs + 2), *(inputs + 3), *outputAct);
+	computeNetwork((inputs + 4));
+	printf("Testing with:\n%f\n%f\ngot : %f\n",*(inputs + 4), *(inputs + 5), *outputAct);
+	computeNetwork((inputs + 6));
+	printf("Testing with:\n%f\n%f\ngot : %f\n",*(inputs + 6), *(inputs + 7), *outputAct);
 }

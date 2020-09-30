@@ -7,7 +7,6 @@
 #include "pixel_functions.h"
 
 long *histo;
-//long *wcv; //to keep all the within class variances calculated (depending on the threshold)
 
 void histogram(SDL_Surface *image_surface)
 {
@@ -33,101 +32,63 @@ void histogram(SDL_Surface *image_surface)
     }
 }
 
-//function that finds the minimum of an array
-int minimumArray(long *tab, int len)
-{
-  int min = *tab;
-  int rank = 0;
-  for(int i = 0 ; i < len ; i++)
-    {
-      if(min > *(tab + i))
-	{
-	  min = *(tab + i);
-	  rank = i;
-	}
-    }
-  return rank;
-}
 
 //function that binarize, using Otsu method
 int threshold(SDL_Surface *image_surface)
 {
-  //allocating enough memory according to the possible nb of thresholds
-  long *wcv = calloc(256, sizeof(long));
-
+  //updating the histogram
   histogram(image_surface);
-  
+
   //taking the dimensions of the image
   int width = image_surface->w;
   int height = image_surface->h;
 
-  //initializing variables
+  //initializing some variables
+  long total_pixels = width * height;
 
-  int total_pixels = width * height;
-  
-  int sum_b = 0;
-  double w_b = 0; //weight
-  double m_b = 0; //mean
-  double v_b = 0; //variance
-  
-  int sum_f = 0;
-  double w_f = 0; //weight
-  double m_f = 0; //mean
-  double v_f = 0; //variance
+  int threshold = 0;
+  double maxt = 0;
 
-  //calculate the best threshold value
+  double w_b = 0; //weight background (white pixels)
+  double w_f = 0; //weight foreground (black pixels)
+
+  double m_b = 0; //mean background
+  double m_f = 0; //mean foreground
+  
+  double sum_b = 0;
+  double sum_f = 0;
+
+  double bcv = 0; //between class variance
+  long sum_pixel_gray = 0; //used to calculate the means
+  
   for(int t = 0 ; t < 256 ; t++)
     {
-      //for the background pixels (white ones)
-      for(int i = t ; i < 256 ; i++)
-	{
-	  sum_b += *(histo+i);
-	}
-
-      w_b = sum_b / total_pixels; //weight
-
-      for(int i = t ; i < 256 ; i++)
-	{
-	  m_b += i * *(histo + i);
-	}
-      m_b /= sum_b; //mean
-
-      for(int i = t ; i < 256 ; i++)
-	{
-	  v_b += (i - m_b)*(i - m_b) * *(histo + i);
-	}
-      v_b /= sum_b; //variance
-      
-
-      //for the foreground pixels
-      for(int i = 0 ; i < t ; i++)
-	{
-	  sum_f += *(histo + i);
-	}
-
-      w_f = 1 - w_b; //weight
-
-      for(int i = 0 ; i < t ; i++)
-	{
-	  m_f += i * *(histo + i);
-	}
-      m_f /= sum_f; //mean
-
-      for(int i = 0 ; i < t ; i++)
-	{
-	  v_f += (i - m_f)*(i - m_f) * *(histo + i);
-	}
-      v_f /= sum_f; //variance
-          
-      //calculating the Within Class Variance
-      *(wcv+t) = w_b * v_b + w_f * v_f;
-
-      ///////////////
-      printf("thresh %d = %ld\n", t, *(wcv+t));
-      //////////////
+      sum_pixel_gray += t * *(histo + t); //lvl_of_gray * nb_of_pixels_of_this_lvl
     }
 
-  return minimumArray(wcv, 256);
+  for(int t = 0 ; t < 256 ; t++)
+    {
+      //weights
+      w_b += *(histo+t); 
+      w_f = (total_pixels - w_b);
+
+      sum_b += t * *(histo+t); //used to calculate the means
+      sum_f = sum_pixel_gray - sum_b;
+
+      //means
+      m_b = sum_b / w_b;
+      m_f = sum_f / w_f;
+
+      //calculating the new between class variance
+      bcv = w_b * w_f * (m_b - m_f) * (m_b - m_f);
+
+      if(bcv > maxt) //getting the maximum 
+	{
+	  maxt = bcv;
+	  threshold = t;
+	}
+    }
+  return threshold;
 }
 
 int binarize(SDL_Surface *image_surface)

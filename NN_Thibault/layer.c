@@ -3,12 +3,17 @@
 
 float sigmoid(float x )
 {
-	return 1 / (1+exp(-x));
+	return 1 / (1+exp(-5*x));
 }
-
+/*   
 float dSigmoid(float x) //derivative of the sigmoid
 {
 	return (x * (1-x));
+}
+*/
+float dSigmoid(float x)
+{
+	return 5*sigmoid(x) * (1-sigmoid(x));
 }
 
 layer createLayer(int nbNeuron)

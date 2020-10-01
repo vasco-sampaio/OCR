@@ -60,5 +60,9 @@ int main()
 */
 	neuralNetwork Xor = initNN(2,2,1);
 	train(Xor);
+	testNetwork(Xor,0.0f,0.0f,0.0f);
+	testNetwork(Xor,0.0f,1.0f,1.0f);
+	testNetwork(Xor,1.0f,0.0f,1.0f);
+	testNetwork(Xor,1.0f,1.0f,0.0f);
 	return 0;
 }

@@ -33,7 +33,7 @@ void initLayer(layer eLayer,int nbNodePr) //nbNodePr = Number of node of the pre
 	{
 		//initalize bias and activation with random numbers between 0 and 1
 		eLayer.neu[i].activation = (float) rand()/RAND_MAX;
-		eLayer.neu[i].bias = (float) rand()/RAND_MAX;
+		eLayer.neu[i].bias = (float) rand()/RAND_MAX+0.1;
 		eLayer.neu[i].weights = calloc(nbNodePr,sizeof(float));
 
 		for(int j = 0;j < nbNodePr;j++)
@@ -66,6 +66,6 @@ void printLayer(layer lay)
 	for(int i = 0; i<lay.nbNeu;i++)
 	{
 		neuron neu = lay.neu[i];
-		printf("Neuron %i: Activation : %f \n ",i,neu.activation);
+// 		printf("Neuron %i: Activation : %f \n ",i,neu.activation);
 	}
 }

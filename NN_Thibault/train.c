@@ -15,6 +15,7 @@ float* deltaOutput(layer output, float expected)
 		float error = expected - output.neu[i].activation;
 		deltaO[i] = error * dSigmoid(output.neu[i].activation);
 	}
+
 	return deltaO;
 }
 
@@ -31,6 +32,7 @@ float* deltaHiddens(layer hidden, float* deltaO,layer output)
 		}
 		deltaH[i] = error * dSigmoid(hidden.neu[i].activation);
 	}
+
 	return deltaH;
 }
 
@@ -60,9 +62,10 @@ void train(neuralNetwork nn)
 {
 	int i  = 0;
 	float *inputs = calloc(2,sizeof(float));
-	while(i <= 100000)
+	float lr = 0.1; //learning rate
+	while(i <= 1000000)
 	{
-		printf("Epoch n°%i \n ",i);
+//		printf("Epoch n°%i \n ",i);
 		int rd = (int) rand() % 4;
 		inputs[0] = training_inputs[rd][0];
 		inputs[1] = training_inputs[rd][1];
@@ -72,11 +75,24 @@ void train(neuralNetwork nn)
 		printLayer(nn.inputsTab);
 		calcActv(nn.hiddensTab, nn.inputsTab);
 		calcActv(nn.outputTab,nn.hiddensTab);
-
+		
+	
+// 		printf("LR: %f\n",lr);
 		float *deltaO = deltaOutput(nn.outputTab,outputsExp);
 		float *deltaH = deltaHiddens(nn.hiddensTab,deltaO,nn.outputTab);
-		updateNeuron(nn.inputsTab,nn.outputTab,nn.hiddensTab,deltaH,deltaO,0.8,rd);
-		printf("Value expected: %f, got %f error: %f \n ",outputsExp,nn.outputTab.neu[0].activation,outputsExp-nn.outputTab.neu[0].activation);
+		updateNeuron(nn.inputsTab,nn.outputTab,nn.hiddensTab,deltaH,deltaO,lr,rd);
+//		printf("Value expected: %f, got %f error: %f \n ",outputsExp,nn.outputTab.neu[0].activation,fabs(outputsExp-nn.outputTab.neu[0].activation));
 		i++;
 	}
+}
+  
+void testNetwork(neuralNetwork nn,float x, float y,float expected)
+{
+
+	nn.inputsTab.neu[0].activation = x;
+	nn.inputsTab.neu[1].activation = y;
+	calcActv(nn.hiddensTab,nn.inputsTab);
+	calcActv(nn.outputTab,nn.hiddensTab);
+	printf("Test with (%f ; %f) got %f, but expect %f \n",x,y,nn.outputTab.neu[0].activation,expected);
+
 }

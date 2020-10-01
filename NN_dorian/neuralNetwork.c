@@ -117,6 +117,7 @@ void trainNetwork(int setSize, double *trainingInputs, double *trainingOutputs)
 			double *deltaHidden = hiddenLayerError(hiddenAct, deltaOutput, hiddenWeights, nbHiddenNodes, nbOutputNodes);
 
 			// 5) Update the weights of the hidden layer
+			//updateLayer(hiddenAct, outputWeights, outputBiases, deltaOutput, nbOutputNodes, nbHiddenNodes, lr);
 			updateLayer(setInput, hiddenWeights, hiddenBiases, deltaHidden, nbHiddenNodes, nbInputNodes, lr);
 
 

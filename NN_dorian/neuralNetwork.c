@@ -8,7 +8,7 @@
 
 
 
-static const int epochs = 10000;	// cycles of training
+static const int epochs = 1000000;	// cycles of training
 static const double lr = 0.1;		// learning rate
 
 
@@ -89,11 +89,13 @@ void computeNetwork(double *inputs)
 
 void trainNetwork(int setSize, double *trainingInputs, double *trainingOutputs)
 {
+
 	// Cycle trough the epochs
 	for(int e = 0; e < epochs; e++)
 	{
 		int *indexes = shuffledList(setSize);
-		
+
+
 		for(int i = 0; i < setSize; i++)
 		{
 			int index = *(indexes + i);
@@ -112,7 +114,7 @@ void trainNetwork(int setSize, double *trainingInputs, double *trainingOutputs)
 
 			// 3) Update the weights of the output layer
 			updateLayer(hiddenAct, outputWeights, outputBiases, deltaOutput, nbOutputNodes, nbHiddenNodes, lr);
-			
+
 			// 4) Compute the error in the hidden layer
 			double *deltaHidden = hiddenLayerError(hiddenAct, deltaOutput, hiddenWeights, nbHiddenNodes, nbOutputNodes);
 
@@ -121,9 +123,13 @@ void trainNetwork(int setSize, double *trainingInputs, double *trainingOutputs)
 			updateLayer(setInput, hiddenWeights, hiddenBiases, deltaHidden, nbHiddenNodes, nbInputNodes, lr);
 
 
+
+
 			free(deltaOutput);
 			free(deltaHidden);
 		}
+
+
 
 	}
 }
@@ -135,7 +141,7 @@ void printNetwork()
 	for(int i = 0; i < nbHiddenNodes; i++)
 	{
 		printf("hidden Neuron %i\nbias : %f\n", i, *(hiddenBiases + i));
-		
+
 		for(int j = 0; j < nbInputNodes; j++)
 		{
 			printf("weight (%i,%i) : %f\n", j, i, *(hiddenWeights + j + i * nbInputNodes));

@@ -17,18 +17,18 @@
  */
 #include <stdio.h>
 #include <time.h>
-#include "neuron.c"
-#include "layer.c"
-#include "nn.c"
-#include "train.c"
+#include "neuron.h"
+#include "layer.h"
+#include "nn.h"
+#include "train.h"
 
 
 int main()
 
 {
 	srand(time(NULL));
-/*     
-	   neuron neu = createNeuron(50);
+     
+/*  	   neuron neu = createNeuron(50);
 	printf("This neuron as %f activation %ld weights and %f bias \n",neu.activation,sizeof(neu.weights),neu.bias);
 
 	layer lay = createLayer(10);
@@ -58,11 +58,13 @@ int main()
 	printLayer(test.outputTab);
 
 */
+	  
 	neuralNetwork Xor = initNN(2,2,1);
 	train(Xor);
 	testNetwork(Xor,0.0f,0.0f,0.0f);
 	testNetwork(Xor,0.0f,1.0f,1.0f);
 	testNetwork(Xor,1.0f,0.0f,1.0f);
 	testNetwork(Xor,1.0f,1.0f,0.0f);
+	 
 	return 0;
 }

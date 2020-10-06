@@ -43,7 +43,7 @@ void initNeuralNetwork(int inputSize, int hiddenLayerSize, int outputSize)
 		*(outputBiases + i) = initWeight();
 		for(int j = 0; j < nbHiddenNodes; j++)
 		{
-			*(outputWeights + i * nbHiddenNodes + j) = initWeight();
+			*(outputWeights + i * nbHiddenNodes + j) = initWeight() + j + i;
 		}
 	}
 

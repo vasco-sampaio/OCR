@@ -9,7 +9,7 @@ double dSigmoid(double x) { return x * (1.0 - x) * 5.0;}
 //double dSigmoid(double x) { return sigmoid(x) * (1 - sigmoid(x)) *5; }
 
 // Return a random value in [0,1]
-double initWeight() { return (double) rand() / (double) RAND_MAX; }
+double initWeight() { return (double) rand() / (double) RAND_MAX * 0.1; }
 
 // Swap 2 pointer's values
 void swap(int *a, int *b)

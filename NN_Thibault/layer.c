@@ -66,6 +66,6 @@ void printLayer(layer lay)
 	for(int i = 0; i<lay.nbNeu;i++)
 	{
 		neuron neu = lay.neu[i];
-// 		printf("Neuron %i: Activation : %f \n ",i,neu.activation);
+ 		printf("Neuron %i: Activation : %f \n ",i,neu.activation);
 	}
 }

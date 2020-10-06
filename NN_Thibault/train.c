@@ -72,11 +72,10 @@ void train(neuralNetwork nn)
 		float outputsExp = trainingOutputs[rd];
 		nn.inputsTab.neu[0].activation = inputs[0];
 		nn.inputsTab.neu[1].activation = inputs[1];
-		printLayer(nn.inputsTab);
+		//printLayer(nn.inputsTab);
 		calcActv(nn.hiddensTab, nn.inputsTab);
 		calcActv(nn.outputTab,nn.hiddensTab);
-		
-	
+			
 // 		printf("LR: %f\n",lr);
 		float *deltaO = deltaOutput(nn.outputTab,outputsExp);
 		float *deltaH = deltaHiddens(nn.hiddensTab,deltaO,nn.outputTab);

@@ -1,5 +1,4 @@
 # include "matrix.h"
-
 # include <stdlib.h>
 # include <stdio.h>
 # include <err.h>
@@ -15,10 +14,30 @@ matrix_t createMatrix(int width, int height)
 	res.width = width;
 	res.height = height;
 	res.data = calloc(width * height, sizeof(double));
-
+	
 	return res;
 }
 
+//initialise the matrix with random values
+void initValues(matrix_t m)
+{
+	for(int i = 0; i<m.width;i++)
+	{
+		for(int j = 0; j <m.height;j++)
+		{
+			double rd = ((double)rand())/((double)RAND_MAX);
+			setMatrixVal(m,i,j,rd);
+		}
+	}
+}
+
+//do the complete initialisation process
+matrix_t initMatrix(int width, int height)
+{
+	matrix_t res = createMatrix(width,height);
+	initValues(res);
+	return res;
+}
 
 // Set the value stored in m at point (i,j) to value
 void setMatrixVal(matrix_t m, int i, int j, double value)

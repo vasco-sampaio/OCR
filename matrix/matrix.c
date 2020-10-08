@@ -1,92 +1,66 @@
-# include "matrix.h"
+#include "matrix.h"
+# include <math.h>
 # include <stdlib.h>
-# include <stdio.h>
+# include <time.h>
 # include <err.h>
 
 
-
-
-// Initialize a matrix
-matrix_t createMatrix(int width, int height)
+// Return a random value in 0-1
+double uniform()
 {
-	printf("Creting matrix of size %i, %i\n", width, height);
+	srand(time(NULL));
+	return (double) rand() / (double) RAND_MAX;
+}
+
+// Return a matrix of asked size
+matrix_t initMatrix(int rows, int cols)
+{
 	matrix_t res;
-	res.width = width;
-	res.height = height;
-	res.data = calloc(width * height, sizeof(double));
-	
+	res.cols = cols;
+	res.rows = rows;
+	res.data = calloc(rows * cols, sizeof(double));
 	return res;
 }
 
-//initialise the matrix with random values
-void initValues(matrix_t m)
+
+// Return a matrix with randomly initialized values
+matrix_t initRandMatrix(int rows, int cols)
 {
-	for(int i = 0; i<m.width;i++)
+	matrix_t res = initMatrix(rows, cols);
+
+	for(int i = 0; i < rows; i++)
 	{
-		for(int j = 0; j <m.height;j++)
+		for(int j = 0; j < cols; j++)
 		{
-			double rd = ((double)rand())/((double)RAND_MAX);
-			setMatrixVal(m,i,j,rd);
-		}
-	}
-}
-
-//do the complete initialisation process
-matrix_t initMatrix(int width, int height)
-{
-	matrix_t res = createMatrix(width,height);
-	initValues(res);
-	return res;
-}
-
-// Set the value stored in m at point (i,j) to value
-void setMatrixVal(matrix_t m, int i, int j, double value)
-{
-	m.data[i * m.width + j] = value;
-}
-
-
-// Return the value stored in matrix m at point (i,j)
-double getMatrixVal(matrix_t m, int i, int j)
-{
-	return m.data[i * m.width + j];
-}
-
-
-// Return the product of matrices a and b
-matrix_t matrixProduct(matrix_t a, matrix_t b)
-{
-	if (a.width != b.height)
-	{
-		errx(1, "Can't multiply those matrices, invalid dimensions");
-	}
-
-	matrix_t res = createMatrix(b.width, a.height);
-	double val;
-	for(int i = 0; i < a.height; i++)
-	{
-		for(int j = 0; j < b.width; j++)
-		{
-			val = 0;
-			for(int k = 0; k < a.width; k++)
-			{
-				val += getMatrixVal(a, k, i) * getMatrixVal(b, j, k);
-			}
-			setMatrixVal(res, j, i, val);
+			res.data[i * cols + j] = uniform();
 		}
 	}
 
 	return res;
 }
 
-void printMatrix(matrix_t a)
+
+// Get the value of matrix at coordinates
+double getMatVal(matrix_t m, int row, int col)
 {
-	for(int i = 0; i < a.height; i++)
+	/* 
+	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
 	{
-		for(int j = 0; j < a.width; j++)
-		{
-			printf("%f | ", getMatrixVal(a, j, i));
-		}
-		printf("\n");
-	}
+		errx(1,"getMatVal: can't access coordinates (%i,%i), max is (%i,%i)", row, col, m.rows, m.cols);
+	}*/
+ 
+	return m.data[row * m.cols + col];
 }
+
+// Set the value of coordinates row col of matrix at value
+void setMatVal(matrix_t m, int row, int col, double val)
+{
+	/* 
+	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
+	{
+		errx(1,"setMatVal: can't access coordinates (%i,%i), max is (%i,%i)", row, col, m.rows, m.cols);
+	}
+*/ 
+	m.data[row * m.cols + col] = val;
+}
+

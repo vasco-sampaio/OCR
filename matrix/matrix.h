@@ -1,21 +1,21 @@
 # ifndef _MATRIX_H_
 # define _MATRIX_H_
 
-typedef struct 
+double uniform();
+
+
+// Matrix type definition
+typedef struct
 {
-int width;
-int height;
+int cols, rows;
 double *data;
 } matrix_t;
 
 
-matrix_t createMatrix(int width, int height);
-void initValues(matrix_t m);
-matrix_t initMatrix(int width, int heights);
-double getMatrixVal(matrix_t m, int w, int h);
-void setMatrixVal(matrix_t m, int w, int h, double value);
-matrix_t matrixProduct(matrix_t a, matrix_t b);
+matrix_t initMatrix(int rows, int cols);
+matrix_t initRandMatrix(int rows, int cols);
 
-void printMatrix(matrix_t m);
+void setMatVal(matrix_t m, int row, int col, double value);;
+double getMatVal(matrix_t m, int row, int col);
 
-# endif //_MATRIX_H_
+# endif

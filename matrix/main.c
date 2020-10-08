@@ -10,10 +10,7 @@ int main()
 	srand(time(NULL));
 	neuralNetwork test = initNN(2,2,1);
 
-	for(int i = 0;i<test.numHiddens;i++)
-	{
-		printf("Bias: %lf \n",getMatrixVal(test.hiddenLayerBias,i,0));
-	}
+	printf("BIAS = %lf",getMatVal(test.outputLayerBias,0,0));
 
 	return 0;
 }

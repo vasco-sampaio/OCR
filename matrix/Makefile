@@ -6,7 +6,7 @@ LDLIBS = -lm
 
 LDFLAGS = -g
 
-main: nn.o matrix.o main.o 
+main: nn.o matrix.o main.o train.o
 
 clean:
 	${RM} main

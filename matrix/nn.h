@@ -26,4 +26,9 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs);
 double simgoid(double x);
 double dSigmoid(double x);
 
+//calculate activation for hidden layer
+void actvHidden(neuralNetwork nn,int x);
+//calculate acitvation for output layer
+void actvOutput(neuralNetwork nn);
+
 #endif

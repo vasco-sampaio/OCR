@@ -88,6 +88,7 @@ int threshold(SDL_Surface *image_surface)
 	  threshold = t;
 	}
     }
+  free(histo);
   return threshold;
 }
 

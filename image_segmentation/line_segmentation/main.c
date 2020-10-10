@@ -22,13 +22,13 @@ int main()
   histo = calloc(height, sizeof(long));
 
   vertHistogram(image_surface, histo);
-  //moving_average(height, histo, 5);
+  moving_average(height, histo, 15);
+  int a = average_black_pixels(height, histo);
 
-  size_t nbLines = line_seg_count(histo, height);
-  //printf("nbLines = %ld\n", nbLines);
+  size_t nbLines = line_seg_count(histo, height, a);
   lines = calloc(nbLines, sizeof(size_t));
   
-  line_seg(histo, height, lines);
+  line_seg(histo, height, lines, a);
 
   line_seg_drawing(image_surface, lines, nbLines);
 

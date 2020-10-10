@@ -77,6 +77,16 @@ void vertHistogram(SDL_Surface *image_surface, long *histo)
 }
 
 
+int average_black_pixels(int len, long *histo)
+{
+  int a = 0;
+  for(int i = 0 ; i < len ; i++)
+    {
+      a += *(histo + i);
+    }
+  return a / len;
+}
+
 //function that smoothes the projection profile histogram
 void moving_average(int len, long *histo, int window)
 {
@@ -111,7 +121,7 @@ void moving_average(int len, long *histo, int window)
 Function that counts the number of valleys in the histogram.
 Each valley correspond to the place of a potential line.
 */
-size_t line_seg_count(long *histo, int lenH)
+size_t line_seg_count(long *histo, int lenH, int a)
 { 
   int isGoingUp = 1; //false, 0 is true
   
@@ -123,7 +133,8 @@ size_t line_seg_count(long *histo, int lenH)
       if (before < *(histo+i) && isGoingUp == 1)
 	{
 	  isGoingUp = 0;
-	  nbLines++;
+	  if(*(histo + i) < a)
+	    nbLines++;
 	}
       else if (before >= *(histo+i) && isGoingUp == 0)
 	{
@@ -140,7 +151,7 @@ size_t line_seg_count(long *histo, int lenH)
 Function that gives the height of the pixels that can be used
 to separate lines of the text.
 */
-void line_seg(long *histo, int lenH, int *lines)
+void line_seg(long *histo, int lenH, int *lines, int a)
 { 
   int isGoingUp = 1; //false, 0 is true
   
@@ -152,8 +163,12 @@ void line_seg(long *histo, int lenH, int *lines)
       if (before < *(histo+i) && isGoingUp == 1)
 	{
 	  isGoingUp = 0;
-	  *(lines + rankLines) = i;
-	  rankLines++;
+	  if(*(histo + i) < a)
+	    {
+	      *(lines + rankLines) = i;
+	      rankLines++;
+	    }
+	     
 	}
       else if (before >= *(histo+i) && isGoingUp == 0)
 	isGoingUp = 1;

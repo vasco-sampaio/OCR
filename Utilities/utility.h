@@ -27,6 +27,8 @@ matrix_t matMul(matrix_t a, matrix_t b);
 matrix_t matTrans(matrix_t m);
 matrix_t matFunc(matrix_t m, double(*fct)(double));
 
+double matSum(matrix_t m);
+
 void printMatrix(matrix_t m);
 void freeMatrix(matrix_t m);
 

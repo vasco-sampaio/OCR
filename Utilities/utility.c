@@ -224,6 +224,21 @@ matrix_t matFunc(matrix_t m, double(*fct)(double))
 }
 
 
+// Return the sum of the matrice
+double matSum(matrix_t m)
+{
+	double res = 0;
+	for(int i = 0; i < m.rows; i++)
+	{
+		for(int j = 0; j < m.cols; j++)
+		{
+			res += getMatVal(m, i, j);
+		}
+	}
+	return res;
+}
+
+
 // Print the given matrix
 void printMatrix(matrix_t m)
 {

@@ -1,5 +1,6 @@
 #include <math.h>
 #include "nn.h"
+#include <stdio.h>
 
 //trainongSet
 double training_input[4][2] = { {0.0f,0.0f},{1.0f,0.0f},{0.0f,1.0f},{1.0f,1.0f}};
@@ -20,8 +21,8 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs)
 	res.hiddenLayerBias = initRandMatrix(1,hiddens);
 	res.outputLayerBias = initRandMatrix(1,outputs);
 
-	res.hiddenWeights = initRandMatrix(inputs,hiddens);
-	res.outputWeights = initRandMatrix(hiddens,outputs);
+	res.hiddenWeights = initRandMatrix(inputs,hiddens); //2*2 matrix
+	res.outputWeights = initRandMatrix(hiddens,outputs);//2*1 matrix
 	
 
 	return res;
@@ -57,12 +58,11 @@ void actvOutput(neuralNetwork nn)
 {
 	for(int i = 0;i < nn.numOutputs;i++)
 	{
-		double res = getMatVal(nn.outputLayerBias,0,i);
+		double res = getMatVal(nn.outputLayerBias,0,i);	
 		for(int j = 0;j < nn.numHiddens;j++)
 		{
 			res += getMatVal(nn.hiddenLayer,0,j) * getMatVal(nn.outputWeights,j,i);
 		}
 		setMatVal(nn.outputLayer,0,i,sigmoid(res));
 	}
-
 }

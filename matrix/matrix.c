@@ -3,7 +3,7 @@
 # include <stdlib.h>
 # include <time.h>
 # include <err.h>
-
+#include <stdio.h>
 
 // Return a random value in 0-1
 double uniform()
@@ -62,5 +62,18 @@ void setMatVal(matrix_t m, int row, int col, double val)
 	}
 */ 
 	m.data[row * m.cols + col] = val;
+}
+// Print the given matrix
+void printMatrix(matrix_t m)
+{
+	for(int i = 0; i < m.rows; i++)
+	{
+		for(int j = 0; j < m.cols; j++)
+		{
+			printf("%f ", getMatVal(m, i, j));
+		}
+		printf("\n");
+	}
+	printf("\n");
 }
 

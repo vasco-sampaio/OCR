@@ -76,7 +76,8 @@ void vertHistogram(SDL_Surface *image_surface, long *histo)
     }  
 }
 
-
+//This function calculates the average number of black pixels
+//in the histogram.
 int average_black_pixels(int len, long *histo)
 {
   int a = 0;

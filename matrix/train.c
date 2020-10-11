@@ -84,17 +84,17 @@ int *shuffledList(int size)
 
 void train(neuralNetwork nn)
 {
-	int gen = 50000;
+	int gen = 10000;
 	int nb = 0;
 	double lr = 1;
 	while(nb < gen)
 	{
 		int *order = shuffledList(4);
 		
-		for(int x = 0; x<5;x++)
+		for(int x = 0; x<4;x++)
 		{
 			int y = order[x];
-			actvHidden(nn,y);
+			/*actvHidden(nn,y);
 			actvOutput(nn);
 			double deltaOutput[1] = {1};
 			for(int i = 0; i< nn.numOutputs;i++)
@@ -136,15 +136,15 @@ void train(neuralNetwork nn)
 					double hiddenWeight = getMatVal(nn.hiddenWeights,j,i);
 					setMatVal(nn.hiddenWeights,j,i,hiddenWeight + (training_inputs[y][j] * deltaHiddens[i] * lr));
 				}
-			}
-			/*  
-			int i = order[x];
-			actvHidden(nn,i);
-			actvOutput(nn);*/
+			}*/
+			  
+			//int i = order[x];
+			actvHidden(nn,y);
+			actvOutput(nn);
 			printf("Test with: %f and %f got %f but expect %f \n",training_inputs[y][0],training_inputs[y][1],getMatVal(nn.outputLayer,0,0),training_outputs[y][0]);
-			/*  double *deltaO = deltaOut(nn,i);
+			 double *deltaO = deltaOut(nn,y);
 			double *deltaH = deltaHiddens(nn,deltaO);
-			applyChanges(nn,deltaO,deltaH,lr,i);*/
+			applyChanges(nn,deltaO,deltaH,lr,y);
 		}
 		nb++;
 	}

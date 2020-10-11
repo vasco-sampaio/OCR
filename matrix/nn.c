@@ -15,14 +15,15 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs)
 	res.numHiddens = hiddens;
 	res.numOutputs = outputs;
 
-	res.hiddenLayer = initRandMatrix(1,hiddens);
-	res.outputLayer = initRandMatrix(1,outputs);
+	res.hiddenLayer = initMatrix(1,hiddens);
+	res.outputLayer = initMatrix(1,outputs);
 
 	res.hiddenLayerBias = initRandMatrix(1,hiddens);
 	res.outputLayerBias = initRandMatrix(1,outputs);
 
 	res.hiddenWeights = initRandMatrix(inputs,hiddens); //2*2 matrix
 	res.outputWeights = initRandMatrix(hiddens,outputs);//2*1 matrix
+	printMatrix(res.hiddenWeights);
 	
 
 	return res;

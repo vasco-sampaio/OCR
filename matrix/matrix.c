@@ -8,7 +8,6 @@
 // Return a random value in 0-1
 double uniform()
 {
-	srand(time(NULL));
 	return (double) rand() / (double) RAND_MAX;
 }
 

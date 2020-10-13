@@ -6,9 +6,9 @@ LDLIBS = -lm
 
 LDFLAGS = -g
 
-main: nn.o matrix.o main.o train.o utility.o
+main: nn.o matrix.o main.o train.o utility.o neuralIO.o
 
 clean:
 	${RM} main
-	${RM} main.o nn.o matrix.o train.o utility.o
+	${RM} main.o nn.o matrix.o train.o utility.o neuralIO.o
 # END

@@ -1,8 +1,10 @@
-#include <stdio.h>
 #include "nn.h"
+#include "train.h"
+#include "neuralIO.h"
+
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "train.h"
 //debug part
 
 double traininginputs[8] = { 0.0f,0.0f,1.0f,0.0f,0.0f,1.0f,1.0f,1.0f };
@@ -18,5 +20,6 @@ int main()
 	neuralNetwork xor = initNN(2,2,1);
 	train(xor, trIn, trOut, 4, 10000, 1);
 	test(xor,trIn,trOut);
+	writeNeuralNet("test.nn", xor);
 	return 0;
 }

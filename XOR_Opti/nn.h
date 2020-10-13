@@ -4,6 +4,7 @@
 
 typedef struct neuralNetwork_t
 {
+	//neuralNetwork parameters
 	int numInputs;
 	int numHiddens;
 	int numOutputs;

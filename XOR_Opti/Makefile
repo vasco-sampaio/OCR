@@ -1,6 +1,6 @@
 CC = gcc
 # asked options
-CFLAGS = -Wall -Wextra -std=c99 -O2 -g
+CFLAGS = -Wall -Wextra -Werror -pedantic-errors -std=c99 -O2 -g
 # grant access to the math.h lib
 LDLIBS = -lm
 

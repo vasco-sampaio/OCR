@@ -6,5 +6,5 @@
 
 double* deltaOut(neuralNetwork, double *expOutput);
 void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, int epochs, double lr);
-
+void test(neuralNetwork nn,double *inputs,double *output);
 #endif

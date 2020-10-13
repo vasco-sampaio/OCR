@@ -15,8 +15,8 @@ double *trOut = trainingoutputs;
 int main()
 {
 	srand(time(NULL));
-	neuralNetwork test = initNN(2,2,1);
-	printf("Bias: %f \n",getMatVal(test.hiddenWeights,0,1));
-	train(test, trIn, trOut, 4, 10000, 1);
+	neuralNetwork xor = initNN(2,2,1);
+	train(xor, trIn, trOut, 4, 10000, 1);
+	test(xor,trIn,trOut);
 	return 0;
 }

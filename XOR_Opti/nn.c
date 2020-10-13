@@ -1,11 +1,7 @@
 # include "utility.h"
 # include "nn.h"
-
 # include <math.h>
 # include <stdio.h>
-
-
-
 
 
 //initialise a neural network
@@ -25,8 +21,7 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs)
 
 	res.hiddenWeights = initRandMatrix(inputs,hiddens); //2*2 matrix
 	res.outputWeights = initRandMatrix(hiddens,outputs);//2*1 matrix
-	printMatrix(res.hiddenWeights);
-	
+
 
 	return res;
 }

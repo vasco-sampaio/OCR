@@ -1,6 +1,5 @@
 # include "train.h"
 # include "utility.h"
-
 # include <stdio.h>
 
 
@@ -99,7 +98,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 			actvOutput(nn);
 
 			// Some printing YUP
-			printf("Test with: %f and %f got %f but expect %f \n", curInputs[0], curInputs[1], getMatVal(nn.outputLayer,0,0),curOutputs[0]);
+		//	printf("Test with: %f and %f got %f but expect %f \n", curInputs[0], curInputs[1], getMatVal(nn.outputLayer,0,0),curOutputs[0]);
 
 			// Calculate the error of the actual input
 			double *deltaO = deltaOut(nn, curOutputs);
@@ -109,5 +108,18 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 			applyChanges(nn, deltaO, deltaH, lr, curInputs);
 		}
 		nb++;
+	}
+}
+
+void test(neuralNetwork nn,double *inputs,double *output)
+{
+	printf("XOR neural network: \n");
+	for(int x = 0;x < 4;x++)
+	{
+		double *curInputs = inputs + x * nn.numInputs;
+		double *curOutput = output + x * nn.numOutputs;
+		actvHidden(nn, curInputs);
+		actvOutput(nn);
+		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMatVal(nn.outputLayer,0,0),curOutput[x]);
 	}
 }

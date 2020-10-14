@@ -20,7 +20,10 @@ int main()
 	train(xor, trIn, trOut, 4, 50000, 1);
 	//test the network for the 4possibiblite:s
 	test(xor,trIn,trOut);
-	writeNeuralNet("test.nn", xor);
-	neuralNetwork X = loadNeuralNetwork("test.nn");
+
+
+	neuralNetToFile(xor, "test.json");
+
+
 	return 0;
 }

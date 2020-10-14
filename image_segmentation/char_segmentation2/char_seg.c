@@ -98,7 +98,7 @@ void moving_average(int len, long *histo, int window)
 Function that counts the number of valleys in the histogram.
 Each valley correspond to the place of a potential char.
 */
-size_t char_seg_count(long *histo, int lenH, int a)
+size_t char_seg_count(long *histo, int lenH)
 { 
   int isGoingUp = 1; //false, 0 is true
   
@@ -111,7 +111,7 @@ size_t char_seg_count(long *histo, int lenH, int a)
 	//verifying if it is going up now, while it was going down before
 	{
 	  isGoingUp = 0;
-	  if(*(histo + i) < a)
+	  if(*(histo + i) == 0)
 	    nbChars++;
 	}
       else if (before >= *(histo+i) && isGoingUp == 0) //verifying if it's continuing to go up
@@ -129,7 +129,7 @@ size_t char_seg_count(long *histo, int lenH, int a)
 Function that gives the position (width) of the pixels that can be used
 to separate the chars of the word.
 */
-void char_seg(long *histo, int lenH, int *chars, int a)
+void char_seg(long *histo, int lenH, int *chars)
 { 
   int isGoingUp = 1; //false, 0 is true
   
@@ -141,7 +141,7 @@ void char_seg(long *histo, int lenH, int *chars, int a)
       if (before < *(histo+i) && isGoingUp == 1)
 	{
 	  isGoingUp = 0;
-	  if(*(histo + i) < a)
+	  if(*(histo + i) == 0)
 	    {
 	      *(chars + rankChars) = i;
 	      rankChars++;

@@ -2,7 +2,6 @@
 #define LINE_SEG_H_
 
 int isBlack(SDL_Surface *image_surface, Uint32 pixel);
-void horiHistogram(SDL_Surface *image_surface, long *histo);
 void vertHistogram(SDL_Surface *image_surface, long *histo);
 int average_black_pixels(int len, long *histo);
 void moving_average(int len, long *histo, int window);

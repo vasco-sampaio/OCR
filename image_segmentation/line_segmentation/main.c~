@@ -13,7 +13,7 @@ int main()
     errx(1,"Could not initialize SDL: %s.\n", SDL_GetError());
   
   SDL_Surface *image_surface;
-  image_surface = IMG_Load("binarize3.bmp");
+  image_surface = IMG_Load("binarize.bmp");
   int height = image_surface->h;
 
   long *histo;

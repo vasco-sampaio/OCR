@@ -22,13 +22,13 @@ int main()
   histo = calloc(width, sizeof(long));
 
   horiHistogram(image_surface, histo);
-  moving_average(width, histo, 15);
-  int a = average_black_pixels(width, histo);
+  //moving_average(width, histo, 15);
+  //int a = average_black_pixels(width, histo);
 
-  size_t nbChars = char_seg_count(histo, width, a);
+  size_t nbChars = char_seg_count(histo, width);
   chars = calloc(nbChars, sizeof(size_t));
 
-  char_seg(histo, width, chars, a);
+  char_seg(histo, width, chars);
 
   char_seg_drawing(image_surface, chars, nbChars);
 

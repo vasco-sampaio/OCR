@@ -26,32 +26,6 @@ int isBlack(SDL_Surface *image_surface, Uint32 pixel)
 
 
 /*
-Function that builds the horizontal histogram of a binarized image.
-
-The array is of the size of the number of columns in
-the image (width).
-
-This histogram will count the nb of black pixels in each column.
-*/
-void horiHistogram(SDL_Surface *image_surface, long *histo)
-{
-  //taking the dimensions of the image
-  int width = image_surface->w;
-  int height = image_surface->h;
-
-  for(int i = 0 ; i < height ; i++)
-    {
-      for(int j = 0 ; j < width ; j++)
-	{
-	  Uint32 pixel = get_pixel(image_surface, j, i);
-	  if (isBlack(image_surface, pixel) == 0)
-	    *(histo + j) +=1;
-	}
-    }  
-}
-
-
-/*
 Function that builds the vertical histogram of a binarized image.
 
 The array is of the size of the number of rows in

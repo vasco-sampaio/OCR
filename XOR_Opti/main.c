@@ -21,5 +21,6 @@ int main()
 	//test the network for the 4possibiblite:s
 	test(xor,trIn,trOut);
 	writeNeuralNet("test.nn", xor);
+	neuralNetwork X = loadNeuralNetwork("test.nn");
 	return 0;
 }

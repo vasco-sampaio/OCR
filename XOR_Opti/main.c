@@ -22,7 +22,23 @@ int main()
 	test(xor,trIn,trOut);
 
 
+	printMatrix(xor.hiddenLayerBias);
+	printMatrix(xor.outputLayerBias);
+	printMatrix(xor.hiddenWeights);
+	printMatrix(xor.outputWeights);
+
+
+
 	neuralNetToFile(xor, "test.json");
+
+	neuralNetwork JSON = fileToNeuralNet("test.json");
+
+	test(JSON, trIn, trOut);
+
+	printMatrix(JSON.hiddenLayerBias);
+	printMatrix(JSON.outputLayerBias);
+	printMatrix(JSON.hiddenWeights);
+	printMatrix(JSON.outputWeights);
 
 
 	return 0;

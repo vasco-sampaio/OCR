@@ -3,7 +3,6 @@
 
 
 void neuralNetToFile(neuralNetwork nn, char *path);
-//void writeNeuralNet(char *path, neuralNetwork nn);
-//neuralNetwork loadNeuralNetwork(char *path);
+neuralNetwork fileToNeuralNet(char *path);
 
 # endif //_NEURALIO_H_

@@ -21,33 +21,74 @@ int is_foreground(SDL_Surface *image_surface, Uint32 pixel)
 }
 
 //Function that changes the color of a pixel to blue
-void to_blue(SDL_Surface *image_surface, int w, int h)
+/*void to_blue(SDL_Surface *image_surface, int w, int h)
 {
   Uint8 r, g, b;
   Uint32 newPixel = SDL_MapRGB(image_surface->format, 0, 0, 255);
   put_pixel(image_surface, w, h, newPixel);
-}
+  }*/
 
 /*
-Function that creates a horizontal histogram that counts the foreground pixels
+Function that creates a vertical histogram that counts the foreground pixels
 of each row, of a given rectangle
 */
+void verti_histo(SDL_Surface *image_surface, int *histo, int topLw, int topLh, int botRw, int botRh)
+{ 
+  for(int i = topLh ; i < botRh ; i++)
+    {
+      for(int j = topLw ; j < botRw ; j++)
+	{
+	  Uint32 pixel = get_pixel(image_surface, j, i);
+	  if (is_foreground(image_surface, pixel) == 0)
+	    *(histo + i) += 1;
+	}
+    }
+}
 
 
 /*
 Function that creates a horizontal histogram that counts the foreground pixels
 of each column, of a given rectangle 
  */
-
+void hori_histo(SDL_Surface *image_surface, int *histo, int topLw, int topLh, int botRw, int botRh)
+{ 
+  for(int j = topLw ; j < botRw ; j++)
+    {
+      for(int i = topLh ; i < botRh ; i++)
+	{
+	  Uint32 pixel = get_pixel(image_surface, j, i);
+	  if(is_foreground(image_surface, pixel) == 0)
+	    *(histo + j) += 1;
+	}
+    }
+}
 
 /*
 Function that draws horizontal lines in a given rectangle, in rows with no foreground pixels
  */
-
+void hori_lines(SDL_Surface *image_surface, int *vertHisto, int topLw, int topLh, int botRw, int botRh)
+{
+  int len = botRh - topLh;
+  for(int i = 0 ; i < len ; i++)
+    {
+      if (*(vertHisto + i) == 0)
+	  trace_hori_red_line(image_surface, topLh + i, topLw, topLh + i, botRw);
+    }
+}
 
 /*
 Function that draws vertical lines in a given rectangle, in columns with no foreground pixels
 */
+void vert_lines(SDL_Surface *image_surface, int *hori_histo,int topLw, int topLh, int botRw, int botRh )
+{
+  int len = botRw - topLw;
+  for(int i = 0 ; i < len ; i++)
+    {
+      if (*(hori_histo + i) == 0)
+	trace_vert_red_line(image_surface, topLh, topLw + i, botRh, topLw + i);
+    }
+}
+
 
 /*
 Function that goes through the image to get the zones not touched by the lines drawn

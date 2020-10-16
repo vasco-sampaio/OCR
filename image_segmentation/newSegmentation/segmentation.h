@@ -10,8 +10,6 @@ typedef struct
 typedef struct
 {
   couple topLeft;
-  couple topRight;
-  couple botLeft;
   couple botRight;
 }coord;
 
@@ -20,6 +18,12 @@ typedef struct
   int nbLetters;
   coord *letters;
 }line;
+
+typedef struct
+{
+  int nbZones;
+  coord *zones;
+}lineZones
 
 typedef struct
 {

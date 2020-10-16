@@ -89,11 +89,110 @@ void vert_lines(SDL_Surface *image_surface, int *hori_histo,int topLw, int topLh
     }
 }
 
+/*
+Function that initialises a lineZone variable
+*/
+lineZones init_lineZones(int nbLines)
+{
+  lineZones res;
+  res.nbZones = nbLines;
+  res.zones = calloc(nbLines, sizeof(int));
+  for(int i = 0 ; i < nbLines ; i++)
+    {
+      res.zones[i].topLeft.w = 0;
+      res.zones[i].topLeft.h = 0;
+      res.zones[i].botRight.w = 0;
+      res.zones[i].botRight.h = 0;
+    }
+  return res;
+}
+
+//Function that check whether or not a pixel is a foreground pixel (= information)
+int is_red(SDL_Surface *image_surface, Uint32 pixel)
+{
+  //variables for the rgb values of each pixel
+  Uint8 r, g, b;
+  SDL_GetRGB(pixel, image_surface->format,&r, &g, &b);
+
+  //checks if the pixel is red
+  //if it is, returns 0
+  if (r == 255)
+    return 0;
+  return 1;
+}
+
+
+/*
+Function that goes through the image to count the zones not touched by the lines drawn
+*/
+int count_get_lines(SDL_Surface *image_surface)
+{
+  int height = image_surface->h;
+  int width = image_surface->w;
+
+  int inZone = 1; //if in zone = 0
+
+  int res = 0;
+
+  for(int i = 0; i < width ; i++)
+    {
+      int j = 0;
+      while(j < height)
+	{
+	  Uint32 pixel = get_pixel(image_surface, i, j);
+	  int red = is_red(image_surface, pixel);
+	  if(inZone == 1 && red == 1)
+	    {
+	      inZone = 0;
+	    }
+	  else if(inZone == 0 && red == 0)
+	    {
+	      inZone = 1;
+	      res += 1;
+	    }
+	  j++;
+	}
+    }
+  return res;
+}
 
 /*
 Function that goes through the image to get the zones not touched by the lines drawn
-Gets 4 coordinates to define a rectangle
+Gets 2 coordinates to define a rectangle
 */
+void get_lines(SDL_Surface *image_surface, lineZones all)
+{
+  int height = image_surface->h;
+  int width = image_surface->w;
+
+  int inZone = 1; //if in zone = 0
+
+  int zone_i = 0;
+
+  for(int i = 0; i < width ; i++)
+    {
+      int j = 0;
+      while(j < height)
+	{
+	  Uint32 pixel = get_pixel(image_surface, i, j);
+	  int red = is_red(image_surface, pixel);
+	  if(inZone == 1 && red == 1)
+	    {
+	      inZone = 0;
+	      all.zones[zone_i].topLeft.w = i;
+	      all.zones[zone_i].topLeft.h = j;
+	    }
+	  else if(inZone == 0 && red == 0)
+	    {
+	      inZone = 1;
+	      all.zones[zone_i].botRight.w = i;
+	      all.zones[zone_i].botRight.h = j;
+	      zone_i += 1;
+	    }
+	  j++;
+	}
+    }
+}
 
 /*
 Function that uses the others :

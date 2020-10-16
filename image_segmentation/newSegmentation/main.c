@@ -24,15 +24,27 @@ int main(int argc, char** argv)
 
   SDL_SaveBMP(image_surface, "line_seg.bmp");
 
-  int *histo2;
-  histo2 = calloc(width, sizeof(int));
-  hori_histo(image_surface, histo2, 0, 0, width-1, height-1);
-  vert_lines(image_surface, histo2, 0, 0, width-1, height-1);
-
+  int nbLines = count_get_lines(image_surface);
+  printf("nbLines = %d\n", nbLines);
+  lineZones all = init_lineZones(nbLines);
+  //all.zones = calloc(nbLines, sizeof(coord));
+  get_lines(image_surface, all);
+  for(int i = 0 ; i < nbLines ; i++)
+    {
+      printf("i = %d\n", i);
+      int topLw = all.zones[i].topLeft.w;
+      int topLh = all.zones[i].topLeft.h;
+      int botRw = all.zones[i].botRight.w;
+      int botRh = all.zones[i].botRight.h;
+      int *histo2 = calloc(botRw - topLw, sizeof(int));
+      hori_histo(image_surface, histo2, topLw, topLh, botRw, botRh);
+      vert_lines(image_surface, histo2, topLw, topLh, botRw, botRh);
+      free(histo2);
+    }
+  
   SDL_SaveBMP(image_surface, "line_seg2.bmp");
 
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);
    free(histo);
-   free(histo2);
 }

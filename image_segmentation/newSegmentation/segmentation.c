@@ -1,6 +1,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "pixel_functions.h"
+#include "segmentation.h"
 /*
 This file is in charge of the segmentation
 */
@@ -20,13 +21,6 @@ int is_foreground(SDL_Surface *image_surface, Uint32 pixel)
   return 1;
 }
 
-//Function that changes the color of a pixel to blue
-/*void to_blue(SDL_Surface *image_surface, int w, int h)
-{
-  Uint8 r, g, b;
-  Uint32 newPixel = SDL_MapRGB(image_surface->format, 0, 0, 255);
-  put_pixel(image_surface, w, h, newPixel);
-  }*/
 
 /*
 Function that creates a vertical histogram that counts the foreground pixels
@@ -96,7 +90,7 @@ lineZones init_lineZones(int nbLines)
 {
   lineZones res;
   res.nbZones = nbLines;
-  res.zones = calloc(nbLines, sizeof(int));
+  res.zones = calloc(nbLines, sizeof(coord));
   for(int i = 0 ; i < nbLines ; i++)
     {
       res.zones[i].topLeft.w = 0;
@@ -116,7 +110,7 @@ int is_red(SDL_Surface *image_surface, Uint32 pixel)
 
   //checks if the pixel is red
   //if it is, returns 0
-  if (r == 255)
+  if (r == 255 && g == 0 && b == 0)
     return 0;
   return 1;
 }
@@ -127,33 +121,45 @@ Function that goes through the image to count the zones not touched by the lines
 */
 int count_get_lines(SDL_Surface *image_surface)
 {
-  int height = image_surface->h;
-  int width = image_surface->w;
+ int height = image_surface->h;
+ int width = image_surface->w;
 
-  int inZone = 1; //if in zone = 0
+ int res = 0;
 
-  int res = 0;
-
-  for(int i = 0; i < width ; i++)
-    {
-      int j = 0;
-      while(j < height)
-	{
-	  Uint32 pixel = get_pixel(image_surface, i, j);
-	  int red = is_red(image_surface, pixel);
-	  if(inZone == 1 && red == 1)
-	    {
-	      inZone = 0;
-	    }
-	  else if(inZone == 0 && red == 0)
-	    {
-	      inZone = 1;
-	      res += 1;
-	    }
-	  j++;
-	}
-    }
-  return res;
+ int i = 0;
+ while(i < height)
+   {
+     int j = 0;
+     while(j < width)
+       {
+	 Uint32 pixel = get_pixel(image_surface, j, i);
+	 int red = is_red(image_surface, pixel);
+	 if(red == 1) //first encounter with a pixel not red
+	   {
+	     int k = j;
+	     while(red == 1 && k < width)
+	       {
+		 pixel = get_pixel(image_surface, k, i);
+		 red = is_red(image_surface, pixel);
+		 k++;
+	       }
+	     k = i;
+	     red = 1;
+	     while(red == 1 && k < height)
+	       {
+		 pixel = get_pixel(image_surface, j, k);
+		 red = is_red(image_surface, pixel);
+		 k++;
+	       }
+	     i = k-1;
+	     j = width;
+	     res += 1;
+	   }
+	 j++;
+       }
+     i++;
+   }
+ return res;
 }
 
 /*
@@ -165,34 +171,65 @@ void get_lines(SDL_Surface *image_surface, lineZones all)
   int height = image_surface->h;
   int width = image_surface->w;
 
-  int inZone = 1; //if in zone = 0
-
+  //int inZone = 1; //if in zone = 0
   int zone_i = 0;
 
-  for(int i = 0; i < width ; i++)
+  int i = 0;
+  while(i < height)
     {
       int j = 0;
-      while(j < height)
+      while(j < width)
 	{
-	  Uint32 pixel = get_pixel(image_surface, i, j);
+	  Uint32 pixel = get_pixel(image_surface, j, i);
 	  int red = is_red(image_surface, pixel);
-	  if(inZone == 1 && red == 1)
+	  if(/*inZone  == 1 &&*/ red == 1) //first encounter with a pixel not red
 	    {
-	      inZone = 0;
-	      all.zones[zone_i].topLeft.w = i;
-	      all.zones[zone_i].topLeft.h = j;
-	    }
-	  else if(inZone == 0 && red == 0)
-	    {
-	      inZone = 1;
-	      all.zones[zone_i].botRight.w = i;
-	      all.zones[zone_i].botRight.h = j;
+	      //inZone == 0;
+	      all.zones[zone_i].topLeft.w = j;
+	      all.zones[zone_i].topLeft.h = i;
+	      int k = j;
+	      while(red == 1 && k < width)
+		{
+		  pixel = get_pixel(image_surface, k, i);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      all.zones[zone_i].botRight.w = k-1;
+	      k = i;
+	      red = 1;
+	      while(red == 1 && k < height)
+		{
+		  pixel = get_pixel(image_surface, j, k);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      all.zones[zone_i].botRight.h = k-1;
 	      zone_i += 1;
+	      j = width;
+	      i = k-1;
 	    }
 	  j++;
 	}
+      i++;
     }
 }
+
+/*
+Function that goes through a given rectangle to count the zones were there are letters
+*/
+/*int count_get_letters(SDL_Surface *image_surface, coord rect)
+{
+  return 1;
+  }*/
+
+
+/*
+Function that goes through a given rectangle to get the zones not touched by the red lines and where there are the letters.
+*/
+/*void get_letters(SDL_Surface *image_surface, coord rect, line l)
+{
+ 
+}*/
 
 /*
 Function that uses the others :

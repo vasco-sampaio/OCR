@@ -34,13 +34,13 @@ void actvHidden(neuralNetwork nn, double *inputs)
 {
 	for(int i = 0; i < nn.numHiddens; i++)
 	{
-		double res = getMatVal(nn.hiddenLayerBias,0,i);
+		double res = getMVal(nn.hiddenLayerBias,0,i);
 		
 		for(int j = 0;j < nn.numInputs;j++)
 		{	
-			res += inputs[j] * getMatVal(nn.hiddenWeights,j,i);
+			res += inputs[j] * getMVal(nn.hiddenWeights,j,i);
 		}
-		setMatVal(nn.hiddenLayer,0,i,sigmoid(res));
+		setMVal(nn.hiddenLayer,0,i,sigmoid(res));
 	}
 }
 
@@ -50,11 +50,11 @@ void actvOutput(neuralNetwork nn)
 {
 	for(int i = 0; i < nn.numOutputs; i++)
 	{
-		double res = getMatVal(nn.outputLayerBias,0,i);	
+		double res = getMVal(nn.outputLayerBias,0,i);	
 		for(int j = 0; j < nn.numHiddens; j++)
 		{
-			res += getMatVal(nn.hiddenLayer,0,j) * getMatVal(nn.outputWeights,j,i);
+			res += getMVal(nn.hiddenLayer,0,j) * getMVal(nn.outputWeights,j,i);
 		}
-		setMatVal(nn.outputLayer,0,i,sigmoid(res));
+		setMVal(nn.outputLayer,0,i,sigmoid(res));
 	}
 }

@@ -38,7 +38,7 @@ matrix_t initRandMatrix(int rows, int cols)
 
 
 // Get the value of matrix at coordinates
-double getMatVal(matrix_t m, int row, int col)
+double getMVal(matrix_t m, int row, int col)
 {
 	/* 
 	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
@@ -50,7 +50,7 @@ double getMatVal(matrix_t m, int row, int col)
 }
 
 // Set the value of coordinates row col of matrix at value
-void setMatVal(matrix_t m, int row, int col, double val)
+void setMVal(matrix_t m, int row, int col, double val)
 {
 	/* 
 	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
@@ -67,7 +67,7 @@ void printMatrix(matrix_t m)
 	{
 		for(int j = 0; j < m.cols; j++)
 		{
-			printf("%f ", getMatVal(m, i, j));
+			printf("%f ", getMVal(m, i, j));
 		}
 		printf("\n");
 	}

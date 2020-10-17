@@ -8,14 +8,14 @@
 //Calculate the error of the output
 double* deltaOut(neuralNetwork nn, double *expOutput)
 {
-	double *deltaOutput = calloc(nn.numInputs,sizeof(double));
+	double *deltaOutput = calloc(nn.numInputs, sizeof(double));
 
 	// Iterate through the outputs
-	for(int i = 0;i < nn.numOutputs;i++)
+	for(int i = 0; i < nn.numOutputs; i++)
 	{
 		// Get the error by using substraction
-		double error = (expOutput[i] - getMatVal(nn.outputLayer,0,i));
-		deltaOutput[i] = error * dSigmoid(getMatVal(nn.outputLayer,0,i));
+		double error = (expOutput[i] - getMVal(nn.outputLayer, 0, i));
+		deltaOutput[i] = error * dSigmoid(getMVal(nn.outputLayer, 0, i));
 	}
 	return deltaOutput;
 }
@@ -28,18 +28,18 @@ double* deltaHiddens(neuralNetwork nn, double* deltaO)
 	double *deltaHidden = calloc(nn.numHiddens,sizeof(double));
 
 	// Iterate through the hidden layer
-	for(int i = 0;i < nn.numHiddens;i++)
+	for(int i = 0; i < nn.numHiddens; i++)
 	{
 		double error = 0;
 
 		// Iterate through the next layer
-		for(int j = 0;j < nn.numOutputs;j++)
+		for(int j = 0; j < nn.numOutputs; j++)
 		{
 			// The error of the hidden node is the weighted sum 
 			// of the error of the next layer
-			error += deltaO[j] * getMatVal(nn.outputWeights,i,j);
+			error += deltaO[j] * getMVal(nn.outputWeights, i, j);
 		}
-		deltaHidden[i] = error * dSigmoid(getMatVal(nn.hiddenLayer,0,i));
+		deltaHidden[i] = error * dSigmoid(getMVal(nn.hiddenLayer, 0, i));
 	}
 	return deltaHidden;
 }
@@ -47,28 +47,28 @@ double* deltaHiddens(neuralNetwork nn, double* deltaO)
 
 
 // Update the weights and biases
-void applyChanges(neuralNetwork nn, double *deltaO, double *deltaH, double lr, double *inputs)
+void applyChanges(neuralNetwork nn, double *dO, double *dH, double lr, double *inputs)
 { 
 	//Changes on the output weights and bias
-	for(int i = 0;i < nn.numOutputs;i++)
+	for(int i = 0; i < nn.numOutputs; i++)
 	{
-		setMatVal(nn.outputLayerBias,0,i,getMatVal(nn.outputLayerBias,0,i) + (deltaO[i]*lr));
-		for(int j = 0;j < nn.numHiddens;j++)
+		setMVal(nn.outputLayerBias, 0, i, getMVal(nn.outputLayerBias, 0, i) + (dO[i] * lr));
+		for(int j = 0; j < nn.numHiddens; j++)
 		{	
-			double add = getMatVal(nn.outputWeights,j,i);
-			setMatVal(nn.outputWeights,j,i,add + getMatVal(nn.hiddenLayer,0,j)*deltaO[i]*lr);
+			double add = getMVal(nn.outputWeights, j ,i);
+			setMVal(nn.outputWeights, j, i, add + getMVal(nn.hiddenLayer, 0, j) * dO[i] * lr);
 		}
 	}
 	
 	
 	//Changes on the hidden weights and bias
-	for(int i = 0;i<nn.numHiddens;i++)
+	for(int i = 0; i < nn.numHiddens; i++)
 	{
-		setMatVal(nn.hiddenLayerBias,0,i,getMatVal(nn.hiddenLayerBias,0,i)+ deltaH[i]*lr);
-		for(int j = 0;j < nn.numInputs;j++)
+		setMVal(nn.hiddenLayerBias, 0, i, getMVal(nn.hiddenLayerBias, 0, i) + dH[i] * lr);
+		for(int j = 0; j < nn.numInputs; j++)
 		{
-			double add2 = getMatVal(nn.hiddenWeights,j,i);
-			setMatVal(nn.hiddenWeights,j,i,add2 + inputs[j]*deltaH[i]*lr);
+			double add2 = getMVal(nn.hiddenWeights, j, i);
+			setMVal(nn.hiddenWeights, j, i, add2 + inputs[j] * dH[i] * lr);
 		}
 	}
 }
@@ -98,7 +98,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 			actvOutput(nn);
 
 			// Some printing YUP
-		//	printf("Test with: %f and %f got %f but expect %f \n", curInputs[0], curInputs[1], getMatVal(nn.outputLayer,0,0),curOutputs[0]);
+		//	printf("Test with: %f and %f got %f but expect %f \n", curInputs[0], curInputs[1], getMVal(nn.outputLayer,0,0),curOutputs[0]);
 
 			// Calculate the error of the actual input
 			double *deltaO = deltaOut(nn, curOutputs);
@@ -111,6 +111,9 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 	}
 }
 
+
+
+// XOR test
 void test(neuralNetwork nn,double *inputs,double *output)
 {
 	printf("XOR neural network: \n");
@@ -120,6 +123,6 @@ void test(neuralNetwork nn,double *inputs,double *output)
 		double *curOutput = output + x * nn.numOutputs;
 		actvHidden(nn, curInputs);
 		actvOutput(nn);
-		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMatVal(nn.outputLayer,0,0),curOutput[x]);
+		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[x]);
 	}
 }

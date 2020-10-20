@@ -101,7 +101,32 @@ lineZones init_lineZones(int nbLines)
   return res;
 }
 
-//Function that check whether or not a pixel is a foreground pixel (= information)
+
+/*
+Function that initialises a structure doc
+*/
+doc init_doc(int nbLines)
+{
+  doc res;
+  res.nbLines = nbLines;
+  res.allLines = calloc(nbLines, sizeof(line));
+  return res;
+}
+
+/*
+Function that initialises a structure line
+*/
+line init_line(int nbLetters)
+{
+  line res;
+  res.nbLetters = nbLetters;
+  if (nbLetters != 0)
+    res.letters = calloc(nbLetters, sizeof(coord));
+  return res;
+}
+
+//Function that check whether or not a pixel is a
+//foreground pixel (= information)
 int is_red(SDL_Surface *image_surface, Uint32 pixel)
 {
   //variables for the rgb values of each pixel
@@ -117,7 +142,8 @@ int is_red(SDL_Surface *image_surface, Uint32 pixel)
 
 
 /*
-Function that goes through the image to count the zones not touched by the lines drawn
+Function that goes through the image to count the zones 
+not touched by the lines drawn
 */
 int count_get_lines(SDL_Surface *image_surface)
 {
@@ -163,7 +189,8 @@ int count_get_lines(SDL_Surface *image_surface)
 }
 
 /*
-Function that goes through the image to get the zones not touched by the lines drawn
+Function that goes through the image to get the zones 
+not touched by the lines drawn.
 Gets 2 coordinates to define a rectangle
 */
 void get_lines(SDL_Surface *image_surface, lineZones all)
@@ -171,7 +198,6 @@ void get_lines(SDL_Surface *image_surface, lineZones all)
   int height = image_surface->h;
   int width = image_surface->w;
 
-  //int inZone = 1; //if in zone = 0
   int zone_i = 0;
 
   int i = 0;
@@ -182,9 +208,8 @@ void get_lines(SDL_Surface *image_surface, lineZones all)
 	{
 	  Uint32 pixel = get_pixel(image_surface, j, i);
 	  int red = is_red(image_surface, pixel);
-	  if(/*inZone  == 1 &&*/ red == 1) //first encounter with a pixel not red
+	  if(red == 1) //first encounter with a pixel not red
 	    {
-	      //inZone == 0;
 	      all.zones[zone_i].topLeft.w = j;
 	      all.zones[zone_i].topLeft.h = i;
 	      int k = j;
@@ -215,21 +240,118 @@ void get_lines(SDL_Surface *image_surface, lineZones all)
 }
 
 /*
-Function that goes through a given rectangle to count the zones were there are letters
+Function that goes through a given rectangle to count the zones 
+were there are letters
 */
-/*int count_get_letters(SDL_Surface *image_surface, coord rect)
+int count_get_letters(SDL_Surface *image_surface, coord rect)
 {
-  return 1;
-  }*/
+  int res = 0;
+  int i = rect.topLeft.w;
+  while(i < rect.botRight.w)
+    {
+      int j = rect.topLeft.h;
+      while(j < rect.botRight.h)
+	{
+	  Uint32 pixel = get_pixel(image_surface, i, j);
+	  int red = is_red(image_surface, pixel);
+	  if (red == 1) //first encounter in the column of a red pixel
+	    {
+	      int k = j;
+	      while(red == 1 && k < rect.botRight.h)
+		{
+		  pixel = get_pixel(image_surface, i, k);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      red = 1;
+	      k = i;
+	      while(red == 1 && k < rect.botRight.w)
+		{
+		  pixel = get_pixel(image_surface, k, j);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      res++;
+	      j = rect.botRight.h;
+	      i = k-1;
+	    }
+	  j++;
+	}
+      i++;
+    }
+  return res;
+}
 
 
 /*
 Function that goes through a given rectangle to get the zones not touched by the red lines and where there are the letters.
 */
-/*void get_letters(SDL_Surface *image_surface, coord rect, line l)
+void get_letters(SDL_Surface *image_surface, coord rect, line l)
 {
- 
-}*/
+  int ind = 0;
+  int i = rect.topLeft.w;
+  while(i < rect.botRight.w)
+    {
+      int j = rect.topLeft.h;
+      while(j < rect.botRight.h)
+	{
+	  Uint32 pixel = get_pixel(image_surface, i, j);
+	  int red = is_red(image_surface, pixel);
+	  if (red == 1) //first encounter in the column of a red pixel
+	    {
+	      l.letters[ind].topLeft.w = i;
+	      l.letters[ind].topLeft.h = j;
+	      int k = j;
+	      while(red == 1 && k < rect.botRight.h)
+		{
+		  pixel = get_pixel(image_surface, i, k);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      l.letters[ind].botRight.h = k;
+	      red = 1;
+	      k = i;
+	      while(red == 1 && k < rect.botRight.w)
+		{
+		  pixel = get_pixel(image_surface, k, j);
+		  red = is_red(image_surface, pixel);
+		  k++;
+		}
+	      l.letters[ind].botRight.w = k;
+	      ind++;
+	      j = rect.botRight.h;
+	      i = k-1;
+	    }
+	  j++;
+	}
+      i++;
+    }
+}
+
+
+/*
+Function that does the vertical histogram and
+draws the lines to show the lines of the text.
+*/
+void marking_lines(SDL_Surface *image_surface, int height, int width)
+{
+  int *histo;
+  histo = calloc(height, sizeof(int));
+  verti_histo(image_surface, histo, 0, 0, width-1, height-1);
+  hori_lines(image_surface, histo, 0, 0, width-1, height-1);
+  free(histo);
+}
+
+/*
+Function that gets the nb of lines and for each line, 
+makes the horizontal histogram to separate the
+letters.
+*/
+/*void marking_letters(SDL_Surface *image_surface)
+{
+  int nbLines = count_get_lines(image_surface);
+  
+  }*/
 
 /*
 Function that uses the others :

@@ -43,4 +43,11 @@ int is_red(SDL_Surface *image_surface, Uint32 pixel);
 int count_get_lines(SDL_Surface *image_surface);
 void get_lines(SDL_Surface *image_surface, lineZones all);
 
+doc init_doc(int nbLines);
+line init_line(int nbLetters);
+
+int count_get_letters(SDL_Surface *image_surface, coord rect);
+void get_letters(SDL_Surface *image_surface, coord rect, line l);
+void marking_lines(SDL_Surface *image_surface, int height, int width);
+
 #endif

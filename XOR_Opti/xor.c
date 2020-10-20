@@ -12,6 +12,23 @@ double trainingoutputs[4] = { 0.0f,1.0f,1.0f,0.0f };
 double *trIn = traininginputs;
 double *trOut = trainingoutputs;
 
+
+// XOR test
+void test(neuralNetwork nn,double *inputs,double *output)
+{
+	printf("XOR neural network: \n");
+	for(int x = 0;x < 4;x++)
+	{
+		double *curInputs = inputs + x * nn.numInputs;
+		double *curOutput = output + x * nn.numOutputs;
+		actvHidden(nn, curInputs);
+		actvOutput(nn);
+		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[x]);
+	}
+}
+
+
+
 int main()
 {
 	srand(time(NULL));
@@ -25,9 +42,9 @@ int main()
 
 	// Save and load the network from a file
 	neuralNetToFile(xor, "test.json");
-
 	neuralNetwork JSON = fileToNeuralNet("test.json");
 
+	printf("Test with the loaded wieghts and bias \n");
 	test(JSON, trIn, trOut);
 
 	return 0;

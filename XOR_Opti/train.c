@@ -111,18 +111,3 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 	}
 }
 
-
-
-// XOR test
-void test(neuralNetwork nn,double *inputs,double *output)
-{
-	printf("XOR neural network: \n");
-	for(int x = 0;x < 4;x++)
-	{
-		double *curInputs = inputs + x * nn.numInputs;
-		double *curOutput = output + x * nn.numOutputs;
-		actvHidden(nn, curInputs);
-		actvOutput(nn);
-		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[x]);
-	}
-}

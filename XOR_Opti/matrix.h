@@ -17,6 +17,7 @@ matrix_t initRandMatrix(int rows, int cols);
 
 void setMVal(matrix_t m, int row, int col, double value);
 double getMVal(matrix_t m, int row, int col);
+void addMVal(matrix_t m, int row, int col, double value);
 
 void printMatrix(matrix_t m);
 # endif

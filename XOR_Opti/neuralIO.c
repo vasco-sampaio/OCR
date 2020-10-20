@@ -18,106 +18,142 @@
 # define JSON_OUTPUT_WEIGHTS	"oWeights"
 
 
-
 // We are using the json-c libray to effectively save 
 
 
 
+// ############################### FILE LOADING ###############################
 
+
+// Get an int in the tegged child of parent
+int getSize(json_object *parent, char *tag)
+{
+	json_object *child;
+	json_object_object_get_ex(parent, tag, &child);
+	return json_object_get_int(child);
+
+}
+
+
+
+// Specially made function to load an array in a bias matrix
+void fillBiases(matrix_t *biases, json_object *parent, char *tag)
+{
+	json_object *biases_json;
+	json_object *bias;
+	double bias_val;
+	json_object_object_get_ex(parent, tag, &biases_json);
+
+	for(int i = 0; i < biases->cols; ++i)
+	{
+		bias = json_object_array_get_idx(biases_json, i);
+		bias_val = json_object_get_double(bias);
+		setMVal(*biases, 0, i, bias_val);
+	}
+
+}
+
+
+
+// Same but for 2D weights matrices
+void fillWeights(matrix_t *weights, json_object *parent, char *tag)
+{
+	json_object *w_rows;
+	json_object *w_cols;
+	json_object *weight;
+	double w_val;
+	json_object_object_get_ex(parent, tag, &w_rows);
+
+	for(int i = 0; i < weights->rows; ++i)
+	{
+		w_cols = json_object_array_get_idx(w_rows, i);
+		for(int j = 0; j < weights->cols; ++j)
+		{
+			weight = json_object_array_get_idx(w_cols, j);
+			w_val = json_object_get_double(weight);
+			setMVal(*weights, i, j, w_val);
+		}
+	}
+}
+
+
+
+// Main loading function, load a neural net from a json file
 neuralNetwork fileToNeuralNet(char *path)
 {
-	json_object *neuralNet_json;
-
 	// I - GET THE JSON OBJECT FROM THE FILE
-	neuralNet_json = json_object_from_file(path);
-
+	json_object *neunet_json;
+	neunet_json = json_object_from_file(path);
 	
 	// II - GET THE SIZE OF THE LAYERS
-	int nbInputs, nbHiddens, nbOutputs;
-	json_object *js_Inputs, *js_Hiddens, *js_Outputs;
-	json_object_object_get_ex(neuralNet_json, JSON_NB_INPUTS, &js_Inputs);
-	json_object_object_get_ex(neuralNet_json, JSON_NB_HIDDENS, &js_Hiddens);
-	json_object_object_get_ex(neuralNet_json, JSON_NB_OUTPUTS, &js_Outputs);
-	
-	nbInputs = json_object_get_int(js_Inputs);
-	nbHiddens = json_object_get_int(js_Hiddens);
-	nbOutputs = json_object_get_int(js_Outputs);
-
+	int nbInputs = getSize(neunet_json, JSON_NB_INPUTS);
+	int nbHiddens = getSize(neunet_json, JSON_NB_HIDDENS);
+	int nbOutputs = getSize(neunet_json, JSON_NB_OUTPUTS);
 	
 	// III - INITIALIZE THE NETWORK
 	neuralNetwork RES = initNN(nbInputs, nbHiddens, nbOutputs);
 
-	
 	// IV - GET THE BIASES
-
-	// Generic json_object pointer, avoid multiple definition
-	json_object *bias;
-	double val_bias;
-	
-	// IV.a - Hidden Biases
-	json_object *hBiases;
-	json_object_object_get_ex(neuralNet_json, JSON_HIDDEN_BIASES, &hBiases);
-	for(int i = 0; i < RES.numHiddens; ++i)
-	{
-		bias = json_object_array_get_idx(hBiases, i);
-		val_bias = json_object_get_double(bias);
-		setMVal(RES.hiddenLayerBias, 0, i, val_bias);
-	}
-
-	// IV.b - Output Biases
-	json_object *oBiases;
-	json_object_object_get_ex(neuralNet_json, JSON_OUTPUT_BIASES, &oBiases);
-	for(int i = 0; i < RES.numOutputs; ++i)
-	{
-		bias = json_object_array_get_idx(oBiases, i);
-		val_bias = json_object_get_double(bias);
-		setMVal(RES.outputLayerBias, 0, i, val_bias);
-	}
-
+	fillBiases(&RES.hiddenBias, neunet_json, JSON_HIDDEN_BIASES);
+	fillBiases(&RES.outputBias, neunet_json, JSON_OUTPUT_BIASES);
 
 	// V - GET THE WEIGHTS
+	fillWeights(&RES.hiddenWeights, neunet_json, JSON_HIDDEN_WEIGHTS);
+	fillWeights(&RES.outputWeights, neunet_json, JSON_OUTPUT_WEIGHTS);
 	
-
-	// Generic json_object pointer and double value to avoid multiple definition
-	json_object *weight_list;
-	json_object *weight;
-	double val_weight;
-
-	// V.a - Hidden Weights
-	json_object *hWeights;
-	json_object_object_get_ex(neuralNet_json, JSON_HIDDEN_WEIGHTS, &hWeights);
-	for(int i = 0; i < RES.numInputs; ++i)
-	{
-		weight_list = json_object_array_get_idx(hWeights, i);
-		for(int j = 0; j < RES.numHiddens; ++j)
-		{
-			weight = json_object_array_get_idx(weight_list, j);
-			val_weight = json_object_get_double(weight);
-			setMVal(RES.hiddenWeights, i, j, val_weight);
-		}
-	}
-
-	// V.b - Output Weights
-	json_object *oWeights;
-	json_object_object_get_ex(neuralNet_json, JSON_OUTPUT_WEIGHTS, &oWeights);
-	for(int i = 0; i < RES.numHiddens; ++i)
-	{
-		weight_list = json_object_array_get_idx(oWeights, i);
-		for(int j = 0; j < RES.numOutputs; ++j)
-		{
-			weight = json_object_array_get_idx(weight_list, j);
-			val_weight = json_object_get_double(weight);
-			setMVal(RES.outputWeights, i, j, val_weight);
-		}
-	}
-
-
-
 	// VI - RETURN
 	return RES;
 }
 
+// ############################################################################
 
+
+
+// ########################### FILE WRITING ###################################
+
+// Return a 1D JSON array from the given 1D matrix
+json_object *biases_object(matrix_t biases)
+{
+	json_object *biases_json = json_object_new_array();
+	json_object *bias;
+	double val;
+
+	for(int i = 0; i < biases.cols; ++i)
+	{
+		val = getMVal(biases, 0, i);
+		bias = json_object_new_double(val);
+		json_object_array_add(biases_json, bias);
+	}
+	return biases_json;
+}
+
+
+
+//
+json_object *weights_object(matrix_t weights)
+{
+	json_object *weights_json = json_object_new_array();
+	json_object *w_list;
+	json_object *weight;
+	double val;
+
+	for(int i = 0; i < weights.rows; ++i)
+	{
+		w_list = json_object_new_array();
+		for(int j = 0; j < weights.cols; ++j)
+		{
+			val = getMVal(weights, i, j);
+			weight = json_object_new_double(val);
+			json_object_array_add(w_list, weight);
+		}
+		json_object_array_add(weights_json, w_list);
+	}
+	return weights_json;
+}
+
+
+
+// Main writing function
 void neuralNetToFile(neuralNetwork nn, char *path)
 {
 	// First create the Neural Network object
@@ -128,54 +164,13 @@ void neuralNetToFile(neuralNetwork nn, char *path)
 	json_object *nbHiddens = json_object_new_int(nn.numHiddens);
 	json_object *nbOutputs = json_object_new_int(nn.numOutputs);
 
-	// Biases objects
-	json_object *hBiases = json_object_new_array();
-	json_object *oBiases = json_object_new_array();
+	// Biases
+	json_object *hBiases = biases_object(nn.hiddenBias);
+	json_object *oBiases = biases_object(nn.outputBias);
 
-	// Hidden Biases
-	for(int i = 0; i < nn.numHiddens; ++i)
-	{
-		json_object *bias = json_object_new_double(getMVal(nn.hiddenLayerBias, 0, i));
-		json_object_array_add(hBiases, bias);
-	}
-
-	// Output Biases
-	for(int i = 0; i < nn.numOutputs; ++i)
-	{
-		json_object *bias = json_object_new_double(getMVal(nn.outputLayerBias, 0, i));
-		json_object_array_add(oBiases, bias);
-	}
-	
-
-	// Weight objects
-	json_object *hWeights = json_object_new_array();
-	json_object *oWeights = json_object_new_array();
-
-	// Hidden Weights
-	for(int i = 0; i < nn.numInputs; ++i)
-	{
-		json_object *input_to_hiddens = json_object_new_array();
-		for(int j = 0; j < nn.numHiddens; ++j)
-		{
-			json_object *i_to_h = json_object_new_double(getMVal(nn.hiddenWeights, i, j));
-			json_object_array_add(input_to_hiddens, i_to_h);
-		}
-		json_object_array_add(hWeights, input_to_hiddens);
-	}
-	
-
-	// Output Weights
-	for(int i = 0; i < nn.numHiddens; ++i)
-	{
-		json_object *hidden_to_outputs = json_object_new_array();
-		for(int j = 0; j < nn.numOutputs; ++j)
-		{
-			json_object *h_to_o = json_object_new_double(getMVal(nn.outputWeights, i, j));
-			json_object_array_add(hidden_to_outputs, h_to_o);
-		}
-		json_object_array_add(oWeights, hidden_to_outputs);
-	}
-
+	// Weights
+	json_object *hWeights = weights_object(nn.hiddenWeights);
+	json_object *oWeights = weights_object(nn.outputWeights);
 
 
 	// Link them
@@ -186,10 +181,6 @@ void neuralNetToFile(neuralNetwork nn, char *path)
 	json_object_object_add(js_nn, JSON_OUTPUT_BIASES,  oBiases);
 	json_object_object_add(js_nn, JSON_HIDDEN_WEIGHTS, hWeights);
 	json_object_object_add(js_nn, JSON_OUTPUT_WEIGHTS, oWeights);
-
-
-
-
 
 	// Write the json Object to the file
 	json_object_to_file(path, js_nn);

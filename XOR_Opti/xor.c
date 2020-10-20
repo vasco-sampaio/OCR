@@ -31,13 +31,13 @@ void test(neuralNetwork nn,double *inputs,double *output)
 
 int main()
 {
+
 	srand(time(NULL));
 	neuralNetwork xor = initNN(2,2,1);
 	//train the network on 10k gens
-	train(xor, trIn, trOut, 4, 50000, 1);
+	train(xor, trIn, trOut, 4, 10000, 4);
 	//test the network for the 4possibiblite:s
 	test(xor,trIn,trOut);
-
 
 
 	// Save and load the network from a file

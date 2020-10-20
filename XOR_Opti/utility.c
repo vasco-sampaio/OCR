@@ -40,5 +40,3 @@ int *shuffledList(int size)
 
 	return res;
 }
-
-

@@ -14,8 +14,8 @@ typedef struct neuralNetwork_t
 	matrix_t outputLayer;
 	
 	//matrix of the bias
-	matrix_t hiddenLayerBias;
-	matrix_t outputLayerBias;
+	matrix_t hiddenBias;
+	matrix_t outputBias;
 
 	//matrix of the weights
 	matrix_t hiddenWeights;

@@ -52,11 +52,12 @@ void applyChanges(neuralNetwork nn, double *dO, double *dH, double lr, double *i
 	//Changes on the output weights and bias
 	for(int i = 0; i < nn.numOutputs; i++)
 	{
-		setMVal(nn.outputLayerBias, 0, i, getMVal(nn.outputLayerBias, 0, i) + (dO[i] * lr));
+		addMVal(nn.outputBias, 0, i, (dO[i] * lr));
 		for(int j = 0; j < nn.numHiddens; j++)
 		{	
 			double add = getMVal(nn.outputWeights, j ,i);
-			setMVal(nn.outputWeights, j, i, add + getMVal(nn.hiddenLayer, 0, j) * dO[i] * lr);
+			add += getMVal(nn.hiddenLayer, 0, j) * dO[i] * lr;
+			setMVal(nn.outputWeights, j, i, add);
 		}
 	}
 	
@@ -64,7 +65,7 @@ void applyChanges(neuralNetwork nn, double *dO, double *dH, double lr, double *i
 	//Changes on the hidden weights and bias
 	for(int i = 0; i < nn.numHiddens; i++)
 	{
-		setMVal(nn.hiddenLayerBias, 0, i, getMVal(nn.hiddenLayerBias, 0, i) + dH[i] * lr);
+		setMVal(nn.hiddenBias, 0, i, getMVal(nn.hiddenBias, 0, i) + dH[i] * lr);
 		for(int j = 0; j < nn.numInputs; j++)
 		{
 			double add2 = getMVal(nn.hiddenWeights, j, i);
@@ -97,8 +98,6 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 			actvHidden(nn, curInputs);
 			actvOutput(nn);
 
-			// Some printing YUP
-		//	printf("Test with: %f and %f got %f but expect %f \n", curInputs[0], curInputs[1], getMVal(nn.outputLayer,0,0),curOutputs[0]);
 
 			// Calculate the error of the actual input
 			double *deltaO = deltaOut(nn, curOutputs);

@@ -37,29 +37,31 @@ matrix_t initRandMatrix(int rows, int cols)
 }
 
 
+
 // Get the value of matrix at coordinates
 double getMVal(matrix_t m, int row, int col)
 {
-	/* 
-	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
-	{
-		errx(1,"getMatVal: can't access coordinates (%i,%i), max is (%i,%i)", row, col, m.rows, m.cols);
-	}*/
- 
 	return m.data[row * m.cols + col];
 }
+
+
 
 // Set the value of coordinates row col of matrix at value
 void setMVal(matrix_t m, int row, int col, double val)
 {
-	/* 
-	if(row < 0 || row >= m.rows || col < 0 || col >= m.cols)
-	{
-		errx(1,"setMatVal: can't access coordinates (%i,%i), max is (%i,%i)", row, col, m.rows, m.cols);
-	}
-*/ 
 	m.data[row * m.cols + col] = val;
 }
+
+
+
+// Add the value to the existing one
+void addMVal(matrix_t m, int row, int col, double val)
+{
+	m.data[row * m.cols + col] += val;
+}
+
+
+
 // Print the given matrix
 void printMatrix(matrix_t m)
 {

@@ -16,8 +16,8 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs)
 	res.hiddenLayer = initMatrix(1,hiddens);
 	res.outputLayer = initMatrix(1,outputs);
 
-	res.hiddenLayerBias = initRandMatrix(1,hiddens);
-	res.outputLayerBias = initRandMatrix(1,outputs);
+	res.hiddenBias = initRandMatrix(1,hiddens);
+	res.outputBias = initRandMatrix(1,outputs);
 
 	res.hiddenWeights = initRandMatrix(inputs,hiddens); //2*2 matrix
 	res.outputWeights = initRandMatrix(hiddens,outputs);//2*1 matrix
@@ -27,6 +27,7 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs)
 }
 
 
+
 // FORWARD PROP
 
 // Compute the hidden layer activation
@@ -34,7 +35,7 @@ void actvHidden(neuralNetwork nn, double *inputs)
 {
 	for(int i = 0; i < nn.numHiddens; i++)
 	{
-		double res = getMVal(nn.hiddenLayerBias,0,i);
+		double res = getMVal(nn.hiddenBias,0,i);
 		
 		for(int j = 0;j < nn.numInputs;j++)
 		{	
@@ -45,12 +46,13 @@ void actvHidden(neuralNetwork nn, double *inputs)
 }
 
 
+
 // Compute the output layer activation
 void actvOutput(neuralNetwork nn)
 {
 	for(int i = 0; i < nn.numOutputs; i++)
 	{
-		double res = getMVal(nn.outputLayerBias,0,i);	
+		double res = getMVal(nn.outputBias,0,i);	
 		for(int j = 0; j < nn.numHiddens; j++)
 		{
 			res += getMVal(nn.hiddenLayer,0,j) * getMVal(nn.outputWeights,j,i);

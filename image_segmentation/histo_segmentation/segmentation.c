@@ -23,7 +23,7 @@ int is_black(SDL_Surface *image_surface, int w, int h)
   SDL_GetRGB(pixel, image_surface->format,&r, &g, &b);
 
   //checks if the pixel is black
-  printf("r = %d\n", r);
+  //printf("r = %d\n", r);
   if (r == 0)
     return 0;
   return 1;
@@ -57,22 +57,15 @@ pixels (black pixels) of each row, of a given rectangle.
 */
 void verti_histo(SDL_Surface *image_surface, int *histo, coord rect)
 {
-   for(int i = 0 ; i < botRh - topLh ; i++)
-     {
-       printf("histo = %d\n", *(histo3+i));
-     }
-  for(int i = rect.topL.h ; i <= rect.botR.h ; i++)
+  int ind = 0;
+  for(int i = rect.topL.h ; i < rect.botR.h ; i++)
     {
-      for(int j = rect.topL.w ; j <= rect.botR.w ; j++)
+      for(int j = rect.topL.w ; j < rect.botR.w ; j++)
 	{
-	  printf("is black = %d\n\n", is_black(image_surface, j, i));
 	  if (is_black(image_surface, j, i) == 0)
-	    {
-	      printf("+1\n");
-	      *(histo + i) += 1;
-	      printf("histo + %d = %d\n", i, *(histo +i));
-	    }
+	      *(histo + ind) += 1;
 	}
+      ind++;
     }
 }
 
@@ -82,14 +75,16 @@ Function that creates a horizontal histogram that counts the foreground
 pixels of each column, of a given rectangle.
  */
 void hori_histo(SDL_Surface *image_surface, int *histo, coord rect)
-{ 
-  for(int j = rect.topL.w ; j <= rect.botR.w ; j++)
+{
+  int ind = 0;
+  for(int j = rect.topL.w ; j < rect.botR.w ; j++)
     {
-      for(int i = rect.topL.h ; i <= rect.botR.h ; i++)
+      for(int i = rect.topL.h ; i < rect.botR.h ; i++)
 	{
 	  if(is_black(image_surface, j, i) == 0)
-	    *(histo + j) += 1;
+	    *(histo + ind) += 1;
 	}
+      ind++;
     }
 }
 
@@ -110,6 +105,71 @@ void hori_lines(SDL_Surface *image_surface, int *vertHisto, coord rect)
       if (*(vertHisto + i) == 0)
 	  trace_hori_red_line(image_surface, topLh + i, topLw, topLh + i, botRw);
     }
+}
+
+
+//This function calculates the average number of black pixels
+//in the histogram.
+int average_black_pixels(int len, long *histo)
+{
+  int a = 0;
+  for(int i = 0 ; i < len ; i++)
+    {
+      a += *(histo + i);
+    }
+  return a / len;
+}
+
+
+//function that smoothes the projection profile histogram
+void moving_average(int len, long *histo, int window)
+{
+  int sum;
+  int average;
+  for(int i = 0 ; i < len ; i++)
+    {
+      //reseting the sum value
+      sum = 0;
+      if(i + window < len)
+	{
+	  //adding the values of the histo
+	  for(int j = i ; j < i + window ; j++)
+	    {
+	      sum += *(histo + j);
+	    }
+	  average = sum / window; 
+	  //changing the values of the histo
+	  for(int j = i ; j < i + window ; j++)
+	    {
+	      *(histo + j) = average;
+	    }
+	}
+    }
+}
+
+
+/*
+Function that counts the number of peaks in a given 
+histogram.
+*/
+int count_peaks(int average, int *histo, int lenH)
+{
+  int isGoingDown = 1; //false, 0 if true
+  int before = *histo;
+  int res = 0;
+  for(int i = 0 ; i < lenH ; i++)
+    {
+      if(before > *(histo + i) && isGoingDown == 1)
+	{
+	  isGoingDown = 0;
+	  if (*(histo + i) > average)
+	    res++;
+	}
+      else if(before <= *(histo + i) && isGoingDown == 0)
+	isGoingDown = 1;
+      before = *(histo+i);
+    }
+  return res;
 }
 
 
@@ -400,7 +460,8 @@ doc keep_letters(SDL_Surface *image_surface, lineZones all)
 }
 
 /*
-Function that resizes the rectangles arround the letters
+Function that resizes the rectangles arround the letters.
+
 */
 void resize_letter(SDL_Surface *image_surface, doc image)
 {
@@ -415,14 +476,32 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 	  printf("botRh = %d\n", botRh);
 	  printf("topLh = %d\n", topLh);
 	  printf("botRw = %d\n", botRw);
-	  printf("topLw = %d\n", topLw);
+	  printf("topLw = %d\n\n", topLw);
 	  int *histo3 = calloc(botRh - topLh, sizeof(int));
 	  verti_histo(image_surface, histo3, image.allLines[i].letters[j]);
-	  /*for(int i = 0 ; i < botRh - topLh ; i++)
-	    {
-	      printf("histo = %d\n", *(histo3+i));
-	      }*/
 	  hori_lines(image_surface, histo3, image.allLines[i].letters[j]);
+	  free(histo3);
+	}
+    }
+}
+
+void resize_letter2(SDL_Surface *image_surface, doc image)
+{
+  for(int i = 0 ; i < image.nbLines ; i++)
+    {
+      for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
+	{
+	  int botRh = image.allLines[i].letters[j].botR.h;
+	  int botRw = image.allLines[i].letters[j].botR.w;
+	  int topLh = image.allLines[i].letters[j].topL.h;
+	  int topLw = image.allLines[i].letters[j].topL.w;
+	  printf("botRh = %d\n", botRh);
+	  printf("topLh = %d\n", topLh);
+	  printf("botRw = %d\n", botRw);
+	  printf("topLw = %d\n", topLw);
+	  int *histo3 = calloc(botRh - topLh, sizeof(int));
+	  hori_histo(image_surface, histo3, image.allLines[i].letters[j]);
+	  vert_lines(image_surface, histo3, image.allLines[i].letters[j]);
 	  free(histo3);
 	}
     }

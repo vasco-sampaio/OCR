@@ -42,6 +42,10 @@ void hori_histo(SDL_Surface *image_surface, int *histo, coord rect);
 void hori_lines(SDL_Surface *image_surface, int *vertHisto, coord rect);
 void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect);
 
+int average_black_pixels(int len, long *histo);
+void moving_average(int len, long *histo, int window);
+int count_peaks(int average, int *histo, int lenH);
+
 lineZones init_lineZones(int nbLines);
 doc init_doc(int nbLines);
 line init_line(int nbLetters);
@@ -59,5 +63,7 @@ void marking_lines(SDL_Surface *image_surface, int height, int width);
 lineZones marking_letters(SDL_Surface *image_surface, int w, int h);
 doc keep_letters(SDL_Surface *image_surface, lineZones all);
 void resize_letter(SDL_Surface *image_surface, doc image);
+
+void resize_letter2(SDL_Surface *image_surface, doc image);
 
 #endif

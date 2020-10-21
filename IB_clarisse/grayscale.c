@@ -19,11 +19,8 @@ int toGrayscale(SDL_Surface *image_surface)
 	  Uint32 pixel = get_pixel(image_surface, j, i); //getting the pixel value
 	  Uint8 r, g, b;
 	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b); //getting the RGB values
-	  double average = 0.3*r + 0.59*g + 0.11*b;
-	  r = average;
-	  g = average;
-	  b = average; //updating rgb values
-	  Uint32 newPixel = SDL_MapRGB(image_surface->format, r, g, b); //getting the new pixel value
+	  int  av = 0.3*r + 0.59*g + 0.11*b;
+	  Uint32 newPixel = SDL_MapRGB(image_surface->format, av, av, av); //getting the new pixel value
 	  put_pixel(image_surface, j, i, newPixel); //putting new pixel value on the surface
 	    
 	}

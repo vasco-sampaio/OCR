@@ -81,6 +81,8 @@ void swap(int *a, int *b)
   *b = temp;
 }
 
+
+//function that traces a horizontal red line from left to right
 void trace_hori_red_line(SDL_Surface *image_surface, int startH, int startW, int endH, int endW)
 {
   //taking the dimensions of the image
@@ -89,26 +91,15 @@ void trace_hori_red_line(SDL_Surface *image_surface, int startH, int startW, int
 
   if(startH < height && endH == startH  && startW < width && endW < width)
     {
-      /*if(startW > endW)
-	{
-	  swap(startW, endW);
-	  }*/
-
-      Uint8 r,g,b;
-
       for(int i = startW ; i <= endW ; i++)
 	{
-	  Uint32 pixel = get_pixel(image_surface, i, endH);
-	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
-	  r = 255;
-	  g = 0;
-	  b = 0;
-	  Uint32 newPixel = SDL_MapRGB(image_surface->format, r, g, b);
+	  Uint32 newPixel = SDL_MapRGB(image_surface->format, 255, 0, 0);
 	  put_pixel(image_surface, i, endH, newPixel);
 	}
     }
 }
 
+//function that traces a vertical red line from the top to bottom
 void trace_vert_red_line(SDL_Surface *image_surface, int startH, int startW, int endH, int endW)
 {
   //taking the dimensions of the image
@@ -117,21 +108,9 @@ void trace_vert_red_line(SDL_Surface *image_surface, int startH, int startW, int
 
   if(startH < height && endH < height && startW < width && startW == endW)
     {
-      /*if(startH < endH)
-	{
-	  swap(startH, endH);
-	  }*/
-
-      Uint8 r,g,b;
-
       for(int i = startH ; i <= endH ; i++)
 	{
-	  Uint32 pixel = get_pixel(image_surface, endW, i);
-	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
-	  r = 255;
-	  g = 0;
-	  b = 0;
-	  Uint32 newPixel = SDL_MapRGB(image_surface->format, r, g, b);
+	  Uint32 newPixel = SDL_MapRGB(image_surface->format, 255, 0, 0);
 	  put_pixel(image_surface, endW, i, newPixel);
 	}
     }

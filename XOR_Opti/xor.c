@@ -47,5 +47,11 @@ int main()
 	printf("Test with the loaded wieghts and bias \n");
 	test(JSON, trIn, trOut);
 
+	printMatrix(JSON.hiddenBias);
+	printMatrix(JSON.outputBias);
+	printMatrix(JSON.hiddenWeights);
+	printMatrix(JSON.outputWeights);
+
+
 	return 0;
 }

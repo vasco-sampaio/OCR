@@ -1,42 +1,59 @@
 # include "neuralNet.h"
 # include "forProp.h"
+# include "utils.h"
+
+# include <stdlib.h>
 
 
 // Return the error of the output
-double *deltaOut(neuralNet nn, double *expected_outputs)
+void deltaOut(nn_layer layer, double *expected_outputs, double *_delta)
 {
-	double *deltaOut = calloc(nn.nbOutputs, sizeof(double));
 	double error;
 	// Iterate through the outputs
-	for(int i = 0; i < nn.nbOutputs; ++i)
+	for(int i = 0; i < layer.size; ++i)
 	{
 		// Get the difference
-		error = expected_outputs[i] - nn.outputLayer.act[i];
+		error = expected_outputs[i] - layer.act[i];
 		
 		// deltaOut = error * dSig(activation)
-		deltaOut[i] = error * dSigmoid(nn.outputLayer.act[i]);
+		_delta[i] = error * dSigmoid(layer.act[i]);
 	}
-	return deltaOut;
 }
 
 
 
-double *deltaPrevLayer(nn_layer layer, double *delta, double *prevAct)
+void deltaLayer(nn_layer layer, nn_layer nLayer, double *nextDelta, double *_delta)
 {
-	double *deltaL = calloc(layer.prevSize, sizeof(double));
 	double error;
 
-	for(int i = 0; i < layer.prevSize; ++i)
+	for(int i = 0; i < layer.size; ++i)
 	{
 		error = 0;
 		// The error of the previous layer, for each node,
 		// is the weighted sum of this layer's delta
-		for(int j = 0; j < layer.size; ++j)
+		for(int j = 0; j < nLayer.size; ++j)
 		{
-			error += delta[j] * layer.weights[j * layer.prevSize + i];
+			error += nextDelta[j] * nLayer.weights[j * layer.size + i];
 		}
-		deltaL[i] = error * dSigmoid(prevAct[i]);
+		_delta[i] = error * dSigmoid(layer.act[i]);
 	}
-
-	return deltaL;
 }
+
+
+
+// update the given layer with the given error and inputs
+void updateLayer(nn_layer layer, double *delta, double *inputs, double lr)
+{
+	for(int i = 0; i < layer.size; ++i)
+	{
+		layer.biases[i] += delta[i] * lr;
+		for(int j = 0; j < layer.prevSize; ++j)
+		{
+			layer.weights[i * layer.size + j] +=  inputs[j] * delta[i] * lr;
+		}
+	}
+}
+
+
+
+

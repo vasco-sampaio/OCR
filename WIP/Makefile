@@ -6,10 +6,10 @@ LDLIBS = -lm -ljson-c
 
 LDFLAGS = -g
 
-main: neuralNet.o utils.o forProp.o
+main: neuralNet.o utils.o forProp.o backprop.o
 
 clean:
 	${RM} main
-	${RM} neuralNet.o utils.o forProp.o
+	${RM} neuralNet.o utils.o forProp.o backprop.o
 	${RM} *.json
 # END

@@ -8,4 +8,10 @@ double dSigmoid(double sig);
 
 double ReLU(double x);
 
+void softMax(double *array, int len);
+
+void applyFunc(double *array, int len, double (*fct)(double));
+
+void resetAlloc(double *ptr, int size);
+
 # endif // _UTILS_H_

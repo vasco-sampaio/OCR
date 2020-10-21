@@ -26,3 +26,32 @@ double ReLU(double x)
 	return x;
 }
 
+
+// Apply the softmax function to an array
+void softMax(double *array, int len)
+{
+	double sum = 0;
+	for(int i = 0; i < len; ++i)
+	{
+		array[i] = exp(array[i]);
+		sum += array[i];
+	}
+
+	for(int j = 0; j < len; ++j)
+		array[j] /= sum;
+}
+
+
+void applyFunc(double *array, int len, double (*fct)(double))
+{
+	for(int i = 0; i < len; ++i)
+		array[i] = fct(array[i]);
+}
+
+
+
+void resetAlloc(double *ptr, int size)
+{
+	free(ptr);
+	ptr = calloc(size, sizeof(double));
+}

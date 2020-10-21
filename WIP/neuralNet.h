@@ -12,7 +12,6 @@ typedef struct layer_t
 	int prevSize;
 	double *biases;
 
-	double *preAct;
 	double *act;
 
 	double *weights;
@@ -24,16 +23,14 @@ typedef struct neuralnet_t
 {
 	int nbInputs;
 	int nbOutputs;
-	int nbHiddenLayers;
+	int nbLayers;
 
-	nn_layer output_layer;
-
-	nn_layer *hidden_layers;
+	nn_layer *layers;
 
 }neuralNet;
 
 
-neuralNet initNeuralNet(int nbIn, int nbOut, int nbHidden, int *hiddenSizes);
+neuralNet initNeuralNet(int nbIn, int nbLayers, int *layerSizes);
 
 
 void freeNeuralNet(neuralNet nn);

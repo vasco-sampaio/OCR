@@ -13,7 +13,6 @@ nn_layer initLayer(int size, int prevSize)
 	res.prevSize = prevSize;
 	
 	res.biases = calloc(size, sizeof(double));
-	res.preAct = calloc(size, sizeof(double));
 	res.act = calloc(size, sizeof(double));
 
 	res.weights = calloc(size * prevSize, sizeof(double));
@@ -30,20 +29,19 @@ nn_layer initLayer(int size, int prevSize)
 }
 
 // Initialize a neural network
-neuralNet initNeuralNet(int nbIn, int nbOut, int nbHidden, int *hiddenSizes)
+neuralNet initNeuralNet(int nbIn, int nbLayers, int *layerSizes)
 {
 	neuralNet res;
 	res.nbInputs = nbIn;
-	res.nbOutputs = nbOut;
-	res.nbHiddenLayers = nbHidden;
+	res.nbOutputs = layerSizes[nbLayers - 1];
+	res.nbLayers = nbLayers;
 	
-	res.output_layer = initLayer(nbOut, hiddenSizes[nbHidden - 1]);
-	res.hidden_layers = calloc(nbHidden, sizeof(nn_layer));
-	res.hidden_layers[0] = initLayer(hiddenSizes[0], nbIn);
+	res.layers = calloc(nbLayers, sizeof(nn_layer));
+	res.layers[0] = initLayer(layerSizes[0], nbIn);
 
-	for(int i = 1; i < nbHidden; ++i)
+	for(int i = 1; i < nbLayers; ++i)
 	{
-		res.hidden_layers[i] = initLayer(hiddenSizes[i], hiddenSizes[i - 1]);
+		res.layers[i] = initLayer(layerSizes[i], layerSizes[i - 1]);
 	}
 	return res;
 }
@@ -54,7 +52,6 @@ neuralNet initNeuralNet(int nbIn, int nbOut, int nbHidden, int *hiddenSizes)
 void freeLayer(nn_layer layer)
 {
 	free(layer.biases);
-	free(layer.preAct);
 	free(layer.act);
 	free(layer.weights);
 }
@@ -62,7 +59,6 @@ void freeLayer(nn_layer layer)
 // Entirely free a neural network
 void freeNeuralNet(neuralNet nn)
 {
-	for(int i = 0; i < nn.nbHiddenLayers; ++i)
-		freeLayer(nn.hidden_layers[i]);
-	freeLayer(nn.output_layer);
+	for(int i = 0; i < nn.nbLayers; ++i)
+		freeLayer(nn.layers[i]);
 }

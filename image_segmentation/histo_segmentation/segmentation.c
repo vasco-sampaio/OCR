@@ -23,6 +23,7 @@ int is_black(SDL_Surface *image_surface, int w, int h)
   SDL_GetRGB(pixel, image_surface->format,&r, &g, &b);
 
   //checks if the pixel is black
+  printf("r = %d\n", r);
   if (r == 0)
     return 0;
   return 1;
@@ -55,13 +56,22 @@ Function that creates a vertical histogram that counts the foreground
 pixels (black pixels) of each row, of a given rectangle.
 */
 void verti_histo(SDL_Surface *image_surface, int *histo, coord rect)
-{ 
-  for(int i = rect.topL.h ; i < rect.botR.h-1 ; i++)
+{
+   for(int i = 0 ; i < botRh - topLh ; i++)
+     {
+       printf("histo = %d\n", *(histo3+i));
+     }
+  for(int i = rect.topL.h ; i <= rect.botR.h ; i++)
     {
-      for(int j = rect.topL.w ; j < rect.botR.w ; j++)
+      for(int j = rect.topL.w ; j <= rect.botR.w ; j++)
 	{
+	  printf("is black = %d\n\n", is_black(image_surface, j, i));
 	  if (is_black(image_surface, j, i) == 0)
-	    *(histo + i) += 1;
+	    {
+	      printf("+1\n");
+	      *(histo + i) += 1;
+	      printf("histo + %d = %d\n", i, *(histo +i));
+	    }
 	}
     }
 }
@@ -73,9 +83,9 @@ pixels of each column, of a given rectangle.
  */
 void hori_histo(SDL_Surface *image_surface, int *histo, coord rect)
 { 
-  for(int j = rect.topL.w ; j < rect.botR.w-1 ; j++)
+  for(int j = rect.topL.w ; j <= rect.botR.w ; j++)
     {
-      for(int i = rect.topL.h ; i < rect.botR.h ; i++)
+      for(int i = rect.topL.h ; i <= rect.botR.h ; i++)
 	{
 	  if(is_black(image_surface, j, i) == 0)
 	    *(histo + j) += 1;
@@ -95,7 +105,7 @@ void hori_lines(SDL_Surface *image_surface, int *vertHisto, coord rect)
   int botRw = rect.botR.w;
   int botRh = rect.botR.h;
   int len = botRh - topLh;
-  for(int i = 0 ; i < len ; i++)
+  for(int i = 0 ; i < len+1 ; i++)
     {
       if (*(vertHisto + i) == 0)
 	  trace_hori_red_line(image_surface, topLh + i, topLw, topLh + i, botRw);
@@ -114,7 +124,7 @@ void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect)
   int botRw = rect.botR.w;
   int botRh = rect.botR.h;
   int len = botRw - topLw;
-  for(int i = 0 ; i < len ; i++)
+  for(int i = 0 ; i < len+1 ; i++)
     {
       if (*(hori_histo + i) == 0)
 	trace_vert_red_line(image_surface, topLh, topLw + i, botRh, topLw + i);
@@ -408,6 +418,10 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 	  printf("topLw = %d\n", topLw);
 	  int *histo3 = calloc(botRh - topLh, sizeof(int));
 	  verti_histo(image_surface, histo3, image.allLines[i].letters[j]);
+	  /*for(int i = 0 ; i < botRh - topLh ; i++)
+	    {
+	      printf("histo = %d\n", *(histo3+i));
+	      }*/
 	  hori_lines(image_surface, histo3, image.allLines[i].letters[j]);
 	  free(histo3);
 	}

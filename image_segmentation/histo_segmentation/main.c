@@ -14,6 +14,7 @@ int main(int argc, char** argv)
   SDL_Surface *image_surface;
   image_surface = IMG_Load(argv[1]);
 
+
   int height = image_surface->h;
   int width = image_surface->w;
 
@@ -24,8 +25,11 @@ int main(int argc, char** argv)
   SDL_SaveBMP(image_surface, "line_seg2.bmp");
 
   doc image = keep_letters(image_surface, all);
+  printf("In resize letter\n\n");
   resize_letter(image_surface, image);
+
   SDL_SaveBMP(image_surface, "line_seg3.bmp");
+
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);

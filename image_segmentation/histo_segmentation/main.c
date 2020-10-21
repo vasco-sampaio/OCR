@@ -34,5 +34,5 @@ int main(int argc, char** argv)
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);
    free(all.zones);
-   free(image.allLines);
+   free_doc(image);
 }

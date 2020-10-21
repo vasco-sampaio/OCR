@@ -100,10 +100,29 @@ void hori_lines(SDL_Surface *image_surface, int *vertHisto, coord rect)
   int botRw = rect.botR.w;
   int botRh = rect.botR.h;
   int len = botRh - topLh;
-  for(int i = 0 ; i < len+1 ; i++)
+  for(int i = 0 ; i < len ; i++)
     {
       if (*(vertHisto + i) == 0)
 	  trace_hori_red_line(image_surface, topLh + i, topLw, topLh + i, botRw);
+    }
+}
+
+
+/*
+Function that draws vertical lines in a given rectangle, 
+in columns with no foreground pixels.
+*/
+void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect)
+{
+  int topLh = rect.topL.h;
+  int topLw = rect.topL.w;
+  int botRw = rect.botR.w;
+  int botRh = rect.botR.h;
+  int len = botRw - topLw;
+  for(int i = 0 ; i < len ; i++)
+    {
+      if (*(hori_histo + i) == 0)
+	trace_vert_red_line(image_surface, topLh, topLw + i, botRh, topLw + i);
     }
 }
 
@@ -177,18 +196,13 @@ int count_peaks(int average, int *histo, int lenH)
 Function that draws vertical lines in a given rectangle, 
 in columns with no foreground pixels.
 */
-void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect)
+void free_doc(doc image)
 {
-  int topLh = rect.topL.h;
-  int topLw = rect.topL.w;
-  int botRw = rect.botR.w;
-  int botRh = rect.botR.h;
-  int len = botRw - topLw;
-  for(int i = 0 ; i < len+1 ; i++)
+  for(int i = 0 ; i < image.nbLines ; i++)
     {
-      if (*(hori_histo + i) == 0)
-	trace_vert_red_line(image_surface, topLh, topLw + i, botRh, topLw + i);
+      free(image.allLines[i].letters);
     }
+  free(image.allLines);
 }
 
 
@@ -230,8 +244,8 @@ line init_line(int nbLetters)
 {
   line res;
   res.nbLetters = nbLetters;
-  if (nbLetters != 0)
-    res.letters = calloc(nbLetters, sizeof(coord));
+  //if (nbLetters != 0)
+  res.letters = calloc(nbLetters, sizeof(coord));
   return res;
 }
 

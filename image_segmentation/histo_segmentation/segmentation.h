@@ -46,6 +46,7 @@ int average_black_pixels(int len, long *histo);
 void moving_average(int len, long *histo, int window);
 int count_peaks(int average, int *histo, int lenH);
 
+void free_doc(doc image);
 lineZones init_lineZones(int nbLines);
 doc init_doc(int nbLines);
 line init_line(int nbLetters);

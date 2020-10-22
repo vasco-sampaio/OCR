@@ -33,25 +33,21 @@ int main()
 {
 
 	srand(time(NULL));
-	neuralNetwork xor = initNN(2,2,1);
+	neuralNetwork xor = initNN(2,5,1);
 	//train the network on 10k gens
-	train(xor, trIn, trOut, 4, 10000, 4);
+	train(xor, trIn, trOut, 4, 1000000, 4);
 	//test the network for the 4possibiblite:s
 	test(xor,trIn,trOut);
 
 
 	// Save and load the network from a file
 	neuralNetToFile(xor, "test.json");
-	neuralNetwork JSON = fileToNeuralNet("test.json");
+//	neuralNetwork JSON = fileToNeuralNet("test.json");
 
-	printf("Test with the loaded wieghts and bias \n");
-	test(JSON, trIn, trOut);
+//	printf("Test with the loaded wieghts and bias \n");
+//	test(JSON, trIn, trOut);
 
-	printMatrix(JSON.hiddenBias);
-	printMatrix(JSON.outputBias);
-	printMatrix(JSON.hiddenWeights);
-	printMatrix(JSON.outputWeights);
-
+	
 
 	return 0;
 }

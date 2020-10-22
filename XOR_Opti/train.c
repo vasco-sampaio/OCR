@@ -105,8 +105,13 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 
 			// Use data to update the network
 			applyChanges(nn, deltaO, deltaH, lr, curInputs);
+			free(deltaO);
+			free(deltaH);
+			//free(curInputs);
+			//free(curOutputs);
 		}
 		nb++;
+		free(order);
 	}
 }
 

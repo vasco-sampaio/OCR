@@ -193,6 +193,19 @@ Uint8 get_median(Uint8 *arr, int len)
 
 }
 
+
+Uint8 get_average(Uint8 *arr, int len)
+{
+	unsigned int sum = 0;
+	for(int i = 0; i < len; ++i)
+	{
+		sum += (unsigned int) arr[i];
+	}
+	return (Uint8) (sum / len);
+}
+
+
+
 /*
    Function that reduces noise in the image using medians
    */
@@ -233,7 +246,7 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 				k++;
 			}
 			sort(pixels_val, k);
-			Uint8 median = get_median(pixels_val, k);
+			Uint8 median = get_average(pixels_val, k);
 			Uint32 pixel = SDL_MapRGB(is->format, median, median, median);
 			put_pixel(is, i, j, pixel);
 			free(pixels_val);

@@ -254,3 +254,36 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 	}
 	SDL_FreeSurface(is2);
 }
+
+
+/*
+Function that truncates a value
+*/
+Uint8 truncate(int val)
+{
+  if (val < 0)
+    return 0;
+  if (val > 255)
+    return 255;
+  return val;
+}
+
+/*
+Function that modifies the contrast of the image
+*/
+void contrast(SDL_Surface *im, int lvlc, int w, int h)
+{
+  double factor = (259.0 * (lvlc + 255.0))/(255.0 * (259.0 - lvlc));
+  Uint8 r, g, b;
+  for(int i = 0 ; i < h ; i++)
+    {
+      for(int j = 0 ; j < w ; j++)
+	{
+	  SDL_GetRGB(get_pixel(im, j, i), im->format, &r, &g, &b);
+	  r = truncate(factor * (r - 128) + 128);
+	  g = truncate(factor * (g - 128) + 128);
+	  b = truncate(factor * (b - 128) + 128);
+	  put_pixel(im, j, i, SDL_MapRGB(im->format, r, g, b));
+	}
+    }
+}

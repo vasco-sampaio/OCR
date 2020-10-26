@@ -21,6 +21,11 @@ int main(int argc, char** argv)
   SDL_SaveBMP(image_surface,"noise.bmp");
   binarize(image_surface, width, height, histo);
   SDL_SaveBMP(image_surface, "binarize.bmp");
+
+  SDL_Surface *im = IMG_Load(argv[1]);
+  contrast(im, 100, width, height);
+  SDL_SaveBMP(im, "contrast.bmp");
+  
   SDL_FreeSurface(image_surface);
   free(histo);
   return 0;

@@ -16,12 +16,11 @@ int main(int argc, char** argv)
   int width = image_surface->w;
   long *histo = calloc(256, sizeof(long));
   toGrayscale(image_surface, width, height);
-  //SDL_SaveBMP(image_surface, "grayscale.bmp");
+  SDL_SaveBMP(image_surface, "grayscale.bmp");
   reduce_noise(image_surface, im, width, height);
-  //  SDL_SaveBMP(image_surface,"noise.bmp");
-  /*
+  SDL_SaveBMP(image_surface,"noise.bmp");
   binarize(image_surface, width, height, histo);
-  SDL_SaveBMP(image_surface, "binarize.bmp");*/
+  SDL_SaveBMP(image_surface, "binarize.bmp");
   SDL_FreeSurface(image_surface);
   free(histo);
   return 0;

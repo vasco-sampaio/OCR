@@ -4,7 +4,7 @@
 # include "neuralNet.h"
 
 void deltaOut(neuralNet nn, double *exp_outputs, double *delta);
-void deltaPrevLayer(nn_layer layer, double *delta, double *prevAct);
+void deltaLayer(nn_layer layer, nn_layer nLayer, double *nextDelta, double *_delta);
 
 void updateLayer(nn_layer layer, double *delta, double *inputs, double lr);
 

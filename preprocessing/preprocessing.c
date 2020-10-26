@@ -159,3 +159,89 @@ void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
 	}
     }
 }
+
+
+/*
+Function that sorts an array
+*/
+void sort(int *arr, int len)
+{
+  for(int i = len-1 ; i > 0 ; i--)
+    {
+      for(int j = 0 ; j < i ; j++)
+	{
+	  if (*(arr+j) > *(arr+j+1))
+	    {
+	      Uint8 tmp = *(arr + j);
+	      *(arr +j) = *(arr + j + 1);
+	      *(arr + j +1) = tmp;
+	    }
+	}
+    }
+}
+
+
+/*
+Function that gets the median of a given list
+*/
+int get_median(int *arr, int len)
+{
+  if (len%2)
+    return arr[len/2];
+  int a1 = arr[len/2];
+  int a2 = arr[len/2+1];
+  return (a1 + a2)/2;
+  
+}
+
+/*
+Function that reduces noise in the image using medians
+*/
+void reduce_noise(SDL_Surface *is, SDL_Surface *is2, int w, int h)
+{
+  /*SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, is->format->BitsPerPixel, is->format->Rmask, is->format->Gmask, is->format->Bmask, is->format->Amask);*/
+  //SDL_BlitSurface(is, NULL, is2, NULL);
+  for(int i = 0 ; i < w ; i++)
+    {
+      for(int j = 0 ; j < h ; j++)
+	{
+	  int k = 1;
+	  Uint8 tmp = 0;
+	  Uint8 tmp2 = 0;
+	  int *pixels_val = calloc(5, sizeof(int));
+	  SDL_GetRGB(get_pixel(is2, i, j), is2->format, pixels_val, &tmp, &tmp2);
+	  //printf("val = %d\n", pixels_val[0]);
+	  if (i + 1 < w)
+	    {
+	    SDL_GetRGB(get_pixel(is2, i+1, j), is2->format, pixels_val + k, &tmp, &tmp2);
+	    k++;
+	    }
+	  if (i - 1 >= 0)
+	    {
+	      SDL_GetRGB(get_pixel(is2, i-1, j), is2->format, pixels_val + k, &tmp, &tmp2);
+	      k++;
+	    }
+	  if(j + 1 < h)
+	    {
+	      SDL_GetRGB(get_pixel(is2, i, j+1), is2->format, pixels_val + k, &tmp, &tmp2);
+	      k++;
+	    }
+	  if(j - 1 >= 0)
+	    {
+	      SDL_GetRGB(get_pixel(is2, i, j-1), is2->format, pixels_val + k, &tmp, &tmp2);
+	      k++;
+	    }
+	  /*for(int l = 0 ; l < 5 ; l++)
+	    {
+	      printf("pixels_val %d = %d\n", l, pixels_val[l]);
+	      }*/
+	  //printf("\n");
+	  sort(pixels_val, k);
+	  int median = get_median(pixels_val, k);
+	  Uint32 pixel = SDL_MapRGB(is->format, median, median, median);
+	  put_pixel(is, i, j, pixel);
+	  free(pixels_val);
+	}
+    }
+  //SDL_FreeSurface(is2);
+}

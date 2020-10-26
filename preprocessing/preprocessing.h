@@ -20,6 +20,6 @@ couple cal_mean(couple m, couple s, couple w);
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);
 void binarize(SDL_Surface *image_surface, int w, int h, long *histo);
 
-void reduce_noise(SDL_Surface *is, SDL_Surface *is2, int w, int h);
+void reduce_noise(SDL_Surface *is, int w, int h);
 
 #endif

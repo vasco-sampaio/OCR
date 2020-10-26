@@ -57,8 +57,7 @@ long calcul_sum_gray(long *histo)
 {
 	long res = 0;
 	for(int t = 0 ; t < 256 ; t++)
-	{
-		res += t * *(histo + t);
+	{ res += t * *(histo + t);
 	}
 	return res;
 }
@@ -197,10 +196,12 @@ Uint8 get_median(Uint8 *arr, int len)
 /*
    Function that reduces noise in the image using medians
    */
-void reduce_noise(SDL_Surface *is, SDL_Surface *is2, int w, int h)
+void reduce_noise(SDL_Surface *is, int w, int h)
 {
-	//SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, is->format->BitsPerPixel, is->format->Rmask, is->format->Gmask, is->format->Bmask, is->format->Amask);
-	//SDL_BlitSurface(is, NULL, is2, NULL);
+	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, is->format->BitsPerPixel, is->format->Rmask, is->format->Gmask, is->format->Bmask, is->format->Amask);
+	SDL_BlitSurface(is, NULL, is2, NULL);
+
+	SDL_SaveBMP(is2, "TAONDEUSE.bmp");
 	for(int i = 0 ; i < w ; i++)
 	{
 		for(int j = 0 ; j < h ; j++)
@@ -231,11 +232,6 @@ void reduce_noise(SDL_Surface *is, SDL_Surface *is2, int w, int h)
 				SDL_GetRGB(get_pixel(is2, i, j-1), is2->format, pixels_val + k, &tmp, &tmp2);
 				k++;
 			}
-			/*for(int l = 0 ; l < 5 ; l++)
-			  {
-			  printf("pixels_val %d = %d\n", l, pixels_val[l]);
-			  }*/
-			//printf("\n");
 			sort(pixels_val, k);
 			Uint8 median = get_median(pixels_val, k);
 			Uint32 pixel = SDL_MapRGB(is->format, median, median, median);
@@ -243,5 +239,5 @@ void reduce_noise(SDL_Surface *is, SDL_Surface *is2, int w, int h)
 			free(pixels_val);
 		}
 	}
-	//SDL_FreeSurface(is2);
+	SDL_FreeSurface(is2);
 }

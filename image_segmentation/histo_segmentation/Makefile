@@ -24,7 +24,7 @@ clean:
 	${RM} main
 	${RM} *.c~
 	${RM} *.h~
-	${RM} line_seg*.bmp
+	${RM} *.bmp
 
 
 # END

@@ -24,7 +24,7 @@ clean:
 	${RM} main
 	${RM} *.c~
 	${RM} *.h~
-	${RM} test.bmp
+	${RM} *.bmp
 
 
 # END

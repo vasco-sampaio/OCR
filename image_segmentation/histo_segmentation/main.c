@@ -25,7 +25,6 @@ int main(int argc, char** argv)
   SDL_SaveBMP(image_surface, "line_seg2.bmp");
 
   doc image = keep_letters(image_surface, all);
-  printf("In resize letter\n\n");
   resize_letter(image_surface, image);
 
   SDL_SaveBMP(image_surface, "line_seg3.bmp");

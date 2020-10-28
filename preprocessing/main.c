@@ -9,24 +9,25 @@ int main(int argc, char** argv)
   if(argc != 2)
     errx(1, "the number of arguments is not valid : you should have 2 arguments");
 
-  SDL_Surface *image_surface;
-  image_surface = IMG_Load(argv[1]);
-  //SDL_Surface *im = IMG_Load(argv[1]);
+  SDL_Surface *image_surface = IMG_Load(argv[1]);
   int height = image_surface->h;
   int width = image_surface->w;
   long *histo = calloc(256, sizeof(long));
+  
+  contrast(image_surface, 50, width, height);
+  SDL_SaveBMP(image_surface, "contrast.bmp");
+
   toGrayscale(image_surface, width, height);
   SDL_SaveBMP(image_surface, "grayscale.bmp");
+
   reduce_noise(image_surface, width, height);
   SDL_SaveBMP(image_surface,"noise.bmp");
+
   binarize(image_surface, width, height, histo);
   SDL_SaveBMP(image_surface, "binarize.bmp");
 
-  SDL_Surface *im = IMG_Load(argv[1]);
-  contrast(im, 100, width, height);
-  SDL_SaveBMP(im, "contrast.bmp");
-  
-  SDL_FreeSurface(image_surface);
   free(histo);
+  SDL_FreeSurface(image_surface);
+  
   return 0;
 }

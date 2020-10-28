@@ -213,8 +213,6 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 {
 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, is->format->BitsPerPixel, is->format->Rmask, is->format->Gmask, is->format->Bmask, is->format->Amask);
 	SDL_BlitSurface(is, NULL, is2, NULL);
-
-	SDL_SaveBMP(is2, "TAONDEUSE.bmp");
 	for(int i = 0 ; i < w ; i++)
 	{
 		for(int j = 0 ; j < h ; j++)
@@ -224,7 +222,6 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 			Uint8 tmp2 = 0;
 			Uint8 *pixels_val = calloc(5, sizeof(Uint8));
 			SDL_GetRGB(get_pixel(is2, i, j), is2->format, pixels_val, &tmp, &tmp2);
-			//printf("val = %d\n", pixels_val[0]);
 			if (i + 1 < w)
 			{
 				SDL_GetRGB(get_pixel(is2, i+1, j), is2->format, pixels_val + k, &tmp, &tmp2);

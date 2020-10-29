@@ -213,8 +213,6 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 {
 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, is->format->BitsPerPixel, is->format->Rmask, is->format->Gmask, is->format->Bmask, is->format->Amask);
 	SDL_BlitSurface(is, NULL, is2, NULL);
-
-	SDL_SaveBMP(is2, "TAONDEUSE.bmp");
 	for(int i = 0 ; i < w ; i++)
 	{
 		for(int j = 0 ; j < h ; j++)
@@ -224,7 +222,6 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 			Uint8 tmp2 = 0;
 			Uint8 *pixels_val = calloc(5, sizeof(Uint8));
 			SDL_GetRGB(get_pixel(is2, i, j), is2->format, pixels_val, &tmp, &tmp2);
-			//printf("val = %d\n", pixels_val[0]);
 			if (i + 1 < w)
 			{
 				SDL_GetRGB(get_pixel(is2, i+1, j), is2->format, pixels_val + k, &tmp, &tmp2);
@@ -253,4 +250,37 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 		}
 	}
 	SDL_FreeSurface(is2);
+}
+
+
+/*
+Function that truncates a value
+*/
+Uint8 truncate(int val)
+{
+  if (val < 0)
+    return 0;
+  if (val > 255)
+    return 255;
+  return val;
+}
+
+/*
+Function that modifies the contrast of the image
+*/
+void contrast(SDL_Surface *im, int lvlc, int w, int h)
+{
+  double factor = (259.0 * (lvlc + 255.0))/(255.0 * (259.0 - lvlc));
+  Uint8 r, g, b;
+  for(int i = 0 ; i < h ; i++)
+    {
+      for(int j = 0 ; j < w ; j++)
+	{
+	  SDL_GetRGB(get_pixel(im, j, i), im->format, &r, &g, &b);
+	  r = truncate(factor * (r - 128) + 128);
+	  g = truncate(factor * (g - 128) + 128);
+	  b = truncate(factor * (b - 128) + 128);
+	  put_pixel(im, j, i, SDL_MapRGB(im->format, r, g, b));
+	}
+    }
 }

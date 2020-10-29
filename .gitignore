@@ -1,8 +1,5 @@
 # ignore object files and Vim/emacs temporary files
 *.o
 *.swp
-*.bmp
 *.gch
 *~
-*.jpg
-*.png

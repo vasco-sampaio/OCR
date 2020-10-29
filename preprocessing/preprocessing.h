@@ -21,5 +21,6 @@ int threshold(SDL_Surface *image_surface, int w, int h, long *histo);
 void binarize(SDL_Surface *image_surface, int w, int h, long *histo);
 
 void reduce_noise(SDL_Surface *is, int w, int h);
+void contrast(SDL_Surface *im, int lvlc, int w, int h);
 
 #endif

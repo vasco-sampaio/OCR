@@ -439,12 +439,10 @@ lineZones marking_letters(SDL_Surface *image_surface, int w, int h)
   rect.botR.w = w;
   rect.botR.h = h;
   int nbLines = count_get_lines(image_surface, rect);
-  printf("nbLines = %d\n", nbLines);
   lineZones all = init_lineZones(nbLines);
   get_lines(image_surface, rect, all);
   for(int i = 0 ; i < nbLines ; i++)
     {
-      printf("i = %d\n", i);
       int topLw = all.zones[i].topL.w;
       int botRw = all.zones[i].botR.w;
       int *histo2 = calloc(botRw - topLw, sizeof(int));
@@ -466,7 +464,6 @@ doc keep_letters(SDL_Surface *image_surface, lineZones all)
   for(int i = 0 ; i < all.nbZones ; i++)
     {
       int nbLetters = count_get_letters(image_surface, all.zones[i]);
-      printf("nbLetters = %d\n", nbLetters);
       image.allLines[i] = init_line(nbLetters);
       get_letters(image_surface, all.zones[i], image.allLines[i]);
     }
@@ -484,13 +481,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
       for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
 	{
 	  int botRh = image.allLines[i].letters[j].botR.h;
-	  int botRw = image.allLines[i].letters[j].botR.w;
 	  int topLh = image.allLines[i].letters[j].topL.h;
-	  int topLw = image.allLines[i].letters[j].topL.w;
-	  printf("botRh = %d\n", botRh);
-	  printf("topLh = %d\n", topLh);
-	  printf("botRw = %d\n", botRw);
-	  printf("topLw = %d\n\n", topLw);
 	  int *histo3 = calloc(botRh - topLh, sizeof(int));
 	  verti_histo(image_surface, histo3, image.allLines[i].letters[j]);
 	  hori_lines(image_surface, histo3, image.allLines[i].letters[j]);
@@ -499,24 +490,3 @@ void resize_letter(SDL_Surface *image_surface, doc image)
     }
 }
 
-void resize_letter2(SDL_Surface *image_surface, doc image)
-{
-  for(int i = 0 ; i < image.nbLines ; i++)
-    {
-      for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
-	{
-	  int botRh = image.allLines[i].letters[j].botR.h;
-	  int botRw = image.allLines[i].letters[j].botR.w;
-	  int topLh = image.allLines[i].letters[j].topL.h;
-	  int topLw = image.allLines[i].letters[j].topL.w;
-	  printf("botRh = %d\n", botRh);
-	  printf("topLh = %d\n", topLh);
-	  printf("botRw = %d\n", botRw);
-	  printf("topLw = %d\n", topLw);
-	  int *histo3 = calloc(botRh - topLh, sizeof(int));
-	  hori_histo(image_surface, histo3, image.allLines[i].letters[j]);
-	  vert_lines(image_surface, histo3, image.allLines[i].letters[j]);
-	  free(histo3);
-	}
-    }
-}

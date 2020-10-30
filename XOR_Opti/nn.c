@@ -60,3 +60,24 @@ void actvOutput(neuralNetwork nn)
 		setMVal(nn.outputLayer,0,i,sigmoid(res));
 	}
 }
+
+
+
+//Give the output of the neural network
+char Output(neuralNetwork nn)
+{
+	char res;	
+	int nbOut = nn.numOutputs;
+	double max = getMVal(nn.outputLayer,0,0);
+	int tmp = 0;
+	for(int i = 0; i < nbOut;i++)
+	{
+		if(getMVal(nn.outputLayer,0,i) > max)
+		{
+			tmp = i;
+			max = getMVal(nn.outputLayer,0,i);
+		}
+	}
+	res = alphaNum[tmp];	
+	return res;
+}

@@ -42,6 +42,7 @@ int main()
 
 	// Save and load the network from a file
 	neuralNetToFile(xor, "test.json");
+	printf("%c",Output(xor));
 //	neuralNetwork JSON = fileToNeuralNet("test.json");
 
 //	printf("Test with the loaded wieghts and bias \n");

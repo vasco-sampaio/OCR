@@ -2,6 +2,8 @@
 #define NN_H
 #include "matrix.h"
 
+char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9'};
+
 typedef struct neuralNetwork_t
 {
 	//neuralNetwork parameters
@@ -29,5 +31,6 @@ neuralNetwork initNN(int inputs, int hiddens, int outputs);
 void actvHidden(neuralNetwork nn, double *inputs);
 //calculate acitvation for output layer
 void actvOutput(neuralNetwork nn);
-
+//determine the output of the nn
+char Output(neuralNetwork nn);
 #endif

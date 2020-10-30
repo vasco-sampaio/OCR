@@ -11,6 +11,8 @@ double traininginputs[8] = { 0.0f,0.0f,1.0f,0.0f,0.0f,1.0f,1.0f,1.0f };
 double trainingoutputs[4] = { 0.0f,1.0f,1.0f,0.0f };
 double *trIn = traininginputs;
 double *trOut = trainingoutputs;
+char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9'};
+char *aNum = alphaNum;
 
 
 // XOR test
@@ -42,7 +44,7 @@ int main()
 
 	// Save and load the network from a file
 	neuralNetToFile(xor, "test.json");
-	printf("%c",Output(xor));
+	printf("%c",Output(xor,aNum));
 //	neuralNetwork JSON = fileToNeuralNet("test.json");
 
 //	printf("Test with the loaded wieghts and bias \n");

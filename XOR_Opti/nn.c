@@ -64,7 +64,7 @@ void actvOutput(neuralNetwork nn)
 
 
 //Give the output of the neural network
-char Output(neuralNetwork nn)
+char Output(neuralNetwork nn,char *aNum)
 {
 	char res;	
 	int nbOut = nn.numOutputs;
@@ -78,6 +78,6 @@ char Output(neuralNetwork nn)
 			max = getMVal(nn.outputLayer,0,i);
 		}
 	}
-	res = alphaNum[tmp];	
+	res = aNum[tmp];	
 	return res;
 }

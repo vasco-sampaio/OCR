@@ -142,7 +142,8 @@ int threshold(SDL_Surface *image_surface, int w, int h, long *histo)
    */
 void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
 {
-	int t = threshold(image_surface, w, h, histo);
+	int t = threshold(image_surface, w, h, histo)+1;
+	printf("threshold = %d\n", t);
 	Uint8 r, g, b;
 	for(int i = 0 ; i < h ; i++)
 	{

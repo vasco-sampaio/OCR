@@ -12,6 +12,7 @@ int main(int argc, char** argv)
   SDL_Surface *image_surface = IMG_Load(argv[1]);
   int height = image_surface->h;
   int width = image_surface->w;
+  double mat[height*width]; //matrix that reprensents the image
   long *histo = calloc(256, sizeof(long));
   
   contrast(image_surface, 50, width, height);
@@ -23,9 +24,18 @@ int main(int argc, char** argv)
   /*reduce_noise(image_surface, width, height);
     SDL_SaveBMP(image_surface,"noise.bmp");*/
 
-  binarize(image_surface, width, height, histo);
+  binarize(image_surface, width, height, histo,mat);
   SDL_SaveBMP(image_surface, "binarize.bmp");
-
+  /*  Print the matrix of the image
+  for(int i = 0; i < height;i++)
+  {
+	for(int j = 0; j < width;j++)
+	  {
+		  printf("%d ",(int)mat[i*width+j]);
+	  }
+	  printf("\n");
+  }
+  */
   free(histo);
   SDL_FreeSurface(image_surface);
   

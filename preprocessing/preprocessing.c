@@ -138,9 +138,9 @@ int threshold(SDL_Surface *image_surface, int w, int h, long *histo)
 
 
 /*
-   Function that binarizes the image.
+   Function that binarizes the image and fill the matrix .
    */
-void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
+void binarize(SDL_Surface *image_surface, int w, int h, long *histo,double mat[])
 {
 	int t = threshold(image_surface, w, h, histo)+1;
 	printf("threshold = %d\n", t);
@@ -152,9 +152,15 @@ void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
 			Uint32 pixel = get_pixel(image_surface, j, i);
 			SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
 			if (r < t)
+			{
 				pixel = SDL_MapRGB(image_surface->format, 0, 0, 0);
+				mat[i*w+j] = 0; //black pixels
+			}
 			else
+			{
 				pixel = SDL_MapRGB(image_surface->format, 255, 255, 255);
+				mat[i*w+j] = 1; //white pixels
+			}
 			put_pixel(image_surface, j, i, pixel);
 		}
 	}

@@ -18,7 +18,7 @@ couple cal_sum(couple s, int t, long *histo, long sum_gray);
 couple cal_mean(couple m, couple s, couple w);
 
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);
-void binarize(SDL_Surface *image_surface, int w, int h, long *histo);
+void binarize(SDL_Surface *image_surface, int w, int h, long *histo,double mat[]);
 
 void reduce_noise(SDL_Surface *is, int w, int h);
 void contrast(SDL_Surface *im, int lvlc, int w, int h);

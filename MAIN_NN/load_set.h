@@ -3,7 +3,10 @@
 
 # include <stdlib.h>
 
-void load_dataset(char *path, size_t *len, double *inputs, double *outputs);
+# define NN_OUT_SIZE 62
+# define IMAGE_SIZE 41*41
+
+void load_dataset(char *path, size_t len, double *inputs, double *outputs);
 
 
 

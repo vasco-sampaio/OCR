@@ -14,7 +14,7 @@ double *trOut = trainingoutputs;
 char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9'};
 char *aNum = alphaNum;
 
-
+/*
 // XOR test
 void test(neuralNetwork nn,double *inputs,double *output)
 {
@@ -28,7 +28,7 @@ void test(neuralNetwork nn,double *inputs,double *output)
 		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[0]);
 	}
 }
-
+*/
 
 
 int main()

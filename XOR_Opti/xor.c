@@ -25,7 +25,7 @@ void test(neuralNetwork nn,double *inputs,double *output)
 		double *curOutput = output + x * nn.numOutputs;
 		actvHidden(nn, curInputs);
 		actvOutput(nn);
-		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[x]);
+		printf("Inputs: %lf and %lf got %lf expected %f \n", curInputs[0],curInputs[1],getMVal(nn.outputLayer,0,0),curOutput[0]);
 	}
 }
 

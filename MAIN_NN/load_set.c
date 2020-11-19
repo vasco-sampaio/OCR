@@ -97,7 +97,35 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 }
 
+void print_output(double *test)
+{
+	int t = 0;
 
+	for(; t < 10; ++t)
+	{
+		if(test[t])
+			printf("\033[1;33m%c \033[0m",t + '0');
+		else
+			printf("%c ",t + '0');
+
+	}
+	for(; t < 36; ++t)
+	{
+		if(test[t])
+			printf("\033[1;33m%c \033[0m",t + 'a' - 10);
+		else
+			printf("%c ",t + 'a' - 10);
+			
+	}
+	for(; t < 62; ++t)
+	{
+		if(test[t])
+			printf("\033[1;33m%c \033[0m",t + 'A' - 36);
+		else
+			printf("%c ",t + 'A' - 36);
+	}
+	printf("\n");
+}
 
 int main()
 {
@@ -116,6 +144,7 @@ int main()
 			}
 			printf("\n");
 		}
+		print_output(outs+ NN_OUT_SIZE * x);
 		printf("\n\n");
 	}
 

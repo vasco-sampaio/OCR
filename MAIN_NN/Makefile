@@ -8,6 +8,10 @@ LDFLAGS = -g -ljson-c
 
 xor: nn.o matrix.o xor.o train.o utility.o neuralIO.o
 
+
+data_set:
+	gcc load_set.c pixel_functions.c -lSDL_image -g -I/usr/include/SDL
+
 clean:
 	${RM} xor
 	${RM} nn.o matrix.o train.o utility.o neuralIO.o xor.o

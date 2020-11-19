@@ -1,10 +1,48 @@
 # include "load_set.h"
+# include "pixel_functions.h"
 
 # include <stdio.h>
 # include <dirent.h>
 # include <string.h>
+# include <SDL.h>
+# include <SDL/SDL_image.h>
 
 
+double is_pixel_true(SDL_Surface *img, int x, int y)
+{
+	Uint32 pix = get_pixel(img, x, y);
+	if(pix)
+		return 0.0;
+	else
+		return 1.0;
+}
+
+//place the image in arr
+void load_image(char *path, char *name, double *arr)
+{
+	char *full_path = calloc(strlen(path) + strlen(name)+ 2, sizeof(char));
+	char *slash = "/";
+	strcpy(full_path, path);
+	strcat(full_path, slash);
+	strcat(full_path, name);
+	//we can get the image with full_path
+	printf("%s\n",full_path);
+	SDL_Surface *img = IMG_Load(full_path);
+
+	if(img != NULL)
+	{
+		for(int i = 0; i < img->w; ++i)
+		{
+			for(int j = 0; j < img->h; ++j)
+			{
+				arr[i * img->w + j] = is_pixel_true(img, j, i);
+			}
+		}
+	}
+
+	free(img);
+	free(full_path);
+}
 
 
 void load_answer(char letter, double *arr)
@@ -18,7 +56,6 @@ void load_answer(char letter, double *arr)
 		*(arr + letter - 'A' + 36) = 1;
 
 
-	arr += NN_OUT_SIZE;
 }
 
 
@@ -35,27 +72,25 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 	char letter;
 
-	inputs = calloc(IMAGE_SIZE * len, sizeof(double));
-	outputs = calloc(NN_OUT_SIZE * len, sizeof(double));
+	size_t count = 0;
 
-	double *ii = inputs;
-	double *io = outputs;
-	
 	while((ent = readdir(main_dir)) != NULL)
 	{
 		if(strstr(ent->d_name, ".bmp") != NULL)
 		{
 			// the 1st letter is the actual symbol of the file
-			letter = ent->d_name;
+			letter = ent->d_name[0];
 
 			// Function that load the image in the path in the array pointed by
-			// ii
+			// inputs
 
 			// TODO
-			load_image(path, name, ii);
-			
-			// Function that fill the output part from the io pointer
-			load_answer(letter, io);
+			load_image(path, ent->d_name, inputs + (IMAGE_SIZE * count));
+
+			// Function that fill the output part from the output spointer
+			load_answer(letter, outputs + (NN_OUT_SIZE * count));
+
+			count++;
 
 		}
 	}
@@ -66,10 +101,24 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 int main()
 {
-	double *ins;
-	double *outs;
-	size_t x = x;
-	load_dataset(".", x, ins, outs);
+	size_t set_size = 62;
+	double *ins = calloc(set_size * IMAGE_SIZE, sizeof(double));
+	double *outs = calloc(set_size * NN_OUT_SIZE, sizeof(double));
+	load_dataset("./times/", set_size, ins, outs);
 	//*x = 12;
-	printf("%lu\n", x);
+	for(int x = 0; x < set_size; ++x)
+	{
+		for(int i = 0; i < 41; ++i)
+		{
+			for(int j = 0; j < 41; ++j)
+			{
+				printf("%c ",((int) *(ins + i * 41 + j+ x*IMAGE_SIZE)) ? '#': ' ');
+			}
+			printf("\n");
+		}
+		printf("\n\n");
+	}
+
+	free(ins);
+	free(outs);
 }

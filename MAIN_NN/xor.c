@@ -62,7 +62,7 @@ int main()
 	//load training set
 	load_dataset(path,set_size,inputs,outputs);
 	/* Training */
-	neuralNetwork nn = initNN(IMAGE_SIZE,16,NN_OUT_SIZE);
+	neuralNetwork nn = initNN(1600,16,62);
 	train(nn,inputs,outputs,set_size,10000,1,aNum);
 	return 0;
 }

@@ -1,4 +1,5 @@
 # include "train.h"
+# include "nn.h"
 # include "utility.h"
 # include <stdio.h>
 
@@ -90,7 +91,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 		for(int x = 0; x<setSize;x++)
 		{
 			int index = order[x];
-			 
+
 			double *curInputs = inputs + index * nn.numInputs;
 			double *curOutputs = expOutputs + index * nn.numOutputs;
 
@@ -105,7 +106,11 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 
 			// Use data to update the network
 			applyChanges(nn, deltaO, deltaH, lr, curInputs);
-			printf("Output of the NN: %c\n",Output(nn,aNum));
+			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs,aNum));
+			/*for(int k = 0; k <62;k++)
+			{
+				printf("%d ",(int)expOutputs[k]);
+			}*/
 			free(deltaO);
 			free(deltaH);
 			//free(curInputs);

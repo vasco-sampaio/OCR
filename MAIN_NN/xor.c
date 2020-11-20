@@ -13,7 +13,7 @@ double traininginputs[8] = { 0.0f,0.0f,1.0f,0.0f,0.0f,1.0f,1.0f,1.0f };
 double trainingoutputs[4] = { 0.0f,1.0f,1.0f,0.0f };
 double *trIn = traininginputs;
 double *trOut = trainingoutputs;
-char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9'};
+char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 char *aNum = alphaNum;
 
 /*
@@ -63,6 +63,6 @@ int main()
 	load_dataset(path,set_size,inputs,outputs);
 	/* Training */
 	neuralNetwork nn = initNN(IMAGE_SIZE,16,NN_OUT_SIZE);
-	//train(nn,inputs,outputs,NN_OUT_SIZE,10000,1);
+	train(nn,inputs,outputs,set_size,10000,1,aNum);
 	return 0;
 }

@@ -54,15 +54,20 @@ int main()
 
 
 	/*Main NN PART */
-	size_t set_size = 62;
-	double *inputs = calloc(set_size*IMAGE_SIZE,sizeof(double));
-	double *outputs = calloc(set_size*NN_OUT_SIZE,sizeof(double));
+	size_t set_size = 61;
+	double *inputs = calloc(set_size * IMG_SIZE,sizeof(double));
+	double *outputs = calloc(set_size * NN_OUT_SIZE,sizeof(double));
 	//directory of the data set
 	char *path = "./times";
 	//load training set
-	load_dataset(path,set_size,inputs,outputs);
+	size_t nbData = load_dataset(path,set_size,inputs,outputs);
 	/* Training */
-	neuralNetwork nn = initNN(1600,16,62);
+	for(size_t x = 0; x < set_size;x++)
+	{
+		print_output(outputs+NN_OUT_SIZE*x);
+		printf("\n");
+	}
+	neuralNetwork nn = initNN(IMG_SIZE,16,NN_OUT_SIZE);
 	train(nn,inputs,outputs,set_size,10000,1,aNum);
 	return 0;
 }

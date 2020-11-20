@@ -1,6 +1,8 @@
 # include "train.h"
 # include "nn.h"
 # include "utility.h"
+# include "load_set.h"
+
 # include <stdio.h>
 
 
@@ -85,16 +87,14 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 	// Iterate through the number of generations to compute
 	while(nb < epochs)
 	{
-		int *order = shuffledList(setSize);
-		
+		int *order = shuffledList(setSize);	
+
 		// Iterate through the whole set of inputs, in a random order
 		for(int x = 0; x<setSize;x++)
 		{
 			int index = order[x];
-
-			double *curInputs = inputs + index * nn.numInputs;
-			double *curOutputs = expOutputs + index * nn.numOutputs;
-
+			double *curInputs = inputs + index * IMG_SIZE;
+			double *curOutputs = expOutputs + index * NN_OUT_SIZE;
 			// Feed forward the network
 			actvHidden(nn, curInputs);
 			actvOutput(nn);
@@ -106,10 +106,10 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 
 			// Use data to update the network
 			applyChanges(nn, deltaO, deltaH, lr, curInputs);
-			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs,aNum));
+			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs+index*IMG_SIZE,aNum));
 			/*for(int k = 0; k <62;k++)
 			{
-				printf("%d ",(int)expOutputs[k]);
+				printf("%d ",(int)curOutputs[k]);
 			}*/
 			free(deltaO);
 			free(deltaH);

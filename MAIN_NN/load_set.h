@@ -7,6 +7,8 @@
 # define IMG_SIDE 30
 # define IMG_SIZE 900
 
+void print_output(double *out);
+
 /*	Load at max max_len images from the path directory
  *	and fill the outputs and inputs
  *

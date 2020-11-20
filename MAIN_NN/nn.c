@@ -78,6 +78,21 @@ char Output(neuralNetwork nn,char *aNum)
 			max = getMVal(nn.outputLayer,0,i);
 		}
 	}
-	res = aNum[tmp];	
+	res = *(aNum+tmp);	
 	return res;
+}
+
+char ExpOut(size_t size,double *expOut,char *aNum)
+{
+	double tmp = *(expOut);
+	size_t res = 0;
+	for(size_t i = 0; i < size;i++)
+	{
+		if(*(expOut+i) > tmp)
+		{
+			tmp = *(expOut+i);
+			res = i;
+		}
+	}
+	return *(aNum+res);
 }

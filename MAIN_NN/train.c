@@ -87,7 +87,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 		int *order = shuffledList(setSize);
 		
 		// Iterate through the whole set of inputs, in a random order
-		for(int x = 0; x<4;x++)
+		for(int x = 0; x<setSize;x++)
 		{
 			int index = order[x];
 			 

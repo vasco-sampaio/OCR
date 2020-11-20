@@ -47,7 +47,7 @@ void load_image(char *path, char *name, double *arr)
 
 void load_answer(char letter, double *arr)
 {
-	int shift = 0;
+	//int shift = 0;
 	if(letter >= '0' && letter <= '9')
 		*(arr + letter - '0') = 1;
 	if(letter >= 'a' && letter <= 'z')
@@ -97,6 +97,10 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 }
 
+
+
+
+
 void print_output(double *test)
 {
 	int t = 0;
@@ -126,14 +130,14 @@ void print_output(double *test)
 	}
 	printf("\n");
 }
-
+ /*   
 int main()
 {
 	size_t set_size = 62;
 	double *ins = calloc(set_size * IMAGE_SIZE, sizeof(double));
 	double *outs = calloc(set_size * NN_OUT_SIZE, sizeof(double));
 	load_dataset("./times/", set_size, ins, outs);
-	//*x = 12;
+	//x = 12;
 	for(int x = 0; x < set_size; ++x)
 	{
 		for(int i = 0; i < 41; ++i)
@@ -151,3 +155,4 @@ int main()
 	free(ins);
 	free(outs);
 }
+ */ 

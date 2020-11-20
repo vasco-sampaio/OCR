@@ -65,7 +65,7 @@ void load_answer(char letter, double *arr)
  *
  * outputs doesn't need to be initialized
  */
-void load_dataset(char *path, size_t len, double *inputs, double *outputs)
+size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 {
 	DIR *main_dir = opendir(path);	
 	struct dirent *ent;
@@ -74,7 +74,7 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 	size_t count = 0;
 
-	while((ent = readdir(main_dir)) != NULL)
+	while((ent = readdir(main_dir)) != NULL && count < len)
 	{
 		if(strstr(ent->d_name, ".bmp") != NULL)
 		{
@@ -85,7 +85,7 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 			// inputs
 
 			// TODO
-			load_image(path, ent->d_name, inputs + (IMAGE_SIZE * count));
+			load_image(path, ent->d_name, inputs + (IMG_SIZE * count));
 
 			// Function that fill the output part from the output spointer
 			load_answer(letter, outputs + (NN_OUT_SIZE * count));
@@ -95,19 +95,20 @@ void load_dataset(char *path, size_t len, double *inputs, double *outputs)
 		}
 	}
 
+	return count;
 }
 
 
 
 
 
-void print_output(double *test)
+void print_output(double *out)
 {
 	int t = 0;
 
 	for(; t < 10; ++t)
 	{
-		if(test[t])
+		if(out[t])
 			printf("\033[1;33m%c \033[0m",t + '0');
 		else
 			printf("%c ",t + '0');
@@ -115,7 +116,7 @@ void print_output(double *test)
 	}
 	for(; t < 36; ++t)
 	{
-		if(test[t])
+		if(out[t])
 			printf("\033[1;33m%c \033[0m",t + 'a' - 10);
 		else
 			printf("%c ",t + 'a' - 10);
@@ -123,7 +124,7 @@ void print_output(double *test)
 	}
 	for(; t < 62; ++t)
 	{
-		if(test[t])
+		if(out[t])
 			printf("\033[1;33m%c \033[0m",t + 'A' - 36);
 		else
 			printf("%c ",t + 'A' - 36);

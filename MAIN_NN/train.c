@@ -88,7 +88,6 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 	while(nb < epochs)
 	{
 		int *order = shuffledList(setSize);	
-
 		// Iterate through the whole set of inputs, in a random order
 		for(int x = 0; x<setSize;x++)
 		{
@@ -106,7 +105,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 
 			// Use data to update the network
 			applyChanges(nn, deltaO, deltaH, lr, curInputs);
-			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs+index*IMG_SIZE,aNum));
+			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs+index*NN_OUT_SIZE,aNum));
 			/*for(int k = 0; k <62;k++)
 			{
 				printf("%d ",(int)curOutputs[k]);

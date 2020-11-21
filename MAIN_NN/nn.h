@@ -1,7 +1,7 @@
 #ifndef NN_H
 #define NN_H
 #include "matrix.h"
-
+#include <stdlib.h>
 typedef struct neuralNetwork_t
 {
 	//neuralNetwork parameters
@@ -31,4 +31,6 @@ void actvHidden(neuralNetwork nn, double *inputs);
 void actvOutput(neuralNetwork nn);
 //determine the output of the nn
 char Output(neuralNetwork nn,char *aNum);
+//determine the expected output
+char ExpOut(size_t size, double *expOut,char *aNum);
 #endif

@@ -58,7 +58,7 @@ int main()
 	double *inputs = calloc(set_size * IMG_SIZE,sizeof(double));
 	double *outputs = calloc(set_size * NN_OUT_SIZE,sizeof(double));
 	//directory of the data set
-	char *path = "./times";
+	char *path = "../data_sets/arial";
 	//load training set
 	size_t nbData = load_dataset(path,set_size,inputs,outputs);
 	/* Training */

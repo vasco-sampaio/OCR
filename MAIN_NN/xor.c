@@ -60,7 +60,7 @@ int main()
 	//directory of the data set
 	char *path = "../data_sets/arial";
 	//load training set
-	size_t nbData = load_dataset(path,set_size,inputs,outputs);
+	load_dataset(path,set_size,inputs,outputs);
 	/* Training */
 	/*for(size_t x = 0; x < set_size;x++)
 	{

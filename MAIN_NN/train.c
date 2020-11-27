@@ -80,7 +80,7 @@ void applyChanges(neuralNetwork nn, double *dO, double *dH, double lr, double *i
 
 
 // Train the network with the given data over several epochs
-void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, int epochs, double lr, char *aNum)
+void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, int epochs, double lr)
 {
 	int nb = 0;
 
@@ -104,12 +104,7 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 			double *deltaH = deltaHiddens(nn, deltaO);
 
 			// Use data to update the network
-			applyChanges(nn, deltaO, deltaH, lr, curInputs);
-			printf("Output of the NN: %c and expected: %c\n",Output(nn,aNum),ExpOut(62,expOutputs+index*NN_OUT_SIZE,aNum));
-			/*for(int k = 0; k <62;k++)
-			{
-				printf("%d ",(int)curOutputs[k]);
-			}*/
+			applyChanges(nn, deltaO, deltaH, lr, curInputs);	
 			free(deltaO);
 			free(deltaH);
 			//free(curInputs);

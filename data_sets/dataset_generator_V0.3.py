@@ -56,7 +56,6 @@ def create_datasets(path, fontpath, img_size, font_size = None, offsets = [], ro
                 im_name = get_name(c, ".bmp")
                 im = create_letter_image(c, img_font, img_size)
                 f = open(os.path.join(path, im_name), "wb")
-                print(f.name)
 
                 im.save(f, "bmp")
                 f.close()
@@ -67,10 +66,13 @@ def create_datasets(path, fontpath, img_size, font_size = None, offsets = [], ro
                 for c in chars:
                         for (i,j) in offsets:
 
-                                im_name = get_name(c, "_X{0}Y{0}.bmp".format(i,j))
+                                im_name = get_name(c, "_X{0}Y{1}.bmp".format(i,j))
 
                                 im = create_letter_image(c, img_font, img_size, Xoff = i, Yoff = j)
-                                im.save(os.path.join(path, im_name))
+
+                                f = open(os.path.join(path, im_name), "wb")
+                                im.save(f, "bmp")
+                                f.close()
 
         if rotations != []:
                 # rotated

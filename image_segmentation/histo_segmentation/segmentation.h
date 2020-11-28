@@ -31,6 +31,25 @@ typedef struct
   line *allLines;
 }doc;
 
+typedef struct
+{
+  int width;
+  int height;
+  double *mat;
+}matrix;
+
+typedef struct
+{
+  int nbLetters;
+  matrix *letterMat;
+}lineMat;
+
+typedef struct
+{
+  int nbLines;
+  lineMat *lines;
+}docMat;
+
 //functions in segmentation.c
 
 int is_black(SDL_Surface *image_surface, int w, int h);
@@ -66,5 +85,12 @@ doc keep_letters(SDL_Surface *image_surface, lineZones all);
 void resize_letter(SDL_Surface *image_surface, doc image);
 
 void resize_letter2(SDL_Surface *image_surface, doc image);
+
+void print_matrix(matrix m);
+matrix buildMatrix(SDL_Surface *image, coord let);
+lineMat buildLineMat(SDL_Surface *image, line l);
+docMat buildDocMat(SDL_Surface *image, doc i);
+void free_docMat(docMat m);
+
 
 #endif

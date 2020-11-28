@@ -29,9 +29,12 @@ int main(int argc, char** argv)
 
   SDL_SaveBMP(image_surface, "line_seg3.bmp");
 
+
+  docMat test = buildDocMat(image_surface, image);
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);
    free(all.zones);
    free_doc(image);
+   free_docMat(test);
 }

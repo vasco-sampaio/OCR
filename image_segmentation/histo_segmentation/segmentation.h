@@ -11,7 +11,7 @@ typedef struct
 {
   couple topL;
   couple botR;
-  int folBySpace; //if is followed by a space
+  int folBySpace; //if is followed by a space equals 1, else 0
 }coord;
 
 typedef struct
@@ -94,5 +94,7 @@ lineMat buildLineMat(SDL_Surface *image, line l);
 docMat buildDocMat(SDL_Surface *image, doc i);
 void free_docMat(docMat m);
 
+void print_doc(doc *image);
+void detectSpace(line *l);
 
 #endif

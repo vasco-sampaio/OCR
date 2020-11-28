@@ -193,10 +193,6 @@ int count_peaks(int average, int *histo, int lenH)
 
 
 /*
-Function that draws vertical lines in a given rectangle, 
-in columns with no foreground pixels.
-*/
-/*
 Function that frees a doc
 */
 void free_doc(doc image)
@@ -247,6 +243,7 @@ line init_line(int nbLetters)
 {
   line res;
   res.nbLetters = nbLetters;
+  res.nbSpaces = 0;
   //if (nbLetters != 0)
   res.letters = calloc(nbLetters, sizeof(coord));
   return res;
@@ -290,16 +287,72 @@ void sepLetters(SDL_Surface *image, line l)
 /*
 Function that calculates the average space between two letters
 */
-int avVoidLetter(line l)
+int avSpaceLetter(line *l)
 {
   int sum = 0;
-  for(int i = 0 ; i < l.nbLetters - 1 ; i++)
+  for(int i = 0 ; i < l->nbLetters - 1 ; i++)
     {
-      sum += (l.letters[i+1].topL.w - l.letters[i].botR.w);
+      sum += (l->letters[i+1].topL.w - l->letters[i].botR.w);
     }
-  if (l.nbLetters != 0)
-    return sum / l.nbLetters;
+  if (l->nbLetters != 0)
+    return sum / l->nbLetters;
   return sum;
+}
+
+
+/*
+Function that detects the spaces between two letters on a line
+*/
+void detectSpace(line *l)
+{
+  int av = avSpaceLetter(l);
+  int len;
+  for(int i = 0 ; i < l->nbLetters - 1 ; i++)
+    {
+      len = l->letters[i+1].topL.w - l->letters[i].botR.w;
+      if (len > av)
+	{
+	  l->nbSpaces +=1;
+	  l->letters[i].folBySpace = 1;
+	}
+    }
+}
+
+void detectSpaceDoc(doc *image)
+{
+  for(int i = 0 ; i < image->nbLines ; i++)
+    {
+      detectSpace(&image->allLines[i]);
+    }
+}
+
+/*
+Function to test if the detection of spaces works.
+Prints random text with the spaces of the text from the image.
+*/
+void print_line(line *l)
+{
+  int sum = 0;
+  for(int i = 0 ; i < l->nbLetters ; i++)
+    {
+      printf("A");
+      sum += 1;
+      if (l->letters[i].folBySpace == 1)
+	printf(" ");
+    }
+  printf("\n %d \n", sum);
+}
+
+/*
+Function to test if the detection of spaces works.
+Prints the text of the whole doc
+*/
+void print_doc(doc *image)
+{
+  for(int i = 0 ; i < image->nbLines ; i++)
+    {
+      print_line(&image->allLines[i]);
+    }
 }
 
 
@@ -444,6 +497,7 @@ void get_letters(SDL_Surface *image_surface, coord rect, line l)
 	  int red = is_red(image_surface, i, j);
 	  if (red == 1)//first encounter of a pixel not red
 	    {
+	      l.letters[ind].folBySpace = 0;
 	      l.letters[ind].topL.w = i;
 	      l.letters[ind].topL.h = j;
 	      l.letters[ind].botR.h = bot_sum(image_surface, j, rect.botR.h, i);
@@ -532,6 +586,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
   for(int i = 0 ; i < image.nbLines ; i++)
     {
       sepLetters(image_surface, image.allLines[i]);
+      
       for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
 	{
 	  int botRh = image.allLines[i].letters[j].botR.h;
@@ -542,6 +597,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 	  free(histo3);
 	}
     }
+  detectSpaceDoc(&image);
 }
 
 

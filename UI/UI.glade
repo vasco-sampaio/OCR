@@ -17,7 +17,8 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-media-play</property>
   </object>
-  <object class="GtkWindow" id="MainWindow">
+  <object class="GtkWindow" id="org.gtk.ocr">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child type="titlebar">
       <placeholder/>
@@ -100,7 +101,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="text_display">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>

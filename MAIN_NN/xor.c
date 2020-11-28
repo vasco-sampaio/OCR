@@ -40,10 +40,15 @@ int main()
 	size_t set_size = 310;
 	double *inputs = calloc(set_size * IMG_SIZE,sizeof(double));
 	double *outputs = calloc(set_size * NN_OUT_SIZE,sizeof(double));
+
+	double *test_in = calloc(62 * IMG_SIZE, sizeof(double));
+	double *test_out = calloc(62 * NN_OUT_SIZE,sizeof(double));
 	//directory of the data set
-	char *path = "../data_sets/arial";
+	char *path = "../data_sets/arial_25_train";
+	char *test_path = "../data_sets/arial_25_test";
 	//load training set
 	load_dataset(path,set_size,inputs,outputs);
+	load_dataset(test_path, 62, test_in, test_out);
 	/* Training */
 	/*for(size_t x = 0; x < set_size;x++)
 	{
@@ -70,7 +75,7 @@ int main()
 	test[61] = 1;
 	printf("ExpOutput: %c\n",ExpOut(62,test,aNum));*/
 	neuralNetwork nn = initNN(IMG_SIZE,16,NN_OUT_SIZE);
-	train(nn,inputs,outputs,set_size,10000,0.6);
-	testNeuralNet(nn,aNum,inputs,outputs);
+	train(nn,test_in,test_out,set_size,10000,0.6);
+	testNeuralNet(nn,aNum, test_in, test_out);
 	return 0;
 }

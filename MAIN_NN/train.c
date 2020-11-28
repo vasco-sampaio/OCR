@@ -87,6 +87,8 @@ void train(neuralNetwork nn, double *inputs, double *expOutputs, int setSize, in
 	// Iterate through the number of generations to compute
 	while(nb < epochs)
 	{
+		if(nb % 100 == 0)
+			printf("Generation %i\n", nb);
 		int *order = shuffledList(setSize);	
 		// Iterate through the whole set of inputs, in a random order
 		for(int x = 0; x<setSize;x++)

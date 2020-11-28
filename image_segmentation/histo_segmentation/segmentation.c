@@ -254,6 +254,41 @@ line init_line(int nbLetters)
 
 
 /*
+Function that calculates the average width of a letter on a line
+*/
+int avLenLetter(line l)
+{
+  int sum = 0;
+  for(int i = 0 ; i < l.nbLetters ; i++)
+    {
+      sum += (l.letters[i].botR.w - l.letters[i].topL.w);
+    }
+  if (l.nbLetters != 0)
+    return sum / l.nbLetters;
+  return sum;
+}
+
+/*
+Function that separates letters of a same line if they are still in the
+same rectangle of letter, even after segmentation
+*/
+void sepLetters(SDL_Surface *image, line l)
+{
+  int av = avLenLetter(l);
+  int len;
+  for(int i = 0 ; i < l.nbLetters ; i++)
+    {
+      len = l.letters[i].botR.w - l.letters[i].topL.w;
+      if (len > 1.75*av)
+	{
+	  int w = l.letters[i].topL.w + (len/2.4);
+	  trace_vert_red_line(image, l.letters[i].topL.h, w, l.letters[i].botR.h, w);
+	}
+    }
+}
+
+
+/*
 Function that goes to the summit of a rectangle,
 at the right of a given point.
 Returns the width of this given point
@@ -481,6 +516,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 {
   for(int i = 0 ; i < image.nbLines ; i++)
     {
+      sepLetters(image_surface, image.allLines[i]);
       for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
 	{
 	  int botRh = image.allLines[i].letters[j].botR.h;

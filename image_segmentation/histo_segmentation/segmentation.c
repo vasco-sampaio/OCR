@@ -287,6 +287,21 @@ void sepLetters(SDL_Surface *image, line l)
     }
 }
 
+/*
+Function that calculates the average space between two letters
+*/
+int avVoidLetter(line l)
+{
+  int sum = 0;
+  for(int i = 0 ; i < l.nbLetters - 1 ; i++)
+    {
+      sum += (l.letters[i+1].topL.w - l.letters[i].botR.w);
+    }
+  if (l.nbLetters != 0)
+    return sum / l.nbLetters;
+  return sum;
+}
+
 
 /*
 Function that goes to the summit of a rectangle,

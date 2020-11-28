@@ -11,11 +11,13 @@ typedef struct
 {
   couple topL;
   couple botR;
+  int folBySpace; //if is followed by a space
 }coord;
 
 typedef struct
 {
   int nbLetters;
+  int nbSpaces;
   coord *letters;
 }line;
 

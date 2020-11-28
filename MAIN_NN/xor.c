@@ -75,7 +75,7 @@ int main()
 	test[61] = 1;
 	printf("ExpOutput: %c\n",ExpOut(62,test,aNum));*/
 	neuralNetwork nn = initNN(IMG_SIZE,16,NN_OUT_SIZE);
-	train(nn,test_in,test_out,set_size,10000,0.6);
+	train(nn,test_in,test_out,62,10000,0.6);
 	testNeuralNet(nn,aNum, test_in, test_out);
 	return 0;
 }

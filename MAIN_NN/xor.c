@@ -37,7 +37,7 @@ int main()
 	srand(time(NULL));
 	
 	/*Main NN PART */
-	size_t set_size = 62;
+	size_t set_size = 310;
 	double *inputs = calloc(set_size * IMG_SIZE,sizeof(double));
 	double *outputs = calloc(set_size * NN_OUT_SIZE,sizeof(double));
 	//directory of the data set
@@ -70,7 +70,7 @@ int main()
 	test[61] = 1;
 	printf("ExpOutput: %c\n",ExpOut(62,test,aNum));*/
 	neuralNetwork nn = initNN(IMG_SIZE,16,NN_OUT_SIZE);
-	train(nn,inputs,outputs,set_size,5,0.6);
+	train(nn,inputs,outputs,set_size,10000,0.6);
 	testNeuralNet(nn,aNum,inputs,outputs);
 	return 0;
 }

@@ -17,4 +17,5 @@ clean:
 	${RM} xor
 	${RM} nn.o matrix.o train.o utility.o neuralIO.o xor.o
 	${RM} *.json
+	${RM} *.d
 # END

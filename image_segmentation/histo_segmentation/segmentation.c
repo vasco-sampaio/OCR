@@ -503,7 +503,7 @@ void print_matrix(matrix m)
     {
       for(int j = 0 ; j < m.width ; j++)
 	{
-	  printf("%4g", m.mat[i*m.width+j]);
+	  printf("%.0lf", m.mat[i*m.width+j]);
 	  if((j+1) % m.width == 0)
 	    printf("\n");
 	}

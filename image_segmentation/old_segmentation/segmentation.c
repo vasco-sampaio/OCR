@@ -580,7 +580,7 @@ doc keep_letters(SDL_Surface *image_surface, lineZones all)
 /*
 Function that resizes the rectangles arround the letters.
 
-*/
+*//*
 void resize_letter(SDL_Surface *image_surface, doc image)
 {
   for(int i = 0 ; i < image.nbLines ; i++)
@@ -599,7 +599,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
     }
   detectSpaceDoc(&image);
 }
-
+  */
 
 /*
 Function that prints the content of a matrix
@@ -636,8 +636,8 @@ matrix buildMatrix(SDL_Surface *image, coord let)
 	    m.mat[i*m.width + j] = 0;
 	}
     }
-  print_matrix(m);
-  printf("\n\n");
+  //print_matrix(m);
+  //printf("\n\n");
   return m;
 }
 
@@ -688,3 +688,211 @@ void free_docMat(docMat m)
 }
 
 
+//--------------------------------------------------------------------------
+
+//to keep point on the i and take off accents
+
+/*
+Calculates the ratio w/h of a rectangle
+*/
+double rect_ratio(coord r)
+{
+  double w = r.botR.w - r.topL.w;
+  double h = r.botR.h - r.topL.h;
+  printf("ratio\nw = %f\nh = %f\n", w, h);
+  if (h == 0)
+    return 0;
+  return w/h;
+}
+
+/*
+Function that counts the number of groups of black pixels in a given 
+histogram.
+*/
+int count_groups(int *histo, int lenH)
+{
+  int inZone = 0;
+  int res = 0;
+  for(int i = 0 ; i < lenH ; i++)
+    {
+      if (inZone == 0 && *(histo + i) != 0)
+	{
+	  inZone = 1;
+	  ++res;
+	}
+      if(inZone == 1 && *(histo + i) == 0)
+	{
+	  inZone = 0;
+	}
+    }
+  return res;
+}
+
+/*
+Function that returns the rank of the black pixels groups
+*/
+tuples generate_groups(int *histo, int lenH)
+{
+  tuples t;
+  int nbgp = count_groups(histo, lenH);
+  t.nb = nbgp;
+  t.list = calloc(nbgp, sizeof(couple));
+  int inZone = 0;
+  int j = 0;
+  for(int i = 0 ; i < lenH ; i++)
+    {
+      if (inZone == 0 && *(histo + i) != 0)
+	{
+	  inZone = 1;
+	  t.list[j].h = i; 
+	}
+      if(inZone == 1 && *(histo + i) == 0)
+	{
+	  inZone = 0;
+	  t.list[j].w = i-1;
+	  ++j;
+	}
+      if(inZone == 1 && i+1 == lenH)
+	t.list[j].w = i;
+    }
+  return t;
+}
+
+/*
+Function that returns the index of the largest group of black pixels
+*/
+int max_tuples(tuples t)
+{
+  if (t.nb > 0)
+    {
+      int index = 0;
+      int max = t.list[0].h - t.list[0].w;
+      int tmp;
+      for(int i = 0 ; i < t.nb ; i++)
+	{
+	  tmp = t.list[i].h - t.list[i].w;
+	  if(max < tmp)
+	    {
+	      index = i;
+	      max = tmp;
+	    }
+	}
+      return index;
+    }
+  else
+    return -1;
+}
+
+/*
+Function that draws vertical lines in a given rectangle, 
+in rows with no foreground pixels and in attributed columns.
+*/
+void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
+{
+  //int len = rect.botR.h - rect.topL.h;
+  double r = rect_ratio(rect);
+  int gps = t.nb;
+
+  printf("\ngps = %d\n\nr = %f\n", gps, r);
+
+  if (gps == 1)
+    {
+      hori_lines(image, vertHisto, rect);
+    }
+  else
+    {
+      //if the ratio is like a i
+      if (r > 1/2 && gps == 2)
+	{
+	  int highr = t.list[0].h;
+	  int lowr = t.list[1].w;
+	  printf("highr = %d \nlowr = %d\n", highr, lowr);
+	  printf("\nrect.topL.h = %d\nlen = %d\n\n",rect.topL.h, rect.topL.h + highr);
+	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
+	    {
+	      printf("hi\n");
+	      /*trace_hori_red_line(image, rect.topL.h + i,
+		rect.topL.w, rect.topL.h + i, rect.botR.w);*/
+
+	      int startH = i;
+	      int startW = rect.topL.w;
+	      int endH = i;
+	      int endW = rect.botR.w;
+	      printf("startW = %d\n", startW);
+	      printf("endW = %d\n", endW);
+	      printf("endH = %d\n", endH);
+	      
+	      //taking the dimensions of the image
+	      int width = image->w;
+	      int height = image->h;
+
+	      if(startH < height && endH == startH  && startW < width && endW < width)
+		{
+		  for(int i = startW ; i <= endW ; i++)
+		    {
+		      Uint32 newPixel = SDL_MapRGB(image->format, 255, 0, 0);
+		      put_pixel(image, i, endH, newPixel);
+		    }
+		}
+	    }
+	  for(int i = rect.topL.h + lowr ; i < rect.botR.h ; i++)
+	    {
+	      trace_hori_red_line(image, i,
+			      rect.topL.w, i, rect.botR.w);
+	    }
+	}
+      else
+	{
+	  printf("hi22222\n");
+	  int indMax = max_tuples(t);
+	  int highr = t.list[indMax].h;
+	  int lowr = t.list[indMax].w;
+	  printf("else\nhighr = %d \nlowr = %d\n", highr, lowr);
+	  printf("\nrect.topL.h = %d\nlen = %d\n\n",rect.topL.h, rect.topL.h + highr);
+	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
+	    {
+	      trace_hori_red_line(image, i,
+			      rect.topL.w, i, rect.botR.w);
+	    }
+	  for(int i = rect.topL.h + lowr ; i < rect.botR.h ; i++)
+	    {
+	      trace_hori_red_line(image, i,
+			      rect.topL.w, i, rect.botR.w);
+	    }
+	}
+    }
+}
+
+
+/*
+Function that resizes the rectangle arround a letter but 
+takes into account the accents and the points on the "i"
+*/
+void resize(SDL_Surface *image, coord letter)
+{
+  int len =letter.botR.h - letter.topL.h;
+  int *histo = calloc(len, sizeof(int));
+  verti_histo(image, histo, letter);
+  tuples t = generate_groups(histo, len);
+  hori_lines_define(image, histo, letter, t);
+  free(t.list);
+  free(histo);
+}
+
+
+/*
+Function that resizes the rectangles arround the letters.
+*/
+void resize_letter(SDL_Surface *image_surface, doc image)
+{
+  for(int i = 0 ; i < image.nbLines ; i++)
+    {
+      sepLetters(image_surface, image.allLines[i]);
+      
+      for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
+	{
+	  resize(image_surface, image.allLines[i].letters[j]);
+	}
+    }
+  detectSpaceDoc(&image);
+}

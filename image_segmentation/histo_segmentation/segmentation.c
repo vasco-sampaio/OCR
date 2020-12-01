@@ -549,7 +549,123 @@ int count_groups(int *histo, int lenH)
 /*
 Function that returns the rank of the black pixels groups
 */
+tuples generate_groups(int *histo, int lenH)
+{
+  tuples t;
+  int nbgp = count_groups(histo, lenH);
+  t.nb = nbgp;
+  t.list = malloc(nbgp*sizeof(couple));
+  int inZone = 0;
+  int j = 0;
+  for(int i = 0 ; i < lenH ; i++)
+    {
+      if (inZone == 0 && *(histo + i) != 0)
+	{
+	  inZone = 1;
+	  t.list[j].h = i; 
+	}
+      if(inZone == 1 && *(histo + i) == 0)
+	{
+	  inZone = 0;
+	  t.list[j].w = i-1;
+	  ++j;
+	}
+      if(inZone == 1 && i+1 == lenH)
+	t.list[j].w = i;
+    }
+  return t;
+}
 
+/*
+Function that returns the index of the largest group of black pixels
+*/
+int max_tuples(tuples t)
+{
+  if (t.nb > 0)
+    {
+      int index = 0;
+      int max = t.list[0].h - t.list[0].w;
+      int tmp;
+      for(int i = 0 ; i < t.nb ; i++)
+	{
+	  tmp = t.list[i].h - t.list[i].w;
+	  if(max < tmp)
+	    {
+	      index = i;
+	      max = tmp;
+	    }
+	}
+    }
+  else
+    return -1
+}
+
+/*
+Function that draws vertical lines in a given rectangle, 
+in rows with no foreground pixels and in attributed columns.
+*/
+void hori_lines_define(SDL_Surface *image, int *vertHisto, coord *rect, tuples t)
+{
+  int len = rect->botR.h - rect->topLh;
+  int j = 0;
+  int r = rect_ratio(rect);
+  int gps = t.nb;;
+
+  if (gps == 1)
+    {
+      hori_lines(image, vertHisto, rect);
+    }
+  else
+    {
+      //if the ratio is like a i
+      if (r < 1/2 && gps == 2)
+	{
+	  int highr = t.list[0].w;
+	  int lowr = t.list[1].h;
+	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
+	    {
+	      trace_hori_red_line(image_surface, rect->topL.h + i,
+			      rect->topL.w, rect->topL.h + i, rect->botR.w);
+	    }
+	  for(int i = rect.topL.h + lowr ; i < rect.botR.h ; i++)
+	    {
+	      trace_hori_red_line(image_surface, rect->topL.h + i,
+			      rect->topL.w, rect->topL.h + i, rect->botR.w);
+	    }
+	}
+      else
+	{
+	  int indMax = max_tuples(t);
+	  int highr = t.list[indMax].w;
+	  int lowr = t.list[indMax].h;
+	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
+	    {
+	      trace_hori_red_line(image_surface, rect->topL.h + i,
+			      rect->topL.w, rect->topL.h + i, rect->botR.w);
+	    }
+	  for(int i = rect.topL.h + lowr ; i < rect.botR.h ; i++)
+	    {
+	      trace_hori_red_line(image_surface, rect->topL.h + i,
+			      rect->topL.w, rect->topL.h + i, rect->botR.w);
+	    }
+	}
+    }
+}
+
+
+/*
+Function that resizes the rectangle arround a letter but 
+takes into account the accents and the points on the "i"
+*/
+void resize(SDL_Surface *image, coord letter)
+{
+  int len =letter.botR.h - letter.topL.h;
+  int *histo = calloc(len, sizeof(int));
+  verti_histo(image, histo, letter);
+  tuples t ⁼ generate_groups(histo, len);
+  hori_lines_define(image, histo, letter, t);
+  free(histo);
+}
 
 
 /*
@@ -563,12 +679,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
       
       for(int j = 0 ; j < image.allLines[i].nbLetters ; j++)
 	{
-	  int botRh = image.allLines[i].letters[j].botR.h;
-	  int topLh = image.allLines[i].letters[j].topL.h;
-	  int *histo3 = calloc(botRh - topLh, sizeof(int));
-	  verti_histo(image_surface, histo3, image.allLines[i].letters[j]);
-	  hori_lines(image_surface, histo3, image.allLines[i].letters[j]);
-	  free(histo3);
+	  resize(image_surface, image.allLines[i].letters[j]);
 	}
     }
   detectSpaceDoc(&image);

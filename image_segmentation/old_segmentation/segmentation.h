@@ -9,6 +9,12 @@ typedef struct
 
 typedef struct
 {
+  couple *list;
+  int nb;
+}tuples;
+
+typedef struct
+{
   couple topL;
   couple botR;
   int folBySpace; //if is followed by a space equals 1, else 0

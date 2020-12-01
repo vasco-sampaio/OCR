@@ -1,25 +1,13 @@
-//pixel_functions.c file
+//functions to manipulate pixels of an image
+//is from the SDL documentation
+//https://www.libsdl.org/release/SDL-1.2.15/docs/html/guidevideo.html
 
 #include <err.h>
-#include <stdlib.h>
-#include <SDL.h>
 #include "pixel_functions.h"
 
 /*
-Regroups functions to manipulate the pixels of an image
-to draw lines on an image and know if a pixel has a
-specific color
-*/
-
-//------------------------------------------------------------------------------
-
-//Functions from the SDL documentation
-//They manipulate the pixels of an image
-//https://www.libsdl.org/release/SDL-1.2.15/docs/html/guidevideo.html
-
-/*
-Return the pixel value at (x, y)
-NOTE: The surface must be locked before calling this!
+ * Return the pixel value at (x, y)
+ * NOTE: The surface must be locked before calling this!
  */
 Uint32 get_pixel(SDL_Surface *surface, int x, int y)
 {
@@ -50,8 +38,8 @@ Uint32 get_pixel(SDL_Surface *surface, int x, int y)
 
 
 /*
-Set the pixel at (x, y) to the given value
-NOTE: The surface must be locked before calling this!
+ * Set the pixel at (x, y) to the given value
+ * NOTE: The surface must be locked before calling this!
  */
 void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
@@ -86,24 +74,23 @@ void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
     }
 }
 
+void swap(int *a, int *b)
+{
+  int temp = *a;
+  *a = *b;
+  *b = temp;
+}
 
-//------------------------------------------------------------------------------
 
-//Functions that draws red lines
-
-/*
-Function that draws a horizontal red line from left to right
-*/
+//function that traces a horizontal red line from left to right
 void trace_hori_red_line(SDL_Surface *image_surface, int startH, int startW, int endH, int endW)
 {
   //taking the dimensions of the image
   int width = image_surface->w;
   int height = image_surface->h;
 
-  //verifying if the coordinates are valid
   if(startH < height && endH == startH  && startW < width && endW < width)
     {
-      //changing the color of the pixels of the line
       for(int i = startW ; i <= endW ; i++)
 	{
 	  Uint32 newPixel = SDL_MapRGB(image_surface->format, 255, 0, 0);
@@ -112,69 +99,19 @@ void trace_hori_red_line(SDL_Surface *image_surface, int startH, int startW, int
     }
 }
 
-/*
-Function that draws a vertical red line from the top to bottom
-*/
+//function that traces a vertical red line from the top to bottom
 void trace_vert_red_line(SDL_Surface *image_surface, int startH, int startW, int endH, int endW)
 {
   //taking the dimensions of the image
   int width = image_surface->w;
   int height = image_surface->h;
 
-  //verifying if the coordinates are valid
   if(startH < height && endH < height && startW < width && startW == endW)
     {
-      //changing the color of the pixels of the line
       for(int i = startH ; i <= endH ; i++)
 	{
 	  Uint32 newPixel = SDL_MapRGB(image_surface->format, 255, 0, 0);
 	  put_pixel(image_surface, endW, i, newPixel);
 	}
     }
-}
-
-//------------------------------------------------------------------------------
-
-//Functions that checks the color of a pixel
-
-/*
-Function that checks if whether or not, a pixel
-that has the coordinates h and w, is black.
-Returns an int : 
--1 if black
--0 if white
-*/
-int is_black(SDL_Surface *image_surface, int w, int h)
-{
-  Uint32 pixel = get_pixel(image_surface, w, h);
-  //variables for the rgb values of each pixel
-  Uint8 r, g, b;
-  SDL_GetRGB(pixel, image_surface->format,&r, &g, &b);
-
-  //checks if the pixel is black (only verifying red because
-  //the image is binarized
-  if (r == 0)
-    return 1;
-  return 0;
-}
-
-/*
-Function that check whether or not a pixel is a
-red pixel.
-Returns an int :
--1 if red
--0 if not
-*/
-int is_red(SDL_Surface *image_surface, int w, int h)
-{
-  Uint32 pixel = get_pixel(image_surface, w, h);
-  //variables for the rgb values of each pixel
-  Uint8 r, g, b;
-  SDL_GetRGB(pixel, image_surface->format,&r, &g, &b);
-
-  //checks if the pixel is red
-  //if it is, returns 1
-  if (r == 255 && g == 0 && b == 0)
-    return 1;
-  return 0;
 }

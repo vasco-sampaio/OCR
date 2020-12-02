@@ -7,7 +7,7 @@
 This file is in charge of the segmentation
 using histograms.
 */
-
+double rect_ratio(coord r);
 /*
 Function that checks if whether or not, a pixel
 that has the coordinates h and w, is black.
@@ -266,18 +266,40 @@ int avLenLetter(line l)
 }
 
 /*
+Function that calculates the average height of a letter on a line
+*/
+double avHeiLetter(line l)
+{
+  double sum = 0;
+  for(int i = 0 ; i < l.nbLetters ; i++)
+    {
+      sum += (l.letters[i].botR.h - l.letters[i].topL.h);
+    }
+  printf("sum = %f\n, nb = %d\n", sum, l.nbLetters);
+  if (l.nbLetters != 0)
+    return sum / l.nbLetters;
+  return sum;
+}
+
+
+
+/*
 Function that separates letters of a same line if they are still in the
 same rectangle of letter, even after segmentation
 */
 void sepLetters(SDL_Surface *image, line l)
 {
   int av = avLenLetter(l);
+  double av2 = avHeiLetter(l);
   int len;
+  double hei;
   for(int i = 0 ; i < l.nbLetters ; i++)
     {
       len = l.letters[i].botR.w - l.letters[i].topL.w;
-      if (len > 1.75*av)
+      hei = l.letters[i].botR.h - l.letters[i].topL.h;
+      if (len > 1.75*av && hei < 1.2*av2)
 	{
+	  printf("hei = %f\nav2 = %f\n", hei, av2);
 	  int w = l.letters[i].topL.w + (len/2.4);
 	  trace_vert_red_line(image, l.letters[i].topL.h, w, l.letters[i].botR.h, w);
 	}
@@ -370,7 +392,7 @@ int r_sum(SDL_Surface *image_surface, int wMin, int wMax, int h)
       red = is_red(image_surface, res, h);
       res++;
     }
-  return res -1;
+  return res;
 }
 
 
@@ -388,7 +410,7 @@ int bot_sum(SDL_Surface *image_surface, int hMin, int hMax, int w)
       red = is_red(image_surface, w, res);
       res++;
     }
-  return res -1;
+  return res;
 }
 
 
@@ -526,7 +548,7 @@ void marking_lines(SDL_Surface *image_surface, int height, int width)
   rect.topL.h = 0;
   rect.topL.w = 0;
   rect.botR.w = width-1;
-  rect.botR.h = height-1;
+  rect.botR.h = height;
   verti_histo(image_surface, histo, rect);
   hori_lines(image_surface, histo, rect);
   free(histo);
@@ -749,7 +771,7 @@ tuples generate_groups(int *histo, int lenH)
       if(inZone == 1 && *(histo + i) == 0)
 	{
 	  inZone = 0;
-	  t.list[j].w = i-1;
+	  t.list[j].w = i;
 	  ++j;
 	}
       if(inZone == 1 && i+1 == lenH)
@@ -797,43 +819,26 @@ void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
 
   if (gps == 1)
     {
+      //printf("\nrect.topL.h = %d\n",rect.topL.h);
+      //printf("rect.topL.w = %d\n\n\n", rect.topL.w);
       hori_lines(image, vertHisto, rect);
     }
   else
     {
       //if the ratio is like a i
-      if (r > 1/2 && gps == 2)
+      if (r < 0.33 && gps == 2)
 	{
 	  int highr = t.list[0].h;
 	  int lowr = t.list[1].w;
+	  printf("hereeeee\n");
 	  printf("highr = %d \nlowr = %d\n", highr, lowr);
-	  printf("\nrect.topL.h = %d\nlen = %d\n\n",rect.topL.h, rect.topL.h + highr);
+	  printf("\nrect.topL.h = %d\nlen = %d\n",rect.topL.h, rect.topL.h + highr);
+	  printf("rect.topL.w = %d\n\n", rect.topL.w);
 	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
 	    {
 	      printf("hi\n");
-	      /*trace_hori_red_line(image, rect.topL.h + i,
-		rect.topL.w, rect.topL.h + i, rect.botR.w);*/
-
-	      int startH = i;
-	      int startW = rect.topL.w;
-	      int endH = i;
-	      int endW = rect.botR.w;
-	      printf("startW = %d\n", startW);
-	      printf("endW = %d\n", endW);
-	      printf("endH = %d\n", endH);
-	      
-	      //taking the dimensions of the image
-	      int width = image->w;
-	      int height = image->h;
-
-	      if(startH < height && endH == startH  && startW < width && endW < width)
-		{
-		  for(int i = startW ; i <= endW ; i++)
-		    {
-		      Uint32 newPixel = SDL_MapRGB(image->format, 255, 0, 0);
-		      put_pixel(image, i, endH, newPixel);
-		    }
-		}
+	      trace_hori_red_line(image, i,
+		rect.topL.w, i, rect.botR.w);
 	    }
 	  for(int i = rect.topL.h + lowr ; i < rect.botR.h ; i++)
 	    {
@@ -845,10 +850,12 @@ void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
 	{
 	  printf("hi22222\n");
 	  int indMax = max_tuples(t);
-	  int highr = t.list[indMax].h;
-	  int lowr = t.list[indMax].w;
+	  int highr = t.list[indMax+1].h;
+	  int lowr = t.list[indMax+1].w;
+	  printf("indMax = %d\n", indMax);
 	  printf("else\nhighr = %d \nlowr = %d\n", highr, lowr);
 	  printf("\nrect.topL.h = %d\nlen = %d\n\n",rect.topL.h, rect.topL.h + highr);
+	  printf("rect.topL.w = %d\n\n", rect.topL.w);
 	  for(int i = rect.topL.h ; i < rect.topL.h + highr ; i++)
 	    {
 	      trace_hori_red_line(image, i,

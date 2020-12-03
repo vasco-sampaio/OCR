@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <SDL.h>
 #include "pixel_functions.h"
+#include "structures.h"
 
 /*
 Regroups functions to manipulate the pixels of an image
@@ -130,6 +131,44 @@ void trace_vert_red_line(SDL_Surface *image_surface, int startH, int startW, int
 	  Uint32 newPixel = SDL_MapRGB(image_surface->format, 255, 0, 0);
 	  put_pixel(image_surface, endW, i, newPixel);
 	}
+    }
+}
+
+//Functions that draws red lines if no black pixels in the row/column
+
+/*
+Function that draws horizontal lines in a given rectangle, 
+in rows with no foreground pixels.
+ */
+void hori_lines(SDL_Surface *image_surface, int *vertHisto, coord rect)
+{
+  int topLh = rect.topL.h;
+  int topLw = rect.topL.w;
+  int botRw = rect.botR.w;
+  int botRh = rect.botR.h;
+  int len = botRh - topLh;
+  for(int i = 0 ; i < len ; i++)
+    {
+      if (*(vertHisto + i) == 0)
+	  trace_hori_red_line(image_surface, topLh + i, topLw, topLh + i, botRw);
+    }
+}
+
+/*
+Function that draws vertical lines in a given rectangle, 
+in columns with no foreground pixels.
+*/
+void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect)
+{
+  int topLh = rect.topL.h;
+  int topLw = rect.topL.w;
+  int botRw = rect.botR.w;
+  int botRh = rect.botR.h;
+  int len = botRw - topLw;
+  for(int i = 0 ; i < len ; i++)
+    {
+      if (*(hori_histo + i) == 0)
+	trace_vert_red_line(image_surface, topLh, topLw + i, botRh, topLw + i);
     }
 }
 

@@ -373,6 +373,7 @@ void print_doc(doc *image)
 {
   for(int i = 0 ; i < image->nbLines ; i++)
     {
+
       print_line(&image->allLines[i]);
     }
 }

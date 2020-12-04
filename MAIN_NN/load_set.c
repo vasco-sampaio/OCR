@@ -131,6 +131,20 @@ void print_output(double *out)
 	}
 	printf("\n");
 }
+
+
+void print_input(double *in)
+{
+	for(int i = 0; i < IMG_SIDE; ++i)
+	{
+		for(int j = 0; j < IMG_SIDE; ++j)
+		{
+			printf("%c ",((int) *(in + i * IMG_SIDE + j)) ? '#': ' ');
+		}
+		printf("\n");
+	}
+}
+
  /*   
 int main()
 {

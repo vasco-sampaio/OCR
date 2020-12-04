@@ -8,6 +8,7 @@
 # define IMG_SIZE 900
 
 void print_output(double *out);
+void print_input(double *in);
 
 /*	Load at max max_len images from the path directory
  *	and fill the outputs and inputs

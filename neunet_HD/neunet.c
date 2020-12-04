@@ -16,6 +16,10 @@ neunet_t *init_neunet()
 	res->nb_hidden = HIDDEN;
 	res->nb_outputs = OUTPUTS;
 
+	res->gen_error = 0;
+	res->global_error = 0;
+	res->max_glb_err = 0;
+
 
 	// I_H Weights init
 	for(int i = 0; i < INPUTS; ++i)
@@ -168,4 +172,22 @@ void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 	backward_prop(nn);
 	update_weights(nn, lr, DEFAULT_ALPHA);
 	update_biases(nn, lr);
+}
+
+
+// Calculate the squared error
+double neunet_get_error(neunet_t *nn)
+{
+	double e = 0;
+	nn->gen_error = 0;
+
+	for(int out = 0; out < OUTPUTS; ++out)
+	{
+		e = (nn->act_o[out] - nn-> exp_outputs[out]);
+		e *= e;
+
+		nn->gen_error += e;
+	}
+
+	return nn->gen_error;
 }

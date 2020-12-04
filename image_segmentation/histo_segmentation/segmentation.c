@@ -4,6 +4,8 @@
 #include "SDL/SDL_image.h"
 #include "pixel_functions.h"
 #include "segmentation.h"
+#include "structures.h"
+#include "utility.h"
 
 /*
 Regroups the functions that do the segmentation.

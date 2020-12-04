@@ -17,6 +17,17 @@ typedef struct
 
 
 /*
+Are used to detect the i and accents.
+To know the number of groups of black pixels in a row / column.
+*/
+typedef struct
+{
+  couple *list;
+  int nb;
+}tuples;
+
+
+/*
 Regroups 2 coordinates of a rectangles in an image.
 The first one is the point in the top left corner.
 The other one is the point in the bottom right corner.

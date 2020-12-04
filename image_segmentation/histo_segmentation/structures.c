@@ -2,6 +2,8 @@
 
 #include <err.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "structures.h"
 
 /*
 Regroups functions to initialize or free the structures.

@@ -171,18 +171,18 @@ void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 }
 
 
-char Output(neuralNetwork nn,char *aNum)
+char Output(neunet_t *nn,char *aNum)
 {
 	char res;
-        int nbOut = nn.numOutputs;
-        double max = getMVal(nn.outputLayer,0,0);
+        int nbOut = nn->nb_outputs;
+        double max = nn->act_o[0];
         int tmp = 0;
         for(int i = 0; i < nbOut;i++)
 	 {
-                  if(getMVal(nn.outputLayer,0,i) > max)
+                  if(nn->act_o[i] > max)
                   {
                           tmp = i;
-                          max = getMVal(nn.outputLayer,0,i);
+                          max = nn->act_o[i];
                   }
           }
           res = *(aNum+tmp);
@@ -202,5 +202,5 @@ char ExpOut(size_t size,double *expOut,char *aNum)
                   }
          }
           return *(aNum+res);
-  }
+}
 

@@ -168,7 +168,7 @@ Function that goes to the summit of a rectangle,
 at the right of a given point.
 Returns the width of this given point
 */
-int r_sum(SDL_Surface *image_surface, int wMin, int wMax, int h)
+int r_sum_line(SDL_Surface *image_surface, int wMin, int wMax, int h)
 {
   int red = 0;
   int res = wMin;
@@ -177,7 +177,7 @@ int r_sum(SDL_Surface *image_surface, int wMin, int wMax, int h)
       red = is_red(image_surface, res, h);
       res++;
     }
-  return res;
+  return res-1;
 }
 
 
@@ -186,7 +186,7 @@ Function that goes to the summit of a rectangle,
 at the bottom of a given point.
 Returns the height of this given point
 */
-int bot_sum(SDL_Surface *image_surface, int hMin, int hMax, int w)
+int bot_sum_line(SDL_Surface *image_surface, int hMin, int hMax, int w)
 {
   int red = 0;
   int res = hMin;
@@ -195,7 +195,7 @@ int bot_sum(SDL_Surface *image_surface, int hMin, int hMax, int w)
       red = is_red(image_surface, w, res);
       res++;
     }
-  return res;
+  return res-1;
 }
 
 /*
@@ -214,7 +214,7 @@ int count_get_lines(SDL_Surface *image_surface, coord rect)
 	  int red = is_red(image_surface, j, i);
 	  if(red == 0) //first encounter with a pixel not red
 	    {
-	      int tmp =  bot_sum(image_surface, i, rect.botR.h, j);
+	      int tmp =  bot_sum_line(image_surface, i, rect.botR.h, j);
 	      res++;
 	      j = rect.botR.w;
 	      i = tmp;
@@ -246,8 +246,8 @@ void get_lines(SDL_Surface *image_surface, coord rect, lineZones all)
 	    {
 	      all.zones[ind].topL.w = j;
 	      all.zones[ind].topL.h = i;
-	      all.zones[ind].botR.w = r_sum(image_surface, j, rect.botR.w, i);
-	      int tmp =  bot_sum(image_surface, i, rect.botR.h, j);
+	      all.zones[ind].botR.w = r_sum_line(image_surface, j, rect.botR.w, i);
+	      int tmp =  bot_sum_line(image_surface, i, rect.botR.h, j);
 	      all.zones[ind].botR.h = tmp;
 	      ind++;
 	      j = rect.botR.w;
@@ -265,6 +265,41 @@ void get_lines(SDL_Surface *image_surface, coord rect, lineZones all)
 //Functions to detect the letters after the letter separation
 
 /*
+Function that goes to the summit of a rectangle,
+at the right of a given point.
+Returns the width of this given point
+*/
+int r_sum_letter(SDL_Surface *image_surface, int wMin, int wMax, int h)
+{
+  int red = 0;
+  int res = wMin;
+  while (red == 0 && res < wMax)
+    {
+      red = is_red(image_surface, res, h);
+      res++;
+    }
+  return res;
+}
+
+
+/*
+Function that goes to the summit of a rectangle,
+at the bottom of a given point.
+Returns the height of this given point
+*/
+int bot_sum_letter(SDL_Surface *image_surface, int hMin, int hMax, int w)
+{
+  int red = 0;
+  int res = hMin;
+  while (red == 0 && res < hMax)
+    {
+      red = is_red(image_surface, w, res);
+      res++;
+    }
+  return res;
+}
+
+/*
 Function that goes through a given rectangle to count the zones 
 were there are letters
 */
@@ -280,7 +315,7 @@ int count_get_letters(SDL_Surface *image_surface, coord rect)
 	  int red = is_red(image_surface, i, j);
 	  if (red == 0)//first encounter of a pixel not red
 	    {
-	      int tmp = r_sum(image_surface, i, rect.botR.w, j);
+	      int tmp = r_sum_letter(image_surface, i, rect.botR.w, j);
 	      res++;
 	      j = rect.botR.h;
 	      i = tmp;
@@ -311,8 +346,8 @@ void get_letters(SDL_Surface *image_surface, coord rect, line l)
 	      l.letters[ind].folBySpace = 0;
 	      l.letters[ind].topL.w = i;
 	      l.letters[ind].topL.h = j;
-	      l.letters[ind].botR.h = bot_sum(image_surface, j, rect.botR.h, i);
-	      int tmp = r_sum(image_surface, i, rect.botR.w, j);
+	      l.letters[ind].botR.h = bot_sum_letter(image_surface, j, rect.botR.h, i);
+	      int tmp = r_sum_letter(image_surface, i, rect.botR.w, j);
 	      l.letters[ind].botR.w = tmp;
 	      ind++;
 	      j = rect.botR.h;

@@ -19,8 +19,11 @@ int avSpaceLetter(line *l);
 void detectSpace(line *l);
 void detectSpaceDoc(doc *image);
 
-int r_sum(SDL_Surface *image_surface, int wMin, int wMax, int h);
-int bot_sum(SDL_Surface *image_surface, int hMin, int hMax, int w);
+int r_sum_line(SDL_Surface *image_surface, int wMin, int wMax, int h);
+int bot_sum_line(SDL_Surface *image_surface, int hMin, int hMax, int w);
+
+int r_sum_letter(SDL_Surface *image_surface, int wMin, int wMax, int h);
+int bot_sum_letter(SDL_Surface *image_surface, int hMin, int hMax, int w);
 
 int count_get_lines(SDL_Surface *image_surface, coord rect);
 void get_lines(SDL_Surface *image_surface, coord rect, lineZones all);

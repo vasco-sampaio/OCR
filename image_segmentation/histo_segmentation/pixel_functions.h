@@ -3,6 +3,12 @@
 #ifndef PIXEL_FUNCTIONS_H_
 #define PIXEL_FUNCTIONS_H_
 
+#include <err.h>
+#include <stdlib.h>
+#include <SDL.h>
+#include "pixel_functions.h"
+#include "structures.h"
+
 Uint32 get_pixel(SDL_Surface *surface, int x, int y);
 void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 

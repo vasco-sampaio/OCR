@@ -12,6 +12,48 @@ Regroups all the functions that contribute to detect the letters
 
 //------------------------------------------------------------------------------
 
+//Functions that builds the histograms for given rectangles on the image
+
+/*
+Function that creates a vertical histogram that counts the foreground 
+pixels (black pixels) of each row, of a given rectangle.
+*/
+void verti_histo(SDL_Surface *image_surface, int *histo, coord rect)
+{
+  int ind = 0;
+  for(int i = rect.topL.h ; i < rect.botR.h ; i++)
+    {
+      for(int j = rect.topL.w ; j < rect.botR.w ; j++)
+	{
+	  if (is_black(image_surface, j, i) == 1)
+	      *(histo + ind) += 1;
+	}
+      ind++;
+    }
+}
+
+/*
+Function that creates a horizontal histogram that counts the foreground 
+pixels of each column, of a given rectangle.
+ */
+void hori_histo(SDL_Surface *image_surface, int *histo, coord rect)
+{
+  int ind = 0;
+  for(int j = rect.topL.w ; j < rect.botR.w ; j++)
+    {
+      for(int i = rect.topL.h ; i < rect.botR.h ; i++)
+	{
+	  if(is_black(image_surface, j, i) == 1)
+	    *(histo + ind) += 1;
+	}
+      ind++;
+    }
+}
+
+
+
+//------------------------------------------------------------------------------
+
 //Functions that separate letters that the histogram method doesn't separate
 
 /*
@@ -128,9 +170,9 @@ Returns the width of this given point
 */
 int r_sum(SDL_Surface *image_surface, int wMin, int wMax, int h)
 {
-  int red = 1;
+  int red = 0;
   int res = wMin;
-  while (red == 1 && res < wMax)
+  while (red == 0 && res < wMax)
     {
       red = is_red(image_surface, res, h);
       res++;
@@ -146,9 +188,9 @@ Returns the height of this given point
 */
 int bot_sum(SDL_Surface *image_surface, int hMin, int hMax, int w)
 {
-  int red = 1;
+  int red = 0;
   int res = hMin;
-  while (red == 1 && res < hMax)
+  while (red == 0 && res < hMax)
     {
       red = is_red(image_surface, w, res);
       res++;
@@ -170,7 +212,7 @@ int count_get_lines(SDL_Surface *image_surface, coord rect)
       while(j < rect.botR.w)
 	{
 	  int red = is_red(image_surface, j, i);
-	  if(red == 1) //first encounter with a pixel not red
+	  if(red == 0) //first encounter with a pixel not red
 	    {
 	      int tmp =  bot_sum(image_surface, i, rect.botR.h, j);
 	      res++;
@@ -200,7 +242,7 @@ void get_lines(SDL_Surface *image_surface, coord rect, lineZones all)
       while(j < rect.botR.w)
 	{
 	  int red = is_red(image_surface, j, i);
-	  if(red == 1) //first encounter with a pixel not red
+	  if(red == 0) //first encounter with a pixel not red
 	    {
 	      all.zones[ind].topL.w = j;
 	      all.zones[ind].topL.h = i;
@@ -236,7 +278,7 @@ int count_get_letters(SDL_Surface *image_surface, coord rect)
       while(j < rect.botR.h)
 	{
 	  int red = is_red(image_surface, i, j);
-	  if (red == 1)//first encounter of a pixel not red
+	  if (red == 0)//first encounter of a pixel not red
 	    {
 	      int tmp = r_sum(image_surface, i, rect.botR.w, j);
 	      res++;
@@ -264,7 +306,7 @@ void get_letters(SDL_Surface *image_surface, coord rect, line l)
       while(j < rect.botR.h)
 	{
 	  int red = is_red(image_surface, i, j);
-	  if (red == 1)//first encounter of a pixel not red
+	  if (red == 0)//first encounter of a pixel not red
 	    {
 	      l.letters[ind].folBySpace = 0;
 	      l.letters[ind].topL.w = i;

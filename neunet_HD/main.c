@@ -39,7 +39,7 @@ void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 int main()
 {
 	srand(time(NULL));
-	printf("%li\n", sizeof(neunet_t));
+	printf("%i\n", sizeof(neunet_t));
 /*
 	double d[] = {0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0};
 	double o[] = {0.0,1.0,1.0,0.0};
@@ -52,33 +52,27 @@ int main()
 	double *in = calloc(set_size * IMG_SIZE, sizeof(double));
 	double *out = calloc(set_size * OUTPUTS, sizeof(double));
 
+	double *t_in = calloc(62 * IMG_SIZE,sizeof(double));
+	double *t_out = calloc(62 * OUTPUTS,sizeof(double));
 	set_size = (int) load_dataset("../data_sets/arial_25_train", (size_t) set_size, in, out);
-
-	printf("Loaded %i items\n", set_size);
-
-
-
+	int test_size = (int) load_dataset("../data_sets/arial_25_test", (size_t) 62,t_in,t_out);
+	
 	neunet_t *xou = init_neunet();
 
-	for(int gen = 0; gen < 1000; ++gen)
+	for(int gen = 0; gen < 5; ++gen)
 	{
-		
+		if(!(gen % 100))
+			printf("Gen %i\n", gen);
 
 		for(int el = 0; el < set_size; ++el)
 		{
 			double *curIn = in + el * INPUTS;
 			double *curOut = out + el * OUTPUTS;
 			neunet_train(xou, curIn, curOut, 0.5);
-			neunet_get_error(xou);
 
 		}
-		if(!(gen % 100))
-		{
-			printf("Gen %i\n", gen);
-			printf("Error: %f\n", xou->gen_error);
-		}
 	}
-	testNeuralNet(xou,aNum,in,out);
+	testNeuralNet(xou,aNum,t_in,t_out);
 	free(xou);
 
 

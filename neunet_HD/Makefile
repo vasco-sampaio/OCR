@@ -9,7 +9,7 @@ LDFLAGS = -g -ljson-c
 
 #xor: nn.o matrix.o xor.o train.o utility.o neuralIO.o load_set.o pixel_functions.o
 
-main: main.o neunet.o utils.o 
+main: main.o neunet.o utils.o load_set.o pixel_functions.o
 
 
 data_set:

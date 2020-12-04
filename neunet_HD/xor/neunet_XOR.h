@@ -1,12 +1,15 @@
 # ifndef NEUNET_H
 # define NEUNET_H
 
-
+/*
 # define IMG_SIDE 30
 # define INPUTS IMG_SIDE*IMG_SIDE
 # define HIDDEN 22
 # define OUTPUTS 62
-
+*/
+# define INPUTS 2
+# define HIDDEN 2
+# define OUTPUTS 1
 
 typedef struct nn
 {

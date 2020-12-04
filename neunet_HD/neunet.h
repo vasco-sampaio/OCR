@@ -1,6 +1,6 @@
 # ifndef NEUNET_H
 # define NEUNET_H
-
+# include <stdlib.h>
 
 # define IMG_SIDE 30
 # define INPUTS IMG_SIDE*IMG_SIDE
@@ -46,6 +46,8 @@ typedef struct nn
 neunet_t *init_neunet();
 
 void neunet_train(neunet_t *nn, double *in, double *out, double lr);
-
+void forward_prop(neunet_t *nn);
+char Output(neunet_t *nn, char *aNum);
+char ExpOut(size_t size,double *expOut,char *aNum);
 
 # endif

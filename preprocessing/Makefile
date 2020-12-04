@@ -10,13 +10,13 @@ EXEC=main
 
 all: $(EXEC)
 
-main: pixel_functions.o preprocessing.o main.o
+main: pixel_functions.o preprocessing.o main1.o
 
 pixel_functions.o: pixel_functions.c pixel_functions.h
 
 preprocessing.o: preprocessing.c pixel_functions.h
 
-main.o: main.c pixel_functions.h preprocessing.h
+main1.o: main1.c pixel_functions.h preprocessing.h
 
 clean:
 	${RM} *.o

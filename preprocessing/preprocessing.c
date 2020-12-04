@@ -19,12 +19,12 @@ void toGrayscale(SDL_Surface *image_surface, int w, int h)
     {
       for(int j = 0 ; j < w ; j++)
 	{
-	  Uint32 pixel = get_pixel(image_surface, j, i); 
+	  Uint32 pixel = get_pixel1(image_surface, j, i); 
 	  Uint8 r, g, b;
 	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b); 
 	  int  av = 0.3*r + 0.59*g + 0.11*b;
 	  pixel = SDL_MapRGB(image_surface->format, av, av, av);
-	  put_pixel(image_surface, j, i, pixel);
+	  put_pixel1(image_surface, j, i, pixel);
 	}
     }
 }
@@ -41,7 +41,7 @@ void histogram(SDL_Surface *image_surface, int w, int h, long *histo)
       for(int j = 0 ; j < w ; j++)
 	{
 	  //getting the pixel value
-	  Uint32 pixel = get_pixel(image_surface, j, i);
+	  Uint32 pixel = get_pixel1(image_surface, j, i);
 	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
 	  *(histo + r) +=1;
 	}
@@ -66,9 +66,9 @@ long calcul_sum_gray(long *histo)
 /*
   Function that initialises the double couples
 */
-couple init_couple()
+duo init_duo()
 {
-  couple res;
+  duo res;
   res.b = 0; //for the foreground pixels (black pixels)
   res.f = 0; //for the background pixels (white pixels)
   return res;
@@ -77,7 +77,7 @@ couple init_couple()
 /*
   Function that calculates the new weights
 */
-couple cal_weight(couple w, int t, int total, long *histo)
+duo cal_weight(duo w, int t, int total, long *histo)
 {
   w.b += *(histo + t);
   w.f = total - w.b;
@@ -88,7 +88,7 @@ couple cal_weight(couple w, int t, int total, long *histo)
   Function that calculates the sums that are used to calculate 
   the means.
 */
-couple cal_sum(couple s, int t, long *histo, long sum_gray)
+duo cal_sum(duo s, int t, long *histo, long sum_gray)
 {
   s.b += t * *(histo + t);
   s.f = sum_gray - s.b;
@@ -99,7 +99,7 @@ couple cal_sum(couple s, int t, long *histo, long sum_gray)
 /*
   Function that calculates the new means.
 */
-couple cal_mean(couple m, couple s, couple w)
+duo cal_mean(duo m, duo s, duo w)
 {
   m.b = s.b / w.b;
   m.f = s.f / w.f;
@@ -116,9 +116,9 @@ int threshold(SDL_Surface *image_surface, int w, int h, long *histo)
   long total_pixels = w * h;
   int threshold = 0;
   double maxt = 0;
-  couple weight = init_couple();
-  couple mean = init_couple();
-  couple sum = init_couple();
+  duo weight = init_duo();
+  duo mean = init_duo();
+  duo sum = init_duo();
   double bcv = 0; //between class variance
   long sum_pixel_gray = calcul_sum_gray(histo); //used to calculate the means
   for(int t = 0 ; t < 256 ; t++)
@@ -149,7 +149,7 @@ void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
     {
       for(int j = 0 ; j < w ; j++)
 	{
-	  Uint32 pixel = get_pixel(image_surface, j, i);
+	  Uint32 pixel = get_pixel1(image_surface, j, i);
 	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
 	  if (r < t)
 	    {
@@ -159,7 +159,7 @@ void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
 	    {
 	      pixel = SDL_MapRGB(image_surface->format, 255, 255, 255);
 	    }
-	  put_pixel(image_surface, j, i, pixel);
+	  put_pixel1(image_surface, j, i, pixel);
 	}
     }
 }
@@ -226,31 +226,31 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 	  Uint8 tmp = 0;
 	  Uint8 tmp2 = 0;
 	  Uint8 *pixels_val = calloc(5, sizeof(Uint8));
-	  SDL_GetRGB(get_pixel(is2, i, j), is2->format, pixels_val, &tmp, &tmp2);
+	  SDL_GetRGB(get_pixel1(is2, i, j), is2->format, pixels_val, &tmp, &tmp2);
 	  if (i + 1 < w)
 	    {
-	      SDL_GetRGB(get_pixel(is2, i+1, j), is2->format, pixels_val + k, &tmp, &tmp2);
+	      SDL_GetRGB(get_pixel1(is2, i+1, j), is2->format, pixels_val + k, &tmp, &tmp2);
 	      k++;
 	    }
 	  if (i - 1 >= 0)
 	    {
-	      SDL_GetRGB(get_pixel(is2, i-1, j), is2->format, pixels_val + k, &tmp, &tmp2);
+	      SDL_GetRGB(get_pixel1(is2, i-1, j), is2->format, pixels_val + k, &tmp, &tmp2);
 	      k++;
 	    }
 	  if(j + 1 < h)
 	    {
-	      SDL_GetRGB(get_pixel(is2, i, j+1), is2->format, pixels_val + k, &tmp, &tmp2);
+	      SDL_GetRGB(get_pixel1(is2, i, j+1), is2->format, pixels_val + k, &tmp, &tmp2);
 	      k++;
 	    }
 	  if(j - 1 >= 0)
 	    {
-	      SDL_GetRGB(get_pixel(is2, i, j-1), is2->format, pixels_val + k, &tmp, &tmp2);
+	      SDL_GetRGB(get_pixel1(is2, i, j-1), is2->format, pixels_val + k, &tmp, &tmp2);
 	      k++;
 	    }
 	  sort(pixels_val, k);
 	  Uint8 median = get_average(pixels_val, k);
 	  Uint32 pixel = SDL_MapRGB(is->format, median, median, median);
-	  put_pixel(is, i, j, pixel);
+	  put_pixel1(is, i, j, pixel);
 	  free(pixels_val);
 	}
     }
@@ -281,11 +281,11 @@ void contrast(SDL_Surface *im, int lvlc, int w, int h)
     {
       for(int j = 0 ; j < w ; j++)
 	{
-	  SDL_GetRGB(get_pixel(im, j, i), im->format, &r, &g, &b);
+	  SDL_GetRGB(get_pixel1(im, j, i), im->format, &r, &g, &b);
 	  r = truncate(factor * (r - 128) + 128);
 	  g = truncate(factor * (g - 128) + 128);
 	  b = truncate(factor * (b - 128) + 128);
-	  put_pixel(im, j, i, SDL_MapRGB(im->format, r, g, b));
+	  put_pixel1(im, j, i, SDL_MapRGB(im->format, r, g, b));
 	}
     }
 }

@@ -30,6 +30,9 @@ typedef struct nn
 	double act_h[HIDDEN];
 	double act_o[OUTPUTS];
 	
+
+	// STORRED ERRORS
+	
 	// Delta Weights arrays
 	double d_weights_i_h[INPUTS][HIDDEN];
 	double d_weights_h_o[HIDDEN][OUTPUTS];
@@ -40,6 +43,10 @@ typedef struct nn
 	// Delta Hidden layer
 	double d_hidden[HIDDEN];
 
+	double gen_error;
+	double global_error;
+	double max_glb_err;
+
 
 } neunet_t;
 
@@ -49,5 +56,7 @@ void neunet_train(neunet_t *nn, double *in, double *out, double lr);
 void forward_prop(neunet_t *nn);
 char Output(neunet_t *nn, char *aNum);
 char ExpOut(size_t size,double *expOut,char *aNum);
+
+double neunet_get_error(neunet_t *nn);
 
 # endif

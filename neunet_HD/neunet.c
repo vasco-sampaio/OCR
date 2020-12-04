@@ -169,3 +169,38 @@ void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 	update_weights(nn, lr, DEFAULT_ALPHA);
 	update_biases(nn, lr);
 }
+
+
+char Output(neuralNetwork nn,char *aNum)
+{
+	char res;
+        int nbOut = nn.numOutputs;
+        double max = getMVal(nn.outputLayer,0,0);
+        int tmp = 0;
+        for(int i = 0; i < nbOut;i++)
+	 {
+                  if(getMVal(nn.outputLayer,0,i) > max)
+                  {
+                          tmp = i;
+                          max = getMVal(nn.outputLayer,0,i);
+                  }
+          }
+          res = *(aNum+tmp);
+          return res;
+}
+ 
+char ExpOut(size_t size,double *expOut,char *aNum)
+{
+	double tmp = *(expOut);
+        size_t res = 0;
+        for(size_t i = 0; i < size;i++)
+        {
+		if(*(expOut+i) > tmp)
+               	{
+                        tmp = *(expOut+i);
+			res = i;
+                  }
+         }
+          return *(aNum+res);
+  }
+

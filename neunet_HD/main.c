@@ -24,14 +24,11 @@ int main()
 	double *out = o;
 */
 
-	int set_size = 62;
+	int set_size = 434;
 	double *in = calloc(set_size * IMG_SIZE, sizeof(double));
 	double *out = calloc(set_size * OUTPUTS, sizeof(double));
 
 	set_size = (int) load_dataset("../data_sets/arial_25_train", (size_t) set_size, in, out);
-
-
-
 
 	neunet_t *xou = init_neunet();
 

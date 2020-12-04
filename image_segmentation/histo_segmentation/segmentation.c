@@ -6,6 +6,7 @@
 #include "segmentation.h"
 #include "structures.h"
 #include "utility.h"
+#include "matrix_letters.h"
 
 /*
 Regroups the functions that do the segmentation.
@@ -106,4 +107,77 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 	}
     }
   detectSpaceDoc(&image);
+}
+
+//------------------------------------------------------------------------------
+
+//Function that makes all the segmentation (as a main)
+
+void segmentation(char *path)
+{
+  SDL_Surface *image_surface;
+  image_surface = IMG_Load(path);
+  
+  int height = image_surface->h;
+  int width = image_surface->w;
+
+  marking_lines(image_surface, height, width);
+  SDL_SaveBMP(image_surface, "line_seg.bmp");
+  
+  lineZones all = marking_letters(image_surface, width, height);
+  SDL_SaveBMP(image_surface, "line_seg2.bmp");
+
+  doc image = keep_letters(image_surface, all);
+  resize_letter(image_surface, image);
+
+  SDL_SaveBMP(image_surface, "line_seg3.bmp");
+  doc testtt = keep_letters(image_surface, all);
+
+  docMat test = buildDocMat(image_surface, testtt);
+
+  detectSpaceDoc(&testtt);
+  print_doc(&testtt);
+
+  char *res = doc_string(&testtt);
+  printf("\n%s", res);
+  
+  //freeing whatever needs to be freed
+   SDL_FreeSurface(image_surface);
+   free(all.zones);
+   free_doc(image);
+   free_doc(testtt);
+   free_docMat(test);
+}
+
+char* segmentation_SDL(SDL_Surface * image_surface)
+{ 
+  int height = image_surface->h;
+  int width = image_surface->w;
+
+  marking_lines(image_surface, height, width);
+  SDL_SaveBMP(image_surface, "line_seg.bmp");
+  
+  lineZones all = marking_letters(image_surface, width, height);
+  SDL_SaveBMP(image_surface, "line_seg2.bmp");
+
+  doc image = keep_letters(image_surface, all);
+  resize_letter(image_surface, image);
+
+  SDL_SaveBMP(image_surface, "line_seg3.bmp");
+  doc testtt = keep_letters(image_surface, all);
+
+  docMat test = buildDocMat(image_surface, testtt);
+
+  detectSpaceDoc(&testtt);
+  print_doc(&testtt);
+  char *res = doc_string(&testtt);
+  printf("%s", res);
+  
+  //freeing whatever needs to be freed
+   SDL_FreeSurface(image_surface);
+   free(all.zones);
+   free_doc(image);
+   free_doc(testtt);
+   free_docMat(test);
+   return res;
 }

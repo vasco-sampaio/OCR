@@ -14,7 +14,9 @@ int main(int argc, char** argv)
   if(argc != 2)
     errx(1, "the number of arguments is not valid : you should have 2 arguments");
 
-  SDL_Surface *image_surface;
+  segmentation(argv[1]);
+  
+  /*SDL_Surface *image_surface;
   image_surface = IMG_Load(argv[1]);
 
 
@@ -34,12 +36,13 @@ int main(int argc, char** argv)
   doc testtt = keep_letters(image_surface, all);
 
   docMat test = buildDocMat(image_surface, testtt);
-  print_doc(&image);
+  print_doc(&testtt);
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);
    free(all.zones);
    free_doc(image);
    free_doc(testtt);
-   free_docMat(test);
+   free_docMat(test);*/
+  return 0;
 }

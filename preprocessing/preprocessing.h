@@ -13,7 +13,7 @@ void histogram(SDL_Surface *image_surface, int w, int h, long *histo);
 long calcul_sum_gray(long *histo);
 duo init_couple();
 
-SDL_Surface* rotate(SDL_Surface *image, int w, int h, double angle);
+void rotate(SDL_Surface *image, int w, int h, double angle);
 
 duo cal_weight(duo w, int t, int total, long *histo);
 duo cal_sum(duo s, int t, long *histo, long sum_gray);

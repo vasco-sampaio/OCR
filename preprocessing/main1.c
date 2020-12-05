@@ -3,6 +3,7 @@
 #include "SDL/SDL_image.h"
 #include "preprocessing.h"
 #include "pixel_functions.h"
+#include <math.h>
 
 int main(int argc, char** argv)
 {
@@ -14,12 +15,11 @@ int main(int argc, char** argv)
   SDL_Surface *image = IMG_Load(argv[1]);
   int height = image->h;
   int width = image->w;
-  SDL_Surface * rot = rotate(image, width, height, 90);
+  rotate(image, width, height, 2* M_PI);
   
-  SDL_SaveBMP(rot, "rotate.bmp");
+  SDL_SaveBMP(image, "rotate.bmp");
 
   SDL_FreeSurface(image);
-  SDL_FreeSurface(rot);
   /*SDL_Surface *image_surface = IMG_Load(argv[1]);
   int height = image_surface->h;
   int width = image_surface->w;

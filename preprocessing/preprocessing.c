@@ -30,13 +30,15 @@ void toGrayscale(SDL_Surface *image_surface, int w, int h)
     }
 }
 
-SDL_Surface* rotate(SDL_Surface *image, int w, int h, double angle)
+void rotate(SDL_Surface *image, int w, int h, double angle)
 {
   int cw = w / 2;
   int ch = h / 2;
 
   double a_cos = cos(angle);
   double a_sin = sin(angle);
+
+  printf("w = %d\nh = %d\n", w, h);
 
   int distw;
   int disth;
@@ -57,12 +59,18 @@ SDL_Surface* rotate(SDL_Surface *image, int w, int h, double angle)
 	  disth = j - ch;
 	  resw = distw*a_cos - disth*a_sin + cw;
 	  resh = distw*a_sin + disth*a_cos + ch;
-	  pixel = get_pixel1(image, resw, resh);
-	  put_pixel1(is2, i, j, pixel); 
+	  //printf("resw = %d\nresh = %d\n", resw, resh);
+
+	  if (resh > h)
+	    resh = h;
+	  if (resw > w)
+	    resw = w;
+	  
+	  pixel = get_pixel1(is2, resw, resh);
+	  put_pixel1(image, i, j, pixel); 
 	}
 
     }
-  return is2;
 }
 
 /*

@@ -3,45 +3,42 @@
 # include <stdlib.h>
 
 # define IMG_SIDE 30
-# define INPUTS IMG_SIDE*IMG_SIDE
-# define HIDDEN 22
-# define OUTPUTS 62
+# define NN_INPUTS IMG_SIDE*IMG_SIDE
+# define NN_HIDDENS 22
+# define NN_OUTPUTS 62
 
 
 typedef struct nn
 {
-	int nb_inputs;
-	int nb_hidden;
-	int nb_outputs;
 
 	// Inputs array
-	double inputs[INPUTS];
-	double exp_outputs[OUTPUTS];
+	double inputs[NN_INPUTS];
+	double exp_outputs[NN_OUTPUTS];
 
 	// Biases arrays
-	double biases_h[HIDDEN];
-	double biases_o[OUTPUTS];
+	double biases_h[NN_HIDDENS];
+	double biases_o[NN_OUTPUTS];
 
 	// Weights arrays
-	double weights_i_h[INPUTS][HIDDEN];
-	double weights_h_o[HIDDEN][OUTPUTS];
+	double weights_i_h[NN_INPUTS][NN_HIDDENS];
+	double weights_h_o[NN_HIDDENS][NN_OUTPUTS];
 
 	// Activations arrays
-	double act_h[HIDDEN];
-	double act_o[OUTPUTS];
+	double act_h[NN_HIDDENS];
+	double act_o[NN_OUTPUTS];
 	
 
 	// STORRED ERRORS
 	
 	// Delta Weights arrays
-	double d_weights_i_h[INPUTS][HIDDEN];
-	double d_weights_h_o[HIDDEN][OUTPUTS];
+	double d_weights_i_h[NN_INPUTS][NN_HIDDENS];
+	double d_weights_h_o[NN_HIDDENS][NN_OUTPUTS];
 
 	// Delta Output layer
-	double d_output[OUTPUTS];
+	double d_output[NN_OUTPUTS];
 
 	// Delta Hidden layer
-	double d_hidden[HIDDEN];
+	double d_hidden[NN_HIDDENS];
 
 	double gen_error;
 	double global_error;

@@ -12,5 +12,5 @@ ocr_ui: ui_utils.o
 
 clean:
 	${RM} $(EXE)
-
+	${RM} *.o
 

@@ -5,6 +5,7 @@
 #include "utility.h"
 #include "structures.h"
 #include "matrix_letters.h"
+#include "resizing.h"
 
 #include <stdlib.h>
 #include <err.h>

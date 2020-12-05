@@ -7,6 +7,7 @@
 #include "structures.h"
 #include "utility.h"
 #include "matrix_letters.h"
+#include "resizing.h"
 
 /*
 Regroups the functions that do the segmentation.
@@ -142,6 +143,24 @@ void segmentation(char *path)
   printf("\n%s", res);
 
   free(res);
+
+  int nbLines = test.nbLines;
+  lineMat* lines = test.lines;
+  int nbLetters = 0;
+  matrix* letters = NULL; 
+  matrix big; 
+  for(int i = 0; i < nbLines; ++i)
+    {
+      nbLetters = lines[i].nbLetters;
+      letters = lines[i].letterMat;
+      for(int j = 0; j < nbLetters; ++j)
+	{
+	  big = interpolation(letters[j].mat, letters[j].width, letters[j].height, 20);
+	  m_fill(&big);
+	  //print_m(big);
+	  free(big.mat);
+	}
+    }
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);

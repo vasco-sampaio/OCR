@@ -8,9 +8,11 @@ typedef struct
 {
 	GtkWindow *main_window;
 
-	GtkViewport *img_viewport;
 	GtkImage *img_display;
 	GdkPixbuf *img_pix_buf;
+
+	GtkTextView *txt_display;
+	GtkTextBuffer *txt_buffer;
 } UI_t;
 
 typedef struct

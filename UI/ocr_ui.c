@@ -9,8 +9,6 @@
 
 
 
-
-
 void on_load_image_click(GtkButton *btn, gpointer user_data)
 {
 	g_print("Pressed load_image button\n");
@@ -46,9 +44,11 @@ int main(int argc, char **argv)
 	GtkButton *load_nn_button = GTK_BUTTON(gtk_builder_get_object(builder, "load_nn_button"));
 	GtkButton *run_OCR_button = GTK_BUTTON(gtk_builder_get_object(builder, "run_OCR_button"));
 
-	GtkViewport *img_viewport = GTK_VIEWPORT(gtk_builder_get_object(builder, "img_viewport"));
 	GtkImage *img_display = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
-	GtkLabel *txt_display = GTK_LABEL(gtk_builder_get_object(builder, "text_display"));
+	GtkTextView *txt_display = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "text_display"));
+	GtkTextBuffer *txt_buffer = GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "ocr_text_buffer"));
+
+	gtk_text_view_set_buffer(txt_display, txt_buffer);
 
 	data_t app_data =
 	{
@@ -58,7 +58,6 @@ int main(int argc, char **argv)
 		{
 			.main_window = main_window,
 			.img_display = img_display,
-			.img_viewport = img_viewport,
 			.img_pix_buf = NULL
 		}
 	};

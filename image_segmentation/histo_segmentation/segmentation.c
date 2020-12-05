@@ -140,6 +140,8 @@ void segmentation(char *path)
 
   char *res = doc_string(&testtt);
   printf("\n%s", res);
+
+  free(res);
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);

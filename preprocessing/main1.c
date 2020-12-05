@@ -3,6 +3,7 @@
 #include "SDL/SDL_image.h"
 #include "preprocessing.h"
 #include "pixel_functions.h"
+#include <math.h>
 
 int main(int argc, char** argv)
 {
@@ -10,7 +11,15 @@ int main(int argc, char** argv)
     errx(1, "the number of arguments is not valid : you should have 2 arguments");
 
   preprocessing(argv[1]);
+
+  SDL_Surface *image = IMG_Load(argv[1]);
+  int height = image->h;
+  int width = image->w;
+  rotate(image, width, height, 2* M_PI);
   
+  SDL_SaveBMP(image, "rotate.bmp");
+
+  SDL_FreeSurface(image);
   /*SDL_Surface *image_surface = IMG_Load(argv[1]);
   int height = image_surface->h;
   int width = image_surface->w;

@@ -2,6 +2,7 @@
 #include "SDL/SDL_image.h"
 #include "pixel_functions.h"
 #include "preprocessing.h"
+#include <math.h>
 
 /*
   This file is in charge of the image pre-processing.
@@ -26,6 +27,49 @@ void toGrayscale(SDL_Surface *image_surface, int w, int h)
 	  pixel = SDL_MapRGB(image_surface->format, av, av, av);
 	  put_pixel1(image_surface, j, i, pixel);
 	}
+    }
+}
+
+void rotate(SDL_Surface *image, int w, int h, double angle)
+{
+  int cw = w / 2;
+  int ch = h / 2;
+
+  double a_cos = cos(angle);
+  double a_sin = sin(angle);
+
+  printf("w = %d\nh = %d\n", w, h);
+
+  int distw;
+  int disth;
+
+  int resw;
+  int resh;
+
+  Uint32 pixel;
+
+  SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
+  SDL_BlitSurface(image, NULL, is2, NULL);
+
+  for(int i = 0 ; i < w ; i++)
+    {
+      distw = i - cw;
+      for(int j = 0 ; j < h ; j++)
+	{
+	  disth = j - ch;
+	  resw = distw*a_cos - disth*a_sin + cw;
+	  resh = distw*a_sin + disth*a_cos + ch;
+	  //printf("resw = %d\nresh = %d\n", resw, resh);
+
+	  if (resh > h)
+	    resh = h;
+	  if (resw > w)
+	    resw = w;
+	  
+	  pixel = get_pixel1(is2, resw, resh);
+	  put_pixel1(image, i, j, pixel); 
+	}
+
     }
 }
 

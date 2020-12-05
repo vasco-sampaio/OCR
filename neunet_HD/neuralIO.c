@@ -39,49 +39,38 @@ int getSize(json_object *parent, char *tag)
 
 
 // Specially made function to load an array in a bias matrix
-void fillBiases(matrix_t *biases, json_object *parent, char *tag)
+void fillBiases(double *biases, int w_l, json_object *parent, char *tag)
 {
 	json_object *biases_json;
 	json_object *bias;
 	double bias_val;
 	json_object_object_get_ex(parent, tag, &biases_json);
 
-	for(int i = 0; i < biases->cols; ++i)
+	for(int i = 0; i < w_l; ++i)
 	{
 		bias = json_object_array_get_idx(biases_json, i);
 		bias_val = json_object_get_double(bias);
-		setMVal(*biases, 0, i, bias_val);
+		biases[i] = bias_val;
 	}
 
 }
 
 
-
-// Same but for 2D weights matrices
-void fillWeights(matrix_t *weights, json_object *parent, char *tag)
-{
-	json_object *w_rows;
-	json_object *w_cols;
-	json_object *weight;
-	double w_val;
-	json_object_object_get_ex(parent, tag, &w_rows);
-
-	for(int i = 0; i < weights->rows; ++i)
-	{
-		w_cols = json_object_array_get_idx(w_rows, i);
-		for(int j = 0; j < weights->cols; ++j)
-		{
-			weight = json_object_array_get_idx(w_cols, j);
-			w_val = json_object_get_double(weight);
-			setMVal(*weights, i, j, w_val);
-		}
+// We can't use functions because parameters are static arrays
+# define fill_weights(w_dst, js_w_src, w_in, w_out)					\
+	for(int i = 0; i < w_in; ++i){									\
+		json_object *col = json_object_array_get_idx(js_w_src, i);	\
+		for(int j = 0; j < w_out; ++j){								\
+			json_object *w_j = json_object_array_get_idx(col, j);	\
+			double val = json_object_get_double(w_j);				\
+			w_dst[i][j] = val;										\
+		}															\
 	}
-}
 
 
 
 // Main loading function, load a neural net from a json file
-neuralNetwork fileToNeuralNet(char *path)
+neunet_t *fileToNeuralNet(char *path)
 {
 	// I - GET THE JSON OBJECT FROM THE FILE
 	json_object *neunet_json;
@@ -92,16 +81,30 @@ neuralNetwork fileToNeuralNet(char *path)
 	int nbHiddens = getSize(neunet_json, JSON_NB_HIDDENS);
 	int nbOutputs = getSize(neunet_json, JSON_NB_OUTPUTS);
 
+	if(nbInputs != NN_INPUTS || nbHiddens != NN_HIDDENS || nbOutputs != NN_OUTPUTS)
+	{
+		printf("Error while loading neural_net: wrong format");
+		return NULL;
+	}
+
 	// III - INITIALIZE THE NETWORK
-	neuralNetwork RES = initNN(nbInputs, nbHiddens, nbOutputs);
+	neunet_t *RES = init_neunet();
 
 	// IV - GET THE BIASES
-	fillBiases(&RES.hiddenBias, neunet_json, JSON_HIDDEN_BIASES);
-	fillBiases(&RES.outputBias, neunet_json, JSON_OUTPUT_BIASES);
+	fillBiases(RES->biases_h, NN_HIDDENS, neunet_json, JSON_HIDDEN_BIASES);
+	fillBiases(RES->biases_o, NN_OUTPUTS, neunet_json, JSON_OUTPUT_BIASES);
 
 	// V - GET THE WEIGHTS
-	fillWeights(&RES.hiddenWeights, neunet_json, JSON_HIDDEN_WEIGHTS);
-	fillWeights(&RES.outputWeights, neunet_json, JSON_OUTPUT_WEIGHTS);
+	json_object *weights_buf;
+
+	// Hidden weights
+	json_object_object_get_ex(neunet_json, JSON_HIDDEN_WEIGHTS, &weights_buf);
+	fill_weights(RES->weights_i_h, weights_buf, NN_INPUTS, NN_HIDDENS);
+
+	// Output weights
+	json_object_object_get_ex(neunet_json, JSON_OUTPUT_WEIGHTS, &weights_buf);
+	fill_weights(RES->weights_h_o, weights_buf, NN_HIDDENS, NN_OUTPUTS);
+	
 
 	// VI - RETURN
 	return RES;
@@ -113,45 +116,24 @@ neuralNetwork fileToNeuralNet(char *path)
 
 // ########################### FILE WRITING ###################################
 
+
 // Return a 1D JSON array from the given 1D matrix
-json_object *biases_object(matrix_t biases)
+json_object *biases_object(double *biases, int arr_len)
 {
 	json_object *biases_json = json_object_new_array();
 	json_object *bias;
-	double val;
 
-	for(int i = 0; i < biases.cols; ++i)
+	for(int i = 0; i < arr_len; ++i)
 	{
-		val = getMVal(biases, 0, i);
-		bias = json_object_new_double(val);
+		bias = json_object_new_double(biases[i]);
 		json_object_array_add(biases_json, bias);
 	}
 	return biases_json;
 }
 
 
-
-/*
-   json_object *weights_object(int w_in, int w_out)
-   {
-   json_object *weights_json = json_object_new_array();
-   json_object *w_list;
-   json_object *weight;
-   double val;
-
-   for(int i = 0; i < w_in; ++i)
-   {
-   w_list = json_object_new_array();
-   for(int j = 0; j < w_out; ++j)
-   {
-   weight = json_object_new_double(val);
-   json_object_array_add(w_list, weight);
-   }
-   json_object_array_add(weights_json, w_list);
-   }
-   return weights_json;
-   }*/
-
+// We must use a macro and not a function because
+// weight arrays are static and thus can't be function parameters
 # define weights_object(jobj, w, w_in, w_out)					\
 	for(int i = 0; i < w_in; ++i)								\
 {																\
@@ -178,8 +160,8 @@ void neuralNetToFile(neunet_t *nn, char *path)
 	json_object *nbOutputs = json_object_new_int(NN_OUTPUTS);
 
 	// Biases
-	//json_object *hBiases = biases_object(nn->biases_h);
-	//json_object *oBiases = biases_object(nn->biases_o);
+	json_object *hBiases = biases_object(nn->biases_h, NN_HIDDENS);
+	json_object *oBiases = biases_object(nn->biases_o, NN_OUTPUTS);
 
 	// Weights
 	json_object *hWeights = json_object_new_array();

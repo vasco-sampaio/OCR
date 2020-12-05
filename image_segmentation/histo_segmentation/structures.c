@@ -117,7 +117,7 @@ void print_line(line *l)
 */
 char* line_string(line *l)
 {
-  char *res = malloc((l->nbLetters + l->nbSpaces)* sizeof(char));
+  char *res = malloc((l->nbLetters + l->nbSpaces + 2)* sizeof(char)); //+2 for \n
   strcpy(res, "");
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
@@ -125,6 +125,7 @@ char* line_string(line *l)
       if (l->letters[i].folBySpace == 1)
 	strcat(res, " ");
     }
+  strcat(res, "\n");
   return res;
 }
 
@@ -136,9 +137,8 @@ int nb_char(doc *image)
   int res = 0;
   for(int i = 0 ; i < image->nbLines ; i++)
     {
-      res += image->allLines[i].nbLetters + image->allLines[i].nbSpaces;
+      res += image->allLines[i].nbLetters + image->allLines[i].nbSpaces + 2; //+2 for \n
     }
-  res += image->nbLines;
   return res;
 }
 
@@ -149,10 +149,12 @@ char* doc_string(doc *image)
 {
   char *res = malloc(nb_char(image)*sizeof(char));
   strcpy(res, "");
+  char *tmp;
   for(int i = 0 ; i < image->nbLines ; i++)
     {
-      strcat(res, line_string(&image->allLines[i]));
-      strcat(res, "\n");
+      tmp = line_string(&image->allLines[i]);
+      strcat(res, tmp);
+      free(tmp);
     }
   return res;
 }

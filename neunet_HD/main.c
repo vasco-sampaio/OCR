@@ -39,7 +39,7 @@ void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 int main()
 {
 	srand(time(NULL));
-	printf("%i\n", sizeof(neunet_t));
+	printf("%li\n", sizeof(neunet_t));
 /*
 	double d[] = {0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0};
 	double o[] = {0.0,1.0,1.0,0.0};
@@ -62,14 +62,14 @@ int main()
 	
 	neunet_t *xou = init_neunet();
 
-	for(int gen = 0; gen < 50; ++gen)
+	for(int gen = 0; gen < 500; ++gen)
 	{
 		if(!(gen % 100))
 			printf("Gen %i\n", gen);
 
 		for(int el = 0; el < set_size; ++el)
 		{
-			double *curIn = in + el * NN_INPUTS ;
+			double *curIn = in + el * NN_INPUTS;
 			double *curOut = out + el * NN_OUTPUTS ;
 			neunet_train(xou, curIn, curOut, 0.1);
 
@@ -79,5 +79,7 @@ int main()
 	testNeuralNet(xou,aNum,t_in,t_out);
 	free(xou);
 
+	//to remove warnings
+	return test_size;
 
 }

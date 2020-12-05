@@ -136,11 +136,24 @@ int threshold(SDL_Surface *image_surface, int w, int h, long *histo)
   return threshold;
 }
 
+/*
+Function that checks if a function is black.
+*/
+int is_pixel_black(SDL_Surface *image, int i, int j)
+{
+  Uint32 pixel = get_pixel1(image, i, j);
+  Uint8 r, g, b;
+  SDL_GetRGB(pixel, image->format, &r, &g, &b);
+  if (r == 0)
+    return 0;
+  return 1;
+}
+
 
 /*
-  Function that binarizes the image and fill the matrix .
+  Function that binarizes the image and fill the matrix if the information is in black.
 */
-void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
+void binarize_b(SDL_Surface *image_surface, int w, int h, long *histo)
 {
   int t = threshold(image_surface, w, h, histo)+1;
   printf("threshold = %d\n", t);
@@ -164,6 +177,51 @@ void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
     }
 }
 
+/*
+  Function that binarizes the image and fill the matrix if the information is in white.
+*/
+void binarize_w(SDL_Surface *image_surface, int w, int h, long *histo)
+{
+  int t = threshold(image_surface, w, h, histo)+1;
+  printf("threshold = %d\n", t);
+  Uint8 r, g, b;
+  for(int i = 0 ; i < h ; i++)
+    {
+      for(int j = 0 ; j < w ; j++)
+	{
+	  Uint32 pixel = get_pixel1(image_surface, j, i);
+	  SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
+	  if (r >= t)
+	    {
+	      pixel = SDL_MapRGB(image_surface->format, 0, 0, 0);
+	    }
+	  else
+	    {
+	      pixel = SDL_MapRGB(image_surface->format, 255, 255, 255);
+	    }
+	  put_pixel1(image_surface, j, i, pixel);
+	}
+    }
+}
+
+
+/*
+Function that binarizes the images and choose the way to binarize,
+depending on where the information is.
+*/
+void binarize(SDL_Surface *image_surface, int w, int h, long *histo)
+{
+  int black_corners = 0;
+  black_corners += is_pixel_black(image_surface, 0, 0);
+  black_corners += is_pixel_black(image_surface, 0, h-1);
+  black_corners += is_pixel_black(image_surface, w-1, 0);
+  black_corners += is_pixel_black(image_surface, w-1, h-1);
+
+  if (black_corners >=2)
+    binarize_b(image_surface, w, h, histo);
+  else
+    binarize_w(image_surface, w, h, histo);
+}
 
 /*
   Function that sorts an array

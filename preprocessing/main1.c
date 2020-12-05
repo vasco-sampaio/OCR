@@ -10,7 +10,16 @@ int main(int argc, char** argv)
     errx(1, "the number of arguments is not valid : you should have 2 arguments");
 
   preprocessing(argv[1]);
+
+  SDL_Surface *image = IMG_Load(argv[1]);
+  int height = image->h;
+  int width = image->w;
+  SDL_Surface * rot = rotate(image, width, height, 90);
   
+  SDL_SaveBMP(rot, "rotate.bmp");
+
+  SDL_FreeSurface(image);
+  SDL_FreeSurface(rot);
   /*SDL_Surface *image_surface = IMG_Load(argv[1]);
   int height = image_surface->h;
   int width = image_surface->w;

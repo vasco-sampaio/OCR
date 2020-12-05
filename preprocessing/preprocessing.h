@@ -5,22 +5,25 @@ typedef struct
 {
   double b;
   double f;
-}couple;
+}duo;
 
 void toGrayscale(SDL_Surface *image_surface, int w, int h);
 void histogram(SDL_Surface *image_surface, int w, int h, long *histo);
 
 long calcul_sum_gray(long *histo);
-couple init_couple();
+duo init_couple();
 
-couple cal_weight(couple w, int t, int total, long *histo);
-couple cal_sum(couple s, int t, long *histo, long sum_gray);
-couple cal_mean(couple m, couple s, couple w);
+duo cal_weight(duo w, int t, int total, long *histo);
+duo cal_sum(duo s, int t, long *histo, long sum_gray);
+duo cal_mean(duo m, duo s, duo w);
 
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);
-void binarize(SDL_Surface *image_surface, int w, int h, long *histo,double mat[]);
+void binarize(SDL_Surface *image_surface, int w, int h, long *histo);
 
 void reduce_noise(SDL_Surface *is, int w, int h);
 void contrast(SDL_Surface *im, int lvlc, int w, int h);
+
+void preprocessing(char *path);
+SDL_Surface* preprocessing_SDL(char *path);
 
 #endif

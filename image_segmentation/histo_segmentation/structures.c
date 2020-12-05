@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "structures.h"
+#include <string.h>
 
 /*
 Regroups functions to initialize or free the structures.
@@ -112,6 +113,51 @@ void print_line(line *l)
 }
 
 /*
+  Function that gives back a string for UI
+*/
+char* line_string(line *l)
+{
+  char *res = malloc((l->nbLetters + l->nbSpaces)* sizeof(char));
+  strcpy(res, "");
+  for(int i = 0 ; i < l->nbLetters ; ++i)
+    {
+      strcat(res, "A");
+      if (l->letters[i].folBySpace == 1)
+	strcat(res, " ");
+    }
+  return res;
+}
+
+/*
+  Function that calculates the number of char in an image
+*/
+int nb_char(doc *image)
+{
+  int res = 0;
+  for(int i = 0 ; i < image->nbLines ; i++)
+    {
+      res += image->allLines[i].nbLetters + image->allLines[i].nbSpaces;
+    }
+  res += image->nbLines;
+  return res;
+}
+
+/*
+Function that gives back a string with all the letters of the doc for the UI
+*/
+char* doc_string(doc *image)
+{
+  char *res = malloc(nb_char(image)*sizeof(char));
+  strcpy(res, "");
+  for(int i = 0 ; i < image->nbLines ; i++)
+    {
+      strcat(res, line_string(&image->allLines[i]));
+      strcat(res, "\n");
+    }
+  return res;
+}
+
+/*
 Function to test if the detection of spaces works.
 Prints the text of the whole doc
 */
@@ -119,7 +165,6 @@ void print_doc(doc *image)
 {
   for(int i = 0 ; i < image->nbLines ; i++)
     {
-
       print_line(&image->allLines[i]);
     }
 }

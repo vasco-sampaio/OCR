@@ -111,6 +111,11 @@ void free_docMat(docMat m);
 
 //To test
 void print_line(line *l);
+
+char* line_string(line *l);
+int nb_char(doc *image);
+char* doc_string(doc *image);
+
 void print_doc(doc *image);
 void print_matrix(matrix m);
 

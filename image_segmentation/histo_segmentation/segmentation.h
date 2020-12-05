@@ -16,5 +16,7 @@ doc keep_letters(SDL_Surface *image_surface, lineZones all);
 void resize(SDL_Surface *image, coord letter);
 void resize_letter(SDL_Surface *image_surface, doc image);
 
+void segmentation(char *path);
+char* segmentation_SDL(SDL_Surface * image_surface);
 
 #endif

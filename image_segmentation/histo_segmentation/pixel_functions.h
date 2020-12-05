@@ -5,7 +5,8 @@
 
 #include <err.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "pixel_functions.h"
 #include "structures.h"
 

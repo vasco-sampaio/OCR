@@ -3,13 +3,15 @@
 //https://www.libsdl.org/release/SDL-1.2.15/docs/html/guidevideo.html
 
 #include <err.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "pixel_functions.h"
 
 /*
  * Return the pixel value at (x, y)
  * NOTE: The surface must be locked before calling this!
  */
-Uint32 get_pixel(SDL_Surface *surface, int x, int y)
+Uint32 get_pixel1(SDL_Surface *surface, int x, int y)
 {
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to retrieve */
@@ -41,7 +43,7 @@ Uint32 get_pixel(SDL_Surface *surface, int x, int y)
  * Set the pixel at (x, y) to the given value
  * NOTE: The surface must be locked before calling this!
  */
-void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void put_pixel1(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
     int bpp = surface->format->BytesPerPixel;
     /* Here p is the address to the pixel we want to set */

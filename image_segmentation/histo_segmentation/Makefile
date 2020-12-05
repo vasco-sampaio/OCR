@@ -12,18 +12,6 @@ all: $(EXEC)
 
 main: structures.o pixel_functions.o utility.o segmentation.o matrix_letters.o main.o
 
-structures.o: structures.c structures.h
-
-pixel_functions.o: pixel_functions.c pixel_functions.h structures.h
-
-utility.o: utility.c utility.h pixel_functions.h structures.h
-
-segmentation.o: segmentation.c pixel_functions.h structures.h utility.h
-
-matrix_letters.o: matrix_letters.c matrix_letters.h structures.h
-
-main.o: main.c pixel_functions.h segmentation.h structures.h matrix_letters.h utility.h
-
 clean:
 	${RM} *.o
 	${RM} *.d

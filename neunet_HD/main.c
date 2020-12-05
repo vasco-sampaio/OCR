@@ -69,7 +69,7 @@ int main()
 
 		for(int el = 0; el < set_size; ++el)
 		{
-			double *curIn = in + el * NN_INPUTS ;
+			double *curIn = in + el * NN_INPUTS;
 			double *curOut = out + el * NN_OUTPUTS ;
 			neunet_train(xou, curIn, curOut, 0.1);
 

@@ -15,7 +15,7 @@ char *aNum = alphaNum;
 
 void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 {
-	int size = nn->nb_outputs;
+	int size = NN_OUTPUTS;
 	int j = 0;
 	for(int i = 0; i < size; i++)
 	{
@@ -26,7 +26,7 @@ void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 		}
 		j++;
 		double *curInputs = inputs + i * IMG_SIZE;
-		for(int i = 0; i < nn->nb_inputs;i++)
+		for(int i = 0; i < NN_INPUTS;i++)
 		{
 			nn->inputs[i] = curInputs[i];
 		}
@@ -51,10 +51,10 @@ int main()
 	int set_size = 434;
 	//train data_set in and out
 	double *in = calloc(set_size * IMG_SIZE, sizeof(double));
-	double *out = calloc(set_size * OUTPUTS, sizeof(double));
+	double *out = calloc(set_size * NN_OUTPUTS, sizeof(double));
 	//test data_set in and out
 	double *t_in = calloc(62 * IMG_SIZE,sizeof(double));
-	double *t_out = calloc(62 * OUTPUTS,sizeof(double));
+	double *t_out = calloc(62 * NN_OUTPUTS,sizeof(double));
 	//load training set
 	set_size = (int) load_dataset("../data_sets/arial_25_train", (size_t) set_size, in, out);
 	//load test_set
@@ -69,8 +69,8 @@ int main()
 
 		for(int el = 0; el < set_size; ++el)
 		{
-			double *curIn = in + el * INPUTS;
-			double *curOut = out + el * OUTPUTS;
+			double *curIn = in + el * NN_INPUTS ;
+			double *curOut = out + el * NN_OUTPUTS ;
 			neunet_train(xou, curIn, curOut, 0.1);
 
 		}

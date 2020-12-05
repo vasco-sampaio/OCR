@@ -12,20 +12,17 @@
 neunet_t *init_neunet()
 {
 	neunet_t *res = calloc(1, sizeof(neunet_t));
-	res->nb_inputs = INPUTS;
-	res->nb_hidden = HIDDEN;
-	res->nb_outputs = OUTPUTS;
 
 
 	// I_H Weights init
-	for(int i = 0; i < INPUTS; ++i)
-		for(int j = 0; j < HIDDEN; ++j)
-			res->weights_i_h[i][j] = xavier_init(INPUTS);
+	for(int i = 0; i < NN_INPUTS; ++i)
+		for(int j = 0; j < NN_HIDDENS; ++j)
+			res->weights_i_h[i][j] = xavier_init(NN_INPUTS);
 	
 	// H_O Weights init
-	for(int i = 0; i < HIDDEN; ++i)
-		for(int j = 0; j < OUTPUTS; ++j)
-			res->weights_h_o[i][j] = xavier_init(HIDDEN);
+	for(int i = 0; i < NN_HIDDENS; ++i)
+		for(int j = 0; j < NN_OUTPUTS; ++j)
+			res->weights_h_o[i][j] = xavier_init(NN_HIDDENS);
 	
 	return res;
 }
@@ -37,10 +34,10 @@ void forward_prop(neunet_t *nn)
 	double sum;	
 
 	// calculate the hidden activation
-	for(int i = 0; i < HIDDEN; ++i)
+	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
 		sum = nn->biases_h[i];
-		for(int j = 0; j < INPUTS; ++j)
+		for(int j = 0; j < NN_INPUTS; ++j)
 		{
 			sum += nn->weights_i_h[j][i] * nn->inputs[j];
 		}
@@ -48,10 +45,10 @@ void forward_prop(neunet_t *nn)
 	}
 
 	// Calculate the output layer activation
-	for(int i = 0; i < OUTPUTS; ++i)
+	for(int i = 0; i < NN_OUTPUTS; ++i)
 	{
 		sum = nn->biases_o[i];
-		for(int j = 0; j < HIDDEN; ++j)
+		for(int j = 0; j < NN_HIDDENS; ++j)
 		{
 			sum += nn->weights_h_o[j][i] * nn->act_h[j];
 		}
@@ -65,7 +62,7 @@ void backward_prop(neunet_t *nn)
 	double error;	
 
 	// Calculate the delta of output layer
-	for(int i = 0; i < OUTPUTS; ++i)
+	for(int i = 0; i < NN_OUTPUTS; ++i)
 	{
 		error = dSigmoid(nn->act_o[i]);
 		error *= (nn->exp_outputs[i] - nn->act_o[i]);
@@ -74,10 +71,10 @@ void backward_prop(neunet_t *nn)
 		
 	double x;
 	// Calculate the delta of hidden layer
-	for(int i = 0; i < HIDDEN; ++i)
+	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
 		x = 0;
-		for(int j = 0; j < OUTPUTS; ++j)
+		for(int j = 0; j < NN_OUTPUTS; ++j)
 		{
 			x += nn->d_output[j] * nn->weights_h_o[i][j];
 		}
@@ -100,9 +97,9 @@ void update_weights(neunet_t *nn, double lr, double alpha)
 	// Update weights
 		
 	// hidden weights
-	for(int i = 0; i < HIDDEN; ++i)
+	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
-		for(int j = 0; j < INPUTS; ++j)
+		for(int j = 0; j < NN_INPUTS; ++j)
 		{
 			w_in = nn->inputs[j];
 			prev_delt = nn->d_weights_i_h[j][i];
@@ -116,9 +113,9 @@ void update_weights(neunet_t *nn, double lr, double alpha)
 
 
 	// output weights
-	for(int i = 0; i < OUTPUTS; ++i)
+	for(int i = 0; i < NN_OUTPUTS; ++i)
 	{
-		for(int j = 0; j < HIDDEN; ++j)
+		for(int j = 0; j < NN_HIDDENS; ++j)
 		{
 			w_in = nn->act_h[j];
 			prev_delt = nn->d_weights_h_o[j][i];
@@ -136,7 +133,7 @@ void update_biases(neunet_t *nn, double lr)
 	double err;
 
 	// Update hidden biases
-	for(int i = 0; i < HIDDEN; ++i)
+	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
 		err = nn->d_hidden[i];
 		err *= lr;
@@ -145,7 +142,7 @@ void update_biases(neunet_t *nn, double lr)
 	}
 
 	// Update output biases
-	for(int i = 0; i < OUTPUTS; ++i)
+	for(int i = 0; i < NN_OUTPUTS; ++i)
 	{
 		err = nn->d_output[i];
 		err *= lr;
@@ -158,9 +155,9 @@ void update_biases(neunet_t *nn, double lr)
 void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 {
 	// Fill the inputs and outputs of the network
-	for(int i = 0; i < INPUTS; ++i)
+	for(int i = 0; i < NN_INPUTS; ++i)
 		nn->inputs[i] = inputs[i];
-	for(int i = 0; i < OUTPUTS; ++i)
+	for(int i = 0; i < NN_OUTPUTS; ++i)
 		nn->exp_outputs[i] = Xout[i];
 
 
@@ -174,7 +171,7 @@ void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 char Output(neunet_t *nn,char *aNum)
 {
 	char res;
-        int nbOut = nn->nb_outputs;
+        int nbOut = NN_OUTPUTS;
         double max = nn->act_o[0];
         int tmp = 0;
         for(int i = 0; i < nbOut;i++)

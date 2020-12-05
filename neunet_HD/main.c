@@ -1,5 +1,6 @@
 # include "neunet.h"
 # include "load_set.h"
+# include "neuralIO.h"
 
 
 # include <stdlib.h>
@@ -76,8 +77,17 @@ int main()
 		}
 	}
 
-	testNeuralNet(xou,aNum,t_in,t_out);
+	//testNeuralNet(xou,aNum,t_in,t_out);
+	neuralNetToFile(xou, "test.nn");
+
+
 	free(xou);
+	neunet_t *bis = fileToNeuralNet("test.nn");
+	testNeuralNet(bis,aNum,t_in,t_out);
+
+
+
+	free(bis);
 
 	//to remove warnings
 	return test_size;

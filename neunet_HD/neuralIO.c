@@ -7,6 +7,9 @@
 # include <json.h>
 
 
+
+
+
 // Define hierarchy tags of the JSON file
 # define JSON_NB_INPUTS			"nb_inputs"
 # define JSON_NB_HIDDENS		"nb_hiddens"
@@ -83,12 +86,12 @@ neuralNetwork fileToNeuralNet(char *path)
 	// I - GET THE JSON OBJECT FROM THE FILE
 	json_object *neunet_json;
 	neunet_json = json_object_from_file(path);
-	
+
 	// II - GET THE SIZE OF THE LAYERS
 	int nbInputs = getSize(neunet_json, JSON_NB_INPUTS);
 	int nbHiddens = getSize(neunet_json, JSON_NB_HIDDENS);
 	int nbOutputs = getSize(neunet_json, JSON_NB_OUTPUTS);
-	
+
 	// III - INITIALIZE THE NETWORK
 	neuralNetwork RES = initNN(nbInputs, nbHiddens, nbOutputs);
 
@@ -99,7 +102,7 @@ neuralNetwork fileToNeuralNet(char *path)
 	// V - GET THE WEIGHTS
 	fillWeights(&RES.hiddenWeights, neunet_json, JSON_HIDDEN_WEIGHTS);
 	fillWeights(&RES.outputWeights, neunet_json, JSON_OUTPUT_WEIGHTS);
-	
+
 	// VI - RETURN
 	return RES;
 }
@@ -128,27 +131,38 @@ json_object *biases_object(matrix_t biases)
 
 
 
-//
-json_object *weights_object(matrix_t weights)
-{
-	json_object *weights_json = json_object_new_array();
-	json_object *w_list;
-	json_object *weight;
-	double val;
+/*
+   json_object *weights_object(int w_in, int w_out)
+   {
+   json_object *weights_json = json_object_new_array();
+   json_object *w_list;
+   json_object *weight;
+   double val;
 
-	for(int i = 0; i < weights.rows; ++i)
-	{
-		w_list = json_object_new_array();
-		for(int j = 0; j < weights.cols; ++j)
-		{
-			val = getMVal(weights, i, j);
-			weight = json_object_new_double(val);
-			json_object_array_add(w_list, weight);
-		}
-		json_object_array_add(weights_json, w_list);
-	}
-	return weights_json;
-}
+   for(int i = 0; i < w_in; ++i)
+   {
+   w_list = json_object_new_array();
+   for(int j = 0; j < w_out; ++j)
+   {
+   weight = json_object_new_double(val);
+   json_object_array_add(w_list, weight);
+   }
+   json_object_array_add(weights_json, w_list);
+   }
+   return weights_json;
+   }*/
+
+# define weights_object(jobj, w, w_in, w_out)					\
+	for(int i = 0; i < w_in; ++i)								\
+{																\
+	json_object *w_list = json_object_new_array();				\
+	for(int j = 0; j < w_out; ++j)								\
+	{															\
+		json_object *weight = json_object_new_double(w[i][j]);	\
+		json_object_array_add(w_list, weight);					\
+	}															\
+	json_object_array_add(jobj, w_list);						\
+}													
 
 
 
@@ -157,19 +171,22 @@ void neuralNetToFile(neunet_t *nn, char *path)
 {
 	// First create the Neural Network object
 	json_object *js_nn = json_object_new_object();
-	
+
 	// Then the layer sizes objects
 	json_object *nbInputs = json_object_new_int(NN_INPUTS);
 	json_object *nbHiddens = json_object_new_int(NN_HIDDENS);
 	json_object *nbOutputs = json_object_new_int(NN_OUTPUTS);
 
 	// Biases
-	json_object *hBiases = biases_object(nn.hiddenBias);
-	json_object *oBiases = biases_object(nn.outputBias);
+	//json_object *hBiases = biases_object(nn->biases_h);
+	//json_object *oBiases = biases_object(nn->biases_o);
 
 	// Weights
-	json_object *hWeights = weights_object(nn.hiddenWeights);
-	json_object *oWeights = weights_object(nn.outputWeights);
+	json_object *hWeights = json_object_new_array();
+	weights_object(hWeights, nn->weights_i_h, NN_INPUTS, NN_HIDDENS);
+
+	json_object *oWeights = json_object_new_array();
+	weights_object(oWeights, nn->weights_h_o, NN_HIDDENS, NN_OUTPUTS);
 
 
 	// Link them

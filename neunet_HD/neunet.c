@@ -4,26 +4,33 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-// Set a default alpha which il often 0.9
+// Set a default alpha which is often 0.9
 # define DEFAULT_ALPHA 0.9
 
+
+// Neural net output disposal
+char nn_ocr_out[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ";
+
+// I know global variables aren't good but 
+// I really don't know where to put it otherwise
 
 
 neunet_t *init_neunet()
 {
 	neunet_t *res = calloc(1, sizeof(neunet_t));
 
+	res->highest_output = 0;
 
 	// I_H Weights init
 	for(int i = 0; i < NN_INPUTS; ++i)
 		for(int j = 0; j < NN_HIDDENS; ++j)
 			res->weights_i_h[i][j] = xavier_init(NN_INPUTS);
-	
+
 	// H_O Weights init
 	for(int i = 0; i < NN_HIDDENS; ++i)
 		for(int j = 0; j < NN_OUTPUTS; ++j)
 			res->weights_h_o[i][j] = xavier_init(NN_HIDDENS);
-	
+
 	return res;
 }
 
@@ -38,9 +45,7 @@ void forward_prop(neunet_t *nn)
 	{
 		sum = nn->biases_h[i];
 		for(int j = 0; j < NN_INPUTS; ++j)
-		{
 			sum += nn->weights_i_h[j][i] * nn->inputs[j];
-		}
 		nn->act_h[i] = sigmoid(sum);
 	}
 
@@ -49,10 +54,12 @@ void forward_prop(neunet_t *nn)
 	{
 		sum = nn->biases_o[i];
 		for(int j = 0; j < NN_HIDDENS; ++j)
-		{
 			sum += nn->weights_h_o[j][i] * nn->act_h[j];
-		}
 		nn->act_o[i] = sigmoid(sum);
+
+		// update the *highest_output* if necessary
+		if(nn->act_o[nn->highest_output] < nn->act_o[i])
+			nn->highest_output = i;
 	}
 }
 
@@ -68,16 +75,14 @@ void backward_prop(neunet_t *nn)
 		error *= (nn->exp_outputs[i] - nn->act_o[i]);
 		nn->d_output[i] = error;
 	}
-		
+
 	double x;
 	// Calculate the delta of hidden layer
 	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
 		x = 0;
 		for(int j = 0; j < NN_OUTPUTS; ++j)
-		{
 			x += nn->d_output[j] * nn->weights_h_o[i][j];
-		}
 		nn->d_hidden[i] = x * dSigmoid(nn->act_h[i]);
 	}
 }
@@ -95,7 +100,7 @@ void update_weights(neunet_t *nn, double lr, double alpha)
 	double delta;
 
 	// Update weights
-		
+
 	// hidden weights
 	for(int i = 0; i < NN_HIDDENS; ++i)
 	{
@@ -106,7 +111,7 @@ void update_weights(neunet_t *nn, double lr, double alpha)
 			delta = nn->d_hidden[i];
 
 			nn->weights_i_h[j][i] += lr * delta * w_in + 
-													alpha * prev_delt;
+				alpha * prev_delt;
 			nn->d_weights_i_h[j][i] = lr * delta * w_in;
 		}
 	}
@@ -168,36 +173,36 @@ void neunet_train(neunet_t *nn, double *inputs, double *Xout, double lr)
 }
 
 
-char Output(neunet_t *nn,char *aNum)
+
+
+// compute the output of the network with the given inputs,
+// and return the corresponding char
+char neural_net_ask(neunet_t *nn, double *inputs)
 {
-	char res;
-        int nbOut = NN_OUTPUTS;
-        double max = nn->act_o[0];
-        int tmp = 0;
-        for(int i = 0; i < nbOut;i++)
-	 {
-                  if(nn->act_o[i] > max)
-                  {
-                          tmp = i;
-                          max = nn->act_o[i];
-                  }
-          }
-          res = *(aNum+tmp);
-          return res;
+	// fill the inputs of the network
+	for(int i = 0; i < NN_INPUTS; ++i)
+		nn->inputs[i] = inputs[i];
+
+	// Compute the output
+	forward_prop(nn);
+
+	// Return the wanted char
+	return nn_ocr_out[nn->highest_output];
 }
- 
-char ExpOut(size_t size,double *expOut,char *aNum)
+
+// Return the index of the max value in an example output of the neunet
+char ExpOut(size_t size,double *expOut)
 {
 	double tmp = *(expOut);
-        size_t res = 0;
-        for(size_t i = 0; i < size;i++)
-        {
+	size_t res = 0;
+	for(size_t i = 0; i < size;i++)
+	{
 		if(*(expOut+i) > tmp)
-               	{
-                        tmp = *(expOut+i);
+		{
+			tmp = *(expOut+i);
 			res = i;
-                  }
-         }
-          return *(aNum+res);
+		}
+	}
+	return nn_ocr_out[res];
 }
 

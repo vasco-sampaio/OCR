@@ -11,10 +11,7 @@
 double is_pixel_true(SDL_Surface *img, int x, int y)
 {
 	Uint32 pix = get_pixel(img, x, y);
-	if(pix)
-		return 0.0;
-	else
-		return 1.0;
+	return (pix) ? 0.0 : 1.0;
 }
 
 //place the image in arr
@@ -26,7 +23,7 @@ void load_image(char *path, char *name, double *arr)
 	strcat(full_path, slash);
 	strcat(full_path, name);
 	//we can get the image with full_path
-	printf("%s\n",full_path);
+	//printf("%s\n",full_path);
 	SDL_Surface *img = IMG_Load(full_path);
 
 	if(img != NULL)
@@ -54,8 +51,6 @@ void load_answer(char letter, double *arr)
 		*(arr + letter - 'a' + 10) = 1;
 	if(letter >= 'A' && letter <= 'Z')
 		*(arr + letter - 'A' + 36) = 1;
-
-
 }
 
 
@@ -145,29 +140,3 @@ void print_input(double *in)
 	}
 }
 
- /*   
-int main()
-{
-	size_t set_size = 62;
-	double *ins = calloc(set_size * IMAGE_SIZE, sizeof(double));
-	double *outs = calloc(set_size * NN_OUT_SIZE, sizeof(double));
-	load_dataset("./times/", set_size, ins, outs);
-	//x = 12;
-	for(int x = 0; x < set_size; ++x)
-	{
-		for(int i = 0; i < 41; ++i)
-		{
-			for(int j = 0; j < 41; ++j)
-			{
-				printf("%c ",((int) *(ins + i * 41 + j+ x*IMAGE_SIZE)) ? '#': ' ');
-			}
-			printf("\n");
-		}
-		print_output(outs+ NN_OUT_SIZE * x);
-		printf("\n\n");
-	}
-
-	free(ins);
-	free(outs);
-}
- */ 

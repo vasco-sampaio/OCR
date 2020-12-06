@@ -9,12 +9,7 @@
 
 
 
-char alphaNum[] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-
-char *aNum = alphaNum;
-
-
-void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
+void testNeuralNet(neunet_t *nn,double *inputs,double *outputs)
 {
 	int size = NN_OUTPUTS;
 	int j = 0;
@@ -27,12 +22,8 @@ void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 		}
 		j++;
 		double *curInputs = inputs + i * IMG_SIZE;
-		for(int i = 0; i < NN_INPUTS;i++)
-		{
-			nn->inputs[i] = curInputs[i];
-		}
-		forward_prop(nn);
-		printf("Outputs: %c and expected %c || ",Output(nn,aNum),ExpOut(size,outputs+i*size,aNum));
+		char nn_answer = neural_net_ask(nn, curInputs);
+		printf("Outputs: %c and expected %c || ", nn_answer,ExpOut(size,outputs+i*size));
 	}
 	printf("\n");
 }
@@ -40,14 +31,7 @@ void testNeuralNet(neunet_t *nn,char *aNum,double *inputs,double *outputs)
 int main()
 {
 	srand(time(NULL));
-	printf("%li\n", sizeof(neunet_t));
-/*
-	double d[] = {0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0};
-	double o[] = {0.0,1.0,1.0,0.0};
 
-	double *in = d;
-	double *out = o;
-*/
 
 	int set_size = 434;
 	//train data_set in and out
@@ -56,10 +40,14 @@ int main()
 	//test data_set in and out
 	double *t_in = calloc(62 * IMG_SIZE,sizeof(double));
 	double *t_out = calloc(62 * NN_OUTPUTS,sizeof(double));
+	
 	//load training set
 	set_size = (int) load_dataset("../data_sets/arial_25_train", (size_t) set_size, in, out);
+	printf("Loaded %i training images\n", set_size);
+
 	//load test_set
 	int test_size = (int) load_dataset("../data_sets/arial_25_test", (size_t) 62,t_in,t_out);
+	printf("Loaded %i testing images\n", test_size);
 	
 	neunet_t *xou = init_neunet();
 
@@ -83,7 +71,7 @@ int main()
 
 	free(xou);
 	neunet_t *bis = fileToNeuralNet("test.nn");
-	testNeuralNet(bis,aNum,t_in,t_out);
+	testNeuralNet(bis,t_in,t_out);
 
 
 
@@ -91,5 +79,4 @@ int main()
 
 	//to remove warnings
 	return test_size;
-
 }

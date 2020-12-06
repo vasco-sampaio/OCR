@@ -11,6 +11,10 @@
 typedef struct nn
 {
 
+	// index out the highest output neuron
+	// in the output layer
+	int highest_output;
+
 	// Inputs array
 	double inputs[NN_INPUTS];
 	double exp_outputs[NN_OUTPUTS];
@@ -40,6 +44,7 @@ typedef struct nn
 	// Delta Hidden layer
 	double d_hidden[NN_HIDDENS];
 
+
 	double gen_error;
 	double global_error;
 	double max_glb_err;
@@ -47,13 +52,17 @@ typedef struct nn
 
 } neunet_t;
 
+
 neunet_t *init_neunet();
 
+// Training functions
 void neunet_train(neunet_t *nn, double *in, double *out, double lr);
 void forward_prop(neunet_t *nn);
-char Output(neunet_t *nn, char *aNum);
-char ExpOut(size_t size,double *expOut,char *aNum);
+
+char ExpOut(size_t size,double *expOut);
 
 double neunet_get_error(neunet_t *nn);
+
+char neural_net_ask(neunet_t *nn, double *inputs);
 
 # endif

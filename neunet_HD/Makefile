@@ -21,4 +21,6 @@ clean:
 	${RM} *.d
 	${RM} *.o
 	${RM} vgcore.*
+	${RM} test.nn
+
 # END

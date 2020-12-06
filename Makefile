@@ -13,7 +13,7 @@ INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= `pkg-config --cflags sdl`$(INC_FLAGS) -MMD
-LDLIBS= `pkg-config --libs sdl` -lSDL_image
+LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm
 CFLAGS= -g -Wall -Wextra -Werror -pedantic-errors -std=c99
 
 $(TARGET): $(OBJS)

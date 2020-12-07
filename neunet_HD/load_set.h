@@ -3,9 +3,7 @@
 
 # include <stdlib.h>
 
-# define NN_OUT_SIZE 62
-# define IMG_SIDE 30
-# define IMG_SIZE 900
+# include "neunet.h"
 
 void print_output(double *out);
 void print_input(double *in);

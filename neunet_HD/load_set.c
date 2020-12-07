@@ -76,10 +76,10 @@ size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 			// Function that load the image in the path in the array pointed by
 			// inputs
-			load_image(path, ent->d_name, inputs + (IMG_SIZE * count));
+			load_image(path, ent->d_name, inputs + (NN_INPUTS * count));
 
 			// Function that fill the output part from the output spointer
-			load_answer(letter, outputs + (NN_OUT_SIZE * count));
+			load_answer(letter, outputs + (NN_OUTPUTS * count));
 
 			count++;
 

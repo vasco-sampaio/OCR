@@ -21,7 +21,7 @@ void testNeuralNet(neunet_t *nn,double *inputs,double *outputs)
 			j = 0;
 		}
 		j++;
-		double *curInputs = inputs + i * IMG_SIZE;
+		double *curInputs = inputs + i * NN_INPUTS;
 		char nn_answer = neural_net_ask(nn, curInputs);
 		printf("Outputs: %c and expected %c || ", nn_answer,expected_output(size,outputs+i*size));
 	}
@@ -35,10 +35,10 @@ int main()
 
 	int set_size = 434;
 	//train data_set in and out
-	double *in = calloc(set_size * IMG_SIZE, sizeof(double));
+	double *in = calloc(set_size * NN_INPUTS, sizeof(double));
 	double *out = calloc(set_size * NN_OUTPUTS, sizeof(double));
 	//test data_set in and out
-	double *t_in = calloc(62 * IMG_SIZE,sizeof(double));
+	double *t_in = calloc(62 * NN_INPUTS,sizeof(double));
 	double *t_out = calloc(62 * NN_OUTPUTS,sizeof(double));
 	
 	//load training set

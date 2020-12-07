@@ -1,5 +1,6 @@
 # ifndef NEUNET_H
 # define NEUNET_H
+
 # include <stdlib.h>
 
 # define IMG_SIDE 30
@@ -52,17 +53,19 @@ typedef struct nn
 
 } neunet_t;
 
-
+// Neural net initialisation function
 neunet_t *init_neunet();
 
 // Training functions
 void neunet_train(neunet_t *nn, double *in, double *out, double lr);
-void forward_prop(neunet_t *nn);
+char expected_output(size_t size,double *expOut);
 
-char ExpOut(size_t size,double *expOut);
-
+// Get error of the neural net
 double neunet_get_error(neunet_t *nn);
 
+// Main neural net function
 char neural_net_ask(neunet_t *nn, double *inputs);
+
+
 
 # endif

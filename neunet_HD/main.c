@@ -23,7 +23,7 @@ void testNeuralNet(neunet_t *nn,double *inputs,double *outputs)
 		j++;
 		double *curInputs = inputs + i * IMG_SIZE;
 		char nn_answer = neural_net_ask(nn, curInputs);
-		printf("Outputs: %c and expected %c || ", nn_answer,ExpOut(size,outputs+i*size));
+		printf("Outputs: %c and expected %c || ", nn_answer,expected_output(size,outputs+i*size));
 	}
 	printf("\n");
 }

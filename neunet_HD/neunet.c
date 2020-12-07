@@ -191,7 +191,7 @@ char neural_net_ask(neunet_t *nn, double *inputs)
 }
 
 // Return the index of the max value in an example output of the neunet
-char ExpOut(size_t size,double *expOut)
+char expected_output(size_t size,double *expOut)
 {
 	double tmp = *(expOut);
 	size_t res = 0;
@@ -205,4 +205,3 @@ char ExpOut(size_t size,double *expOut)
 	}
 	return nn_ocr_out[res];
 }
-

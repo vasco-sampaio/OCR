@@ -4,6 +4,8 @@
 # include <stdio.h>
 # include <dirent.h>
 # include <string.h>
+# include <errno.h>
+# include <err.h>
 # include <SDL.h>
 # include <SDL/SDL_image.h>
 
@@ -63,6 +65,9 @@ void load_answer(char letter, double *arr)
 size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 {
 	DIR *main_dir = opendir(path);	
+	if(errno)
+		errx(errno, "Error: no such directory: %s", path);
+
 	struct dirent *ent;
 
 	char letter;

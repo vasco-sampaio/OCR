@@ -42,7 +42,7 @@ int main()
 	double *t_out = calloc(62 * NN_OUTPUTS,sizeof(double));
 	
 	//load training set
-	set_size = (int) load_dataset("../data_sets/arial_25_train", (size_t) set_size, in, out);
+	set_size = (int) load_dataset("../data_sets/arial_25_train/", (size_t) set_size, in, out);
 	printf("Loaded %i training images\n", set_size);
 
 	//load test_set

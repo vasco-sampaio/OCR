@@ -3,20 +3,91 @@
 #include "image_segmentation/histo_segmentation/segmentation.h"
 #include "preprocessing/preprocessing.h"
 
-#include <stdlib.h>
 #include <err.h>
 #include <stdlib.h>
+# include <unistd.h>
 
-int main(int argc, char** argv)
+
+// Where to find a default neural net file 
+# define NN_DEFAULT "./neunet_HD/test.nn"
+
+void help(void)
 {
-  if(argc != 2)
-    errx(1, "the number of arguments is not valid : you should have 2 arguments");
+	printf("Usage:\n");
+	printf("- No arguments : launch GUI\n");
+	printf("- Options:\n"
+			"	-h : Display help\n"
+			"	-a BMP_FILE [NN_FILE] : Compute OCR on the BMP_FILE, with NN_FILE, if given."
+					"otherwise, process it with the default one.\n"
+			"	-t NN-PATH DATA-SET-PATH : if nn-path exists, load it, train it with the given dataset, otherwise, create one, train it and saves it.\n");
+}
 
-  SDL_Surface *image = preprocessing_SDL(argv[1]);
-  char *text = segmentation_SDL(image);
-  printf("text = \n%s\n", text);
 
-  free(text);
-  
-  return 0;
+int _main(int argc, char** argv)
+{
+	if(argc != 2)
+		errx(1, "the number of arguments is not valid : you should have 2 arguments");
+
+	SDL_Surface *image = preprocessing_SDL(argv[1]);
+	char *text = segmentation_SDL(image);
+	printf("text = \n%s\n", text);
+
+	free(text);
+
+	return 0;
+}
+
+
+
+int main(int argc, char **argv)
+{
+	if(argc == 1)
+	{
+		//TODO : run the GUI
+	}
+	else
+	{
+		// Please refer to the help text to learn about the options
+		char *nn_path = NN_DEFAULT;
+		int option = 0;	
+		if((option = getopt(argc, argv, ":hat")) != -1)
+		{
+			switch(option)
+			{
+				case 'a':
+					if(optind == argc)
+					{
+						help();
+						break;
+					}
+					char *img_path = argv[optind];
+					if(optind + 1 < argc)
+						nn_path = argv[optind + 1];
+
+					// TODO : a thing like process_OCR(nn, image);
+
+					break;
+
+				case 't':
+					if(optind + 1 >= argc)
+					{
+						help();
+						break;
+					}
+					*nn_path = argv[optind];
+					char *ds_path = argv[optind + 1];
+
+					// TODO : a thing like train_neural_net(nn, dataset);
+					
+					break;
+
+				case 'h':
+				case '?':
+				default:
+					help();
+					break;
+			}
+		}	
+	}
+	return 0;
 }

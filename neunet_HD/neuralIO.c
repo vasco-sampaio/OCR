@@ -8,9 +8,6 @@
 # include <json.h>
 
 
-
-
-
 // Define hierarchy tags of the JSON file
 # define JSON_NB_INPUTS			"nb_inputs"
 # define JSON_NB_HIDDENS		"nb_hiddens"
@@ -21,8 +18,35 @@
 # define JSON_OUTPUT_WEIGHTS	"o_weights"
 
 
-// We are using the json-c libray to effectively save 
+// We can't use functions because parameters are static arrays
+# define fill_weights(w_dst, js_w_src, w_in, w_out)					\
+	for(int i = 0; i < w_in; ++i){									\
+		json_object *col = json_object_array_get_idx(js_w_src, i);	\
+		for(int j = 0; j < w_out; ++j){								\
+			json_object *w_j = json_object_array_get_idx(col, j);	\
+			double val = json_object_get_double(w_j);				\
+			w_dst[i][j] = val;										\
+		}															\
+	}
 
+// We must use a macro and not a function because
+// weight arrays are static and thus can't be function parameters
+# define weights_object(jobj, w, w_in, w_out)					\
+	for(int i = 0; i < w_in; ++i)								\
+{																\
+	json_object *w_list = json_object_new_array();				\
+	for(int j = 0; j < w_out; ++j)								\
+	{															\
+		json_object *weight = json_object_new_double(w[i][j]);	\
+		json_object_array_add(w_list, weight);					\
+	}															\
+	json_object_array_add(jobj, w_list);						\
+}													
+
+
+
+
+// We are using the json-c libray to effectively save 
 
 
 // ############################### FILE LOADING ###############################
@@ -56,17 +80,6 @@ void fillBiases(double *biases, int w_l, json_object *parent, char *tag)
 
 }
 
-
-// We can't use functions because parameters are static arrays
-# define fill_weights(w_dst, js_w_src, w_in, w_out)					\
-	for(int i = 0; i < w_in; ++i){									\
-		json_object *col = json_object_array_get_idx(js_w_src, i);	\
-		for(int j = 0; j < w_out; ++j){								\
-			json_object *w_j = json_object_array_get_idx(col, j);	\
-			double val = json_object_get_double(w_j);				\
-			w_dst[i][j] = val;										\
-		}															\
-	}
 
 
 
@@ -139,20 +152,6 @@ json_object *biases_object(double *biases, int arr_len)
 	return biases_json;
 }
 
-
-// We must use a macro and not a function because
-// weight arrays are static and thus can't be function parameters
-# define weights_object(jobj, w, w_in, w_out)					\
-	for(int i = 0; i < w_in; ++i)								\
-{																\
-	json_object *w_list = json_object_new_array();				\
-	for(int j = 0; j < w_out; ++j)								\
-	{															\
-		json_object *weight = json_object_new_double(w[i][j]);	\
-		json_object_array_add(w_list, weight);					\
-	}															\
-	json_object_array_add(jobj, w_list);						\
-}													
 
 
 

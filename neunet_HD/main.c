@@ -31,7 +31,8 @@ void testNeuralNet(neunet_t *nn,double *inputs,double *outputs)
 int main()
 {
 	srand(time(NULL));
-
+	
+	printf("%li\n", sizeof(neunet_t));
 
 	int set_size = 434;
 	//train data_set in and out

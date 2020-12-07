@@ -27,17 +27,12 @@ void load_image(char *path, char *name, double *arr)
 	//we can get the image with full_path
 	//printf("%s\n",full_path);
 	SDL_Surface *img = IMG_Load(full_path);
-
-	if(img != NULL)
-	{
+	if(img && img->w == IMG_SIDE && img->h == IMG_SIDE)
 		for(int i = 0; i < img->w; ++i)
-		{
 			for(int j = 0; j < img->h; ++j)
-			{
 				arr[i * img->w + j] = is_pixel_true(img, j, i);
-			}
-		}
-	}
+	else
+		printf("Error : %s is not a correct dataset image", name);
 
 	free(img);
 	free(full_path);
@@ -69,9 +64,7 @@ size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 		errx(errno, "Error: no such directory: %s", path);
 
 	struct dirent *ent;
-
 	char letter;
-
 	size_t count = 0;
 
 	while((ent = readdir(main_dir)) != NULL && count < len)
@@ -83,8 +76,6 @@ size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 
 			// Function that load the image in the path in the array pointed by
 			// inputs
-
-			// TODO
 			load_image(path, ent->d_name, inputs + (IMG_SIZE * count));
 
 			// Function that fill the output part from the output spointer
@@ -120,7 +111,7 @@ void print_output(double *out)
 			printf("\033[1;33m%c \033[0m",t + 'a' - 10);
 		else
 			printf("%c ",t + 'a' - 10);
-			
+
 	}
 	for(; t < 62; ++t)
 	{

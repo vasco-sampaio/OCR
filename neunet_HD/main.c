@@ -51,7 +51,7 @@ int main()
 	
 	neunet_t *xou = init_neunet();
 
-	for(int gen = 0; gen < 500; ++gen)
+	for(int gen = 0; gen < 50; ++gen)
 	{
 		if(!(gen % 100))
 			printf("Gen %i\n", gen);

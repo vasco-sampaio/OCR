@@ -128,23 +128,31 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
   int w;
   int h;
   char letter;
-  //char *letter;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
       matrix  m = buildMatrix(surface, l->letters[i]);
-      print_matrix(m);
+      //print_matrix(m);
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = interpolation(m.mat, w, h, 20);
       m_fill(&m);
-      printf("matrix resized :\n\n");
-      print_matrix(m);
+      //printf("matrix resized :\n\n");
+      //print_matrix(m);
       
       letter = neural_net_ask(nn, m.mat);
+
+      printf("line string : %c\n", letter);
       
-      strcat(res, &letter);
+      //strcat(res, &letter);
+      sprintf((res+i), "%c", letter);
+      
+      printf("res = %s\n", res);
       if (l->letters[i].folBySpace == 1)
-	strcat(res, " ");
+	{
+	  ++i;
+	  sprintf((res+i), " ");
+	  //strcat(res, " ");
+	}
     }
   strcat(res, "\n");
   return res;

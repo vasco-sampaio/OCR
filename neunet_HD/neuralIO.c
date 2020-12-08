@@ -189,5 +189,6 @@ void neuralNetToFile(neunet_t *nn, char *path)
 
 	// Write the json Object to the file
 	json_object_to_file(path, js_nn);
+
 }
 

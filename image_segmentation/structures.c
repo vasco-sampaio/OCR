@@ -8,7 +8,7 @@
 #include "resizing.h"
 #include "matrix_letters.h"
 
-#include "../../neunet_HD/neural_main.h"
+#include "../neunet_HD/neural_main.h"
 
 /*
 Regroups functions to initialize or free the structures.

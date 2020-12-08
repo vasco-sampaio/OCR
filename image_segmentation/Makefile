@@ -11,7 +11,7 @@ EXEC=main
 
 #all: $(EXEC)
 
-main: structures.o pixel_functions.o utility.o resizing.o segmentation.o matrix_letters.o main.o ../../neunet_HD/neuralIO.o ../../neunet_HD/neunet.o ../../neunet_HD/utils.o ../../neunet_HD/neunet.o
+main: structures.o pixel_functions.o utility.o resizing.o segmentation.o matrix_letters.o main.o ../neunet_HD/neuralIO.o ../neunet_HD/neunet.o ../neunet_HD/utils.o 
 
 clean:
 	${RM} *.o

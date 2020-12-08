@@ -56,19 +56,21 @@ int main(int argc, char **argv)
 					break;
 
 				case 't':
-					if(optind + 1 >= argc)
+					if(optind + 2 >= argc)
 					{
 						printf("-t : bad usage.\n");
 						help();
 						break;
 					}
 					int gens = 500;
-					if(optind + 2 < argc)
+					if(optind + 3 < argc)
 						gens = atoi(argv[optind + 2]);
+
 					nn_path = argv[optind];
 					char *ds_path = argv[optind + 1];
+					int set_size = atoi(argv[optind + 2]);
 
-					//train_neural_net(nn_path, ds_path, gens);
+					neural_net_run_training(nn_path, ds_path, set_size, gens);
 					break;
 
 				case 'h':

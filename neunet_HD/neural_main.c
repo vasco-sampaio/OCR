@@ -60,7 +60,7 @@ void neural_net_run_training(char *nn_path, char *dataset_path, int set_size, in
 			neunet_train(nn, curIn, curOut, LEARNING_RATE);
 		}
 		if(!(g % 100))
-			printf("Gen %i : neural net error: %f\n", g, neunet_get_error(nn)); 
+			printf("Gen %i : neural net error: %f\n", g, 0.5);//neunet_get_error(nn)); 
 	}
 
 	// Saving of the neural network

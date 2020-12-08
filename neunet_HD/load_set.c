@@ -1,18 +1,17 @@
 # include "load_set.h"
-# include "pixel_functions.h"
 
 # include <stdio.h>
 # include <dirent.h>
 # include <string.h>
 # include <errno.h>
 # include <err.h>
-# include <SDL.h>
+# include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
 
 
 double is_pixel_true(SDL_Surface *img, int x, int y)
 {
-	Uint32 pix = get_pixel(img, x, y);
+	Uint32 pix = get_pixel1(img, x, y);
 	return (pix) ? 0.0 : 1.0;
 }
 
@@ -59,6 +58,7 @@ void load_answer(char letter, double *arr)
  */
 size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 {
+	errno = 0;
 	DIR *main_dir = opendir(path);	
 	if(errno)
 		errx(errno, "Error: no such directory: %s", path);

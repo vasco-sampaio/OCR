@@ -3,7 +3,7 @@
 CC=gcc
 
 TARGET ?= main
-SRC_DIRS ?= ./preprocessing ./image_segmentation/histo_segmentation
+SRC_DIRS ?= ./preprocessing ./image_segmentation/histo_segmentation ./neunet_HD
 
 SRCS := $(shell find $(SRC_DIRS) -name *.c -or -name *.h)
 OBJS := $(addsuffix .o,$(basename $(SRCS))) Main.o 
@@ -12,9 +12,9 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= `pkg-config --cflags sdl`$(INC_FLAGS) -MMD
-LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm
-CFLAGS= -g -Wall -Wextra -pedantic-errors -std=c99
+CPPFLAGS ?= `pkg-config --cflags sdl`$(INC_FLAGS) -MMD -I/usr/include/json-c/
+LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm -ljson-c
+CFLAGS= -g -Wall -Wextra -pedantic-errors -std=c99 -ljson-c
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS)
@@ -27,5 +27,16 @@ clean:
 	${RM} *.c~
 	${RM} *.h~
 	${RM} *.bmp
+	for d in $(SRC_DIRS); \
+		do \
+		make --directory=$$d clean; \
+		done
+
+
+
+
+
 
 -include $(DEPS)
+
+

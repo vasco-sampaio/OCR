@@ -9,6 +9,8 @@
 #include "matrix_letters.h"
 #include "resizing.h"
 
+#include "../../neunet_HD/neural_main.h"
+
 /*
 Regroups the functions that do the segmentation.
 This segmentation uses histograms
@@ -114,7 +116,7 @@ void resize_letter(SDL_Surface *image_surface, doc image)
 
 //Function that makes all the segmentation (as a main)
 
-void segmentation(char *path)
+void segmentation(char *path, neunet_t *nn)
 {
   SDL_Surface *image_surface;
   image_surface = IMG_Load(path);
@@ -142,6 +144,17 @@ void segmentation(char *path)
   char *res = doc_string(image_surface, &testtt);
   printf("\n%s", res);
 
+  //----------
+  
+  matrix m = test.lines[1].letterMat[1];
+  m = interpolation(m.mat, m.width, m.height, 20);
+  m_fill(&m);
+
+  char letter = neural_net_ask(nn, m.mat);
+  printf("letter = %d\n", letter);
+
+  //------------
+    
   free(res);
   
   //freeing whatever needs to be freed

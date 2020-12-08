@@ -10,13 +10,15 @@
 #include "structures.h"
 #include "utility.h"
 
+#include "../../neunet_HD/neural_main.h"
+
 void marking_lines(SDL_Surface *image_surface, int height, int width);
 lineZones marking_letters(SDL_Surface *image_surface, int w, int h);
 doc keep_letters(SDL_Surface *image_surface, lineZones all);
 void resize(SDL_Surface *image, coord letter);
 void resize_letter(SDL_Surface *image_surface, doc image);
 
-void segmentation(char *path);
+void segmentation(char *path, neunet_t *nn);
 char* segmentation_SDL(SDL_Surface * image_surface);
 
 #endif

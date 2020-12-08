@@ -7,6 +7,11 @@
 #include "matrix_letters.h"
 #include "resizing.h"
 
+#include "../../neunet_HD/neural_main.h"
+/*
+#include  "../../neunet_HD/neunet.h"
+#include "../../neunet_HD/neuralIO.h"*/
+
 #include <stdlib.h>
 #include <err.h>
 
@@ -14,8 +19,11 @@ int main(int argc, char** argv)
 {
   if(argc != 2)
     errx(1, "the number of arguments is not valid : you should have 2 arguments");
+  
+  neunet_t *nn = fileToNeuralNet(argv[2]);
+  segmentation(argv[1], nn);
 
-  segmentation(argv[1]);
+
   
   /*SDL_Surface *image_surface;
   image_surface = IMG_Load(argv[1]);

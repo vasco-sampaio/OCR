@@ -8,6 +8,8 @@
 #include "resizing.h"
 #include "matrix_letters.h"
 
+#include "../../neunet_HD/neural_main.h"
+
 /*
 Regroups functions to initialize or free the structures.
 Regroups some test functions too.
@@ -125,10 +127,11 @@ char* line_string(SDL_Surface *surface, line *l)
   strcpy(res, "");
   int w;
   int h;
+  //char *letter;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
       matrix  m = buildMatrix(surface, l->letters[i]);
-      //print_matrix(m);
+      print_matrix(m);
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = interpolation(m.mat, w, h, 20);

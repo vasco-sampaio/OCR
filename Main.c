@@ -4,7 +4,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# include "image_segmentation/histo_segmentation/segmentation.h"
+# include "image_segmentation/segmentation.h"
 # include "preprocessing/preprocessing.h"
 # include "neunet_HD/neural_main.h"
 

@@ -8,7 +8,6 @@
 # include "preprocessing/preprocessing.h"
 # include "neunet_HD/neural_main.h"
 
-
 // Where to find a default neural net file 
 # define NN_DEFAULT "./neunet_HD/test.nn"
 
@@ -23,14 +22,6 @@ void help(void)
 					"otherwise, process it with the default one.\n"
 			"	-t NN-PATH DATA-SET-PATH [NB-GEN]: if nn-path exists, load it, train it with the given dataset, otherwise, create one, train it and saves it.\n");
 }
-
-
-
-
-
-
-
-
 
 
 

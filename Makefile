@@ -6,7 +6,7 @@ TARGET ?= main
 SRC_DIRS ?= ./preprocessing ./image_segmentation/histo_segmentation
 
 SRCS := $(shell find $(SRC_DIRS) -name *.c -or -name *.h)
-OBJS := $(addsuffix .o,$(basename $(SRCS))) Main.o
+OBJS := $(addsuffix .o,$(basename $(SRCS))) Main.o 
 DEPS := $(OBJS:.o=.d)
 
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)

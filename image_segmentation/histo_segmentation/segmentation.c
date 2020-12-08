@@ -151,7 +151,7 @@ void segmentation(char *path, neunet_t *nn)
   m_fill(&m);
 
   char letter = neural_net_ask(nn, m.mat);
-  printf("letter = %d\n", letter);
+  printf("letter = %c\n", letter);
 
   //------------
     

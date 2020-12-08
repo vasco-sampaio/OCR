@@ -33,7 +33,8 @@ void load_image(char *path, char *name, double *arr)
 	else
 		printf("Error : %s is not a correct dataset image", name);
 
-	free(img);
+	SDL_FreeSurface(img);
+//	free(img);
 	free(full_path);
 }
 

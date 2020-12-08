@@ -20,7 +20,7 @@ void help(void)
 			"	-h : Display help\n"
 			"	-a BMP_FILE [NN_FILE] : Compute OCR on the BMP_FILE, with NN_FILE, if given."
 					"otherwise, process it with the default one.\n"
-			"	-t NN-PATH DATA-SET-PATH [NB-GEN]: if nn-path exists, load it, train it with the given dataset, otherwise, create one, train it and saves it.\n");
+			"	-t NN-PATH DATA-SET-PATH DATA-SET-LEN [NB-GEN]: if nn-path exists, load it, train it with the given dataset, otherwise, create one, train it and saves it.\n");
 }
 
 
@@ -89,19 +89,3 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-
-/*
-int _main(int argc, char** argv)
-{
-	if(argc != 2)
-		errx(1, "the number of arguments is not valid : you should have 2 arguments");
-
-	SDL_Surface *image = preprocessing_SDL(argv[1]);
-	char *text = segmentation_SDL(image);
-	printf("text = \n%s\n", text);
-
-	free(text);
-
-	return 0;
-}
-*/

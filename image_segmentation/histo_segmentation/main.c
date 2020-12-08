@@ -8,17 +8,16 @@
 #include "resizing.h"
 
 #include "../../neunet_HD/neural_main.h"
-/*
 #include  "../../neunet_HD/neunet.h"
-#include "../../neunet_HD/neuralIO.h"*/
+#include "../../neunet_HD/neuralIO.h"
 
 #include <stdlib.h>
 #include <err.h>
 
 int main(int argc, char** argv)
 {
-  if(argc != 2)
-    errx(1, "the number of arguments is not valid : you should have 2 arguments");
+  if(argc != 3)
+    errx(1, "the number of arguments is not valid : you should have 3 arguments");
   
   neunet_t *nn = fileToNeuralNet(argv[2]);
   segmentation(argv[1], nn);

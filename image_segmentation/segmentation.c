@@ -143,20 +143,6 @@ void segmentation(char *path, neunet_t *nn)
 
   char *res = doc_string(image_surface, &testtt, nn);
   printf("\n%s", res);
-
-  //----------
-  
-  matrix m = test.lines[1].letterMat[1];
-  m = interpolation(m.mat, m.width, m.height, 20);
-  m_fill(&m);
-
-  printf("neural network letter \n");
-  print_matrix(m);
-  char letter = neural_net_ask(nn, m.mat);
-  printf("letter = %c\n", letter);
-
-  //------------
-    
   free(res);
   
   //freeing whatever needs to be freed

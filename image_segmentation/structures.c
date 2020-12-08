@@ -8,6 +8,8 @@
 #include "resizing.h"
 #include "matrix_letters.h"
 
+#include "string.h"
+
 #include "../neunet_HD/neural_main.h"
 
 /*
@@ -123,38 +125,31 @@ void print_line(line *l)
 */
 char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
 {
-  char *res = malloc((l->nbLetters + l->nbSpaces + 2)* sizeof(char)); //+2 for \n
+  char *res = calloc((l->nbLetters + l->nbSpaces + 2), sizeof(char)); //+2 for \n
   strcpy(res, "");
   int w;
   int h;
   char letter;
+  int space = 0;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
       matrix  m = buildMatrix(surface, l->letters[i]);
-      //print_matrix(m);
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = interpolation(m.mat, w, h, 20);
       m_fill(&m);
-      //printf("matrix resized :\n\n");
-      //print_matrix(m);
       
       letter = neural_net_ask(nn, m.mat);
-
-      printf("line string : %c\n", letter);
       
-      //strcat(res, &letter);
-      sprintf((res+i), "%c", letter);
-      
-      printf("res = %s\n", res);
+      res[i+space] = letter;
       if (l->letters[i].folBySpace == 1)
 	{
-	  ++i;
-	  sprintf((res+i), " ");
-	  //strcat(res, " ");
+	  space++;
+	  res[i+space] = ' ';
 	}
     }
-  strcat(res, "\n");
+  //strcat(res, "\n");
+  sprintf((res+l->nbLetters+l->nbSpaces), "\n");
   return res;
 }
 
@@ -176,7 +171,7 @@ Function that gives back a string with all the letters of the doc for the UI
 */
 char* doc_string(SDL_Surface *surface, doc *image, neunet_t *nn)
 {
-  char *res = malloc(nb_char(image)*sizeof(char));
+  char *res = calloc(nb_char(image),sizeof(char));
   strcpy(res, "");
   char *tmp;
   for(int i = 0 ; i < image->nbLines ; i++)

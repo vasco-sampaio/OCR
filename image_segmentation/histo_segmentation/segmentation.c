@@ -150,6 +150,8 @@ void segmentation(char *path, neunet_t *nn)
   m = interpolation(m.mat, m.width, m.height, 20);
   m_fill(&m);
 
+  printf("neural network letter \n");
+  print_matrix(m);
   char letter = neural_net_ask(nn, m.mat);
   printf("letter = %c\n", letter);
 

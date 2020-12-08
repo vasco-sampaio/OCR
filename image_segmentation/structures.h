@@ -7,6 +7,8 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 
+#include "../neunet_HD/neural_main.h"
+
 //------------------------------------------------------------------------------
 
 /*
@@ -115,9 +117,9 @@ void free_docMat(docMat m);
 //To test
 void print_line(line *l);
 
-char* line_string(SDL_Surface *surface, line *l);
+char* line_string(SDL_Surface *surface, line *l, neunet_t *nn);
 int nb_char(doc *image);
-char* doc_string(SDL_Surface *surface, doc *image);
+char* doc_string(SDL_Surface *surface, doc *image, neunet_t *nn);
 
 void print_doc(doc *image);
 void print_matrix(matrix m);

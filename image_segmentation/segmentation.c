@@ -141,7 +141,7 @@ void segmentation(char *path, neunet_t *nn)
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
 
-  char *res = doc_string(image_surface, &testtt);
+  char *res = doc_string(image_surface, &testtt, nn);
   printf("\n%s", res);
 
   //----------
@@ -167,7 +167,7 @@ void segmentation(char *path, neunet_t *nn)
    free_docMat(test);
 }
 
-char* segmentation_SDL(SDL_Surface * image_surface)
+char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
 { 
   int height = image_surface->h;
   int width = image_surface->w;
@@ -188,7 +188,7 @@ char* segmentation_SDL(SDL_Surface * image_surface)
 
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
-  char *res = doc_string(image_surface, &testtt);
+  char *res = doc_string(image_surface, &testtt, nn);
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);

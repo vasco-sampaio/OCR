@@ -121,12 +121,13 @@ void print_line(line *l)
   Transforms the letter in a matrix, resizes it.
   Should be giving it to the Neural Network, and will give back a letter.
 */
-char* line_string(SDL_Surface *surface, line *l)
+char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
 {
   char *res = malloc((l->nbLetters + l->nbSpaces + 2)* sizeof(char)); //+2 for \n
   strcpy(res, "");
   int w;
   int h;
+  char letter;
   //char *letter;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
@@ -138,7 +139,10 @@ char* line_string(SDL_Surface *surface, line *l)
       m_fill(&m);
       printf("matrix resized :\n\n");
       print_matrix(m);
-      strcat(res, "A");
+      
+      letter = neural_net_ask(nn, m.mat);
+      
+      strcat(res, &letter);
       if (l->letters[i].folBySpace == 1)
 	strcat(res, " ");
     }
@@ -162,14 +166,14 @@ int nb_char(doc *image)
 /*
 Function that gives back a string with all the letters of the doc for the UI
 */
-char* doc_string(SDL_Surface *surface, doc *image)
+char* doc_string(SDL_Surface *surface, doc *image, neunet_t *nn)
 {
   char *res = malloc(nb_char(image)*sizeof(char));
   strcpy(res, "");
   char *tmp;
   for(int i = 0 ; i < image->nbLines ; i++)
     {
-      tmp = line_string(surface, &image->allLines[i]);
+      tmp = line_string(surface, &image->allLines[i], nn);
       strcat(res, tmp);
       free(tmp);
     }

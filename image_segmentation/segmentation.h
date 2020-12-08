@@ -19,6 +19,6 @@ void resize(SDL_Surface *image, coord letter);
 void resize_letter(SDL_Surface *image_surface, doc image);
 
 void segmentation(char *path, neunet_t *nn);
-char* segmentation_SDL(SDL_Surface * image_surface);
+char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn);
 
 #endif

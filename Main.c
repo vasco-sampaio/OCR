@@ -52,6 +52,8 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
+					neunet_t *nn = fileToNeuralNet(nn_path);
+					segmentation(img_path, nn);
 					//process_OCR(nn_path, img_path);
 					break;
 

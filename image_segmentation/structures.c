@@ -130,10 +130,11 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
   int w;
   int h;
   char letter;
+  matrix m;
   int space = 0;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
-      matrix  m = buildMatrix(surface, l->letters[i]);
+      m = buildMatrix(surface, l->letters[i]);
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = interpolation(m.mat, w, h, 20);
@@ -149,6 +150,7 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
 	}
     }
   //strcat(res, "\n");
+  free(m.mat);
   sprintf((res+l->nbLetters+l->nbSpaces), "\n");
   return res;
 }

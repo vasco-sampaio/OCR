@@ -10,7 +10,7 @@
 #include "structures.h"
 #include "utility.h"
 
-#include "../../neunet_HD/neunet.h"
+#include "../neunet_HD/neunet.h"
 
 void marking_lines(SDL_Surface *image_surface, int height, int width);
 lineZones marking_letters(SDL_Surface *image_surface, int w, int h);

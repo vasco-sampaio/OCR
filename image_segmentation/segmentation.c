@@ -9,7 +9,7 @@
 #include "matrix_letters.h"
 #include "resizing.h"
 
-#include "../../neunet_HD/neural_main.h"
+#include "../neunet_HD/neural_main.h"
 
 /*
 Regroups the functions that do the segmentation.

@@ -7,9 +7,7 @@
 #include "matrix_letters.h"
 #include "resizing.h"
 
-#include "../../neunet_HD/neural_main.h"
-#include  "../../neunet_HD/neunet.h"
-#include "../../neunet_HD/neuralIO.h"
+#include "../neunet_HD/neural_main.h"
 
 #include <stdlib.h>
 #include <err.h>

@@ -3,7 +3,7 @@
 CC=gcc
 
 TARGET ?= main
-SRC_DIRS ?= ./preprocessing ./image_segmentation/histo_segmentation ./neunet_HD
+SRC_DIRS ?= ./preprocessing ./image_segmentation/ ./neunet_HD
 
 SRCS := $(shell find $(SRC_DIRS) -name *.c -or -name *.h)
 OBJS := $(addsuffix .o,$(basename $(SRCS))) Main.o 

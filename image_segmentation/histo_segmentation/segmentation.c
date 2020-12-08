@@ -139,28 +139,10 @@ void segmentation(char *path)
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
 
-  char *res = doc_string(&testtt);
+  char *res = doc_string(image_surface, &testtt);
   printf("\n%s", res);
 
   free(res);
-
-  int nbLines = test.nbLines;
-  lineMat* lines = test.lines;
-  int nbLetters = 0;
-  matrix* letters = NULL; 
-  matrix big; 
-  for(int i = 0; i < nbLines; ++i)
-    {
-      nbLetters = lines[i].nbLetters;
-      letters = lines[i].letterMat;
-      for(int j = 0; j < nbLetters; ++j)
-	{
-	  big = interpolation(letters[j].mat, letters[j].width, letters[j].height, 20);
-	  m_fill(&big);
-	  //print_m(big);
-	  free(big.mat);
-	}
-    }
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);
@@ -191,7 +173,7 @@ char* segmentation_SDL(SDL_Surface * image_surface)
 
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
-  char *res = doc_string(&testtt);
+  char *res = doc_string(image_surface, &testtt);
   
   //freeing whatever needs to be freed
    SDL_FreeSurface(image_surface);

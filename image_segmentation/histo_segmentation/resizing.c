@@ -1,7 +1,15 @@
+//resizing.c file
+
 #include "structures.h"
 #include <stdio.h>
 #include <stdlib.h>
 
+//Functions that resizes the letter matrix so that they can be processed
+//by the neural network.
+
+/*
+  Function that defines a new square matrix, of size = size.
+*/
 matrix interpolation(double* image, int width, int height, int size)
 {
   double* new_image = calloc(size*size, sizeof(double));
@@ -22,6 +30,9 @@ matrix interpolation(double* image, int width, int height, int size)
   return m;
 }
 
+/*
+  Function that prints a matrix.
+*/
 void print_m(matrix m)
 {
   int height = m.height;
@@ -38,6 +49,11 @@ void print_m(matrix m)
     }
 }
 
+
+/*
+  Filling the columns and rows left to make a 20*20 matrix
+  become a 30*30 matrix.
+*/
 void m_fill(matrix* m)
 {
   double* image = m->mat;
@@ -52,7 +68,7 @@ void m_fill(matrix* m)
 	      filled[i * 30 + j] = image[c++];
 	      continue;
 	    }
-	  filled[i * 30 + j] = 1;
+	  filled[i * 30 + j] = 0;
 	}
     }
 

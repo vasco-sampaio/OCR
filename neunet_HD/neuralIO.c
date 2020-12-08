@@ -128,6 +128,9 @@ neunet_t *fileToNeuralNet(char *path)
 	fill_weights(RES->weights_h_o, weights_buf, NN_HIDDENS, NN_OUTPUTS);
 	
 
+	// free the json structure
+	json_object_put(neunet_json);
+
 	// VI - RETURN
 	return RES;
 }
@@ -190,6 +193,9 @@ void neuralNetToFile(neunet_t *nn, char *path)
 
 	// Write the json Object to the file
 	json_object_to_file(path, js_nn);
+
+	// Free the json structure
+	json_object_put(js_nn);
 
 }
 

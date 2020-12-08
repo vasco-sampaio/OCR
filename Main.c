@@ -1,10 +1,12 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
-#include <err.h>
-#include <stdlib.h>
+# include <SDL/SDL.h>
+# include <SDL/SDL_image.h>
+# include <err.h>
+# include <stdlib.h>
 # include <unistd.h>
 
-# include "commands.h"
+# include "image_segmentation/histo_segmentation/segmentation.h"
+# include "preprocessing/preprocessing.h"
+# include "neunet_HD/neural_main.h"
 
 // Where to find a default neural net file 
 # define NN_DEFAULT "./neunet_HD/test.nn"
@@ -22,11 +24,14 @@ void help(void)
 }
 
 
+
+
 int main(int argc, char **argv)
 {
 	if(argc == 1)
 	{
-		launch_GUI();
+		printf("Launching GUI\n");
+		//launch_GUI();
 	}
 	else
 	{
@@ -47,7 +52,7 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					process_OCR(nn_path, img_path);
+					//process_OCR(nn_path, img_path);
 					break;
 
 				case 't':
@@ -63,7 +68,7 @@ int main(int argc, char **argv)
 					nn_path = argv[optind];
 					char *ds_path = argv[optind + 1];
 
-					train_neural_net(nn_path, ds_path, gens);
+					//train_neural_net(nn_path, ds_path, gens);
 					break;
 
 				case 'h':

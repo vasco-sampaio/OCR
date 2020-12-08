@@ -26,7 +26,7 @@ matrix buildMatrix(SDL_Surface *image, coord let)
     {
       for(int j = 0 ; j < m.width  ; j++)
 	{
-	  if(is_black(image, j+let.topL.w, i+let.topL.h) == 0)
+	  if(is_black(image, j+let.topL.w, i+let.topL.h) == 1)
 	    m.mat[i*m.width + j] = 1;
 	  else
 	    m.mat[i*m.width + j] = 0;

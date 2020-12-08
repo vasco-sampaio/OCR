@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "structures.h"
 #include <string.h>
+#include "resizing.h"
+#include "matrix_letters.h"
 
 /*
 Regroups functions to initialize or free the structures.
@@ -113,14 +115,26 @@ void print_line(line *l)
 }
 
 /*
-  Function that gives back a string for UI
+  Function that gives back a string for UI.
+  Transforms the letter in a matrix, resizes it.
+  Should be giving it to the Neural Network, and will give back a letter.
 */
-char* line_string(line *l)
+char* line_string(SDL_Surface *surface, line *l)
 {
   char *res = malloc((l->nbLetters + l->nbSpaces + 2)* sizeof(char)); //+2 for \n
   strcpy(res, "");
+  int w;
+  int h;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
+      matrix  m = buildMatrix(surface, l->letters[i]);
+      //print_matrix(m);
+      w = l->letters[i].botR.w - l->letters[i].topL.w;
+      h = l->letters[i].botR.h - l->letters[i].topL.h;
+      m = interpolation(m.mat, w, h, 20);
+      m_fill(&m);
+      printf("matrix resized :\n\n");
+      print_matrix(m);
       strcat(res, "A");
       if (l->letters[i].folBySpace == 1)
 	strcat(res, " ");
@@ -145,14 +159,14 @@ int nb_char(doc *image)
 /*
 Function that gives back a string with all the letters of the doc for the UI
 */
-char* doc_string(doc *image)
+char* doc_string(SDL_Surface *surface, doc *image)
 {
   char *res = malloc(nb_char(image)*sizeof(char));
   strcpy(res, "");
   char *tmp;
   for(int i = 0 ; i < image->nbLines ; i++)
     {
-      tmp = line_string(&image->allLines[i]);
+      tmp = line_string(surface, &image->allLines[i]);
       strcat(res, tmp);
       free(tmp);
     }

@@ -86,16 +86,17 @@ void fillBiases(double *biases, int w_l, json_object *parent, char *tag)
 // Main loading function, load a neural net from a json file
 neunet_t *fileToNeuralNet(char *path)
 {
-	const char *json_error;
+  const char *json_error;
 
 	// I - GET THE JSON OBJECT FROM THE FILE
 	json_object *neunet_json;
 	neunet_json = json_object_from_file(path);
 	json_error = json_util_get_last_err();
 
+	
 	if(json_error)
-		errx(1, json_error);
-
+	  errx(1, "%s", json_error);
+	
 
 
 	// II - GET THE SIZE OF THE LAYERS

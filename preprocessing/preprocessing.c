@@ -30,6 +30,13 @@ void toGrayscale(SDL_Surface *image_surface, int w, int h)
     }
 }
 
+
+
+/*
+  Function that rotates an image according to an angle.
+  Pi = 180°
+  2Pi = 360°
+*/
 void rotate(SDL_Surface *image, int w, int h, double angle)
 {
   int cw = w / 2;

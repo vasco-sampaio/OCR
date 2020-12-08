@@ -14,7 +14,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= `pkg-config --cflags sdl`$(INC_FLAGS) -MMD
 LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm
-CFLAGS= -g -Wall -Wextra -Werror -pedantic-errors -std=c99
+CFLAGS= -g -Wall -Wextra -pedantic-errors -std=c99
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS)

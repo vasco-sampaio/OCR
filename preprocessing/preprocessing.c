@@ -72,6 +72,10 @@ void rotate(SDL_Surface *image, int w, int h, double angle)
 	    resh = h;
 	  if (resw > w)
 	    resw = w;
+	  if(resh < 0)
+	    resh = 0;
+	  if(resw < 0)
+	    resw = 0;
 	  
 	  pixel = get_pixel1(is2, resw, resh);
 	  put_pixel1(image, i, j, pixel); 
@@ -233,7 +237,9 @@ void binarize_b(SDL_Surface *image_surface, int w, int h, long *histo)
 */
 void binarize_w(SDL_Surface *image_surface, int w, int h, long *histo)
 {
-  int t = threshold(image_surface, w, h, histo)+1;
+  int t = threshold(image_surface, w, h, histo);
+  if (t==0)
+    t = 1;
   printf("threshold = %d\n", t);
   Uint8 r, g, b;
   for(int i = 0 ; i < h ; i++)

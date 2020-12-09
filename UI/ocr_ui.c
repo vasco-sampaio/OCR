@@ -25,6 +25,19 @@ void on_load_image_click(GtkButton *btn, gpointer user_data)
 }
 
 
+void on_load_neural_net_click(GtkButton *btn, gpointer user_data)
+{
+	g_print("Pressed load_nn button\n");
+
+	data_t *app_data = user_data;
+	char *filename = ask_file_path(app_data->ui.main_window);
+	if(filename)
+	{
+		app_data->nn_path = filename;
+	}
+}
+
+
 int main(int argc, char **argv)
 {
 	gtk_init(NULL, NULL);
@@ -64,6 +77,7 @@ int main(int argc, char **argv)
 
     g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(load_img_button, "clicked", G_CALLBACK(on_load_image_click), &app_data);
+	g_signal_connect(load_nn_button, "clicked", G_CALLBACK(on_load_neural_net_click), &app_data);
 
 	g_print("TEST");
 	gtk_main();

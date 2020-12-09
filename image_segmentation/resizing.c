@@ -42,7 +42,7 @@ void print_m(matrix m)
     {
       for(int j = 0 ; j < width ; j++)
 	{
-	  printf("%c", (m.mat[i*m.width+j]==1) ? ' ' : '#');
+	  printf("%c", (m.mat[i*m.width+j]!=1) ? ' ' : '#');
 	  if((j+1) % m.width == 0)
 	    printf("\n");
 	}

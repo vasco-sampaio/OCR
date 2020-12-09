@@ -100,7 +100,7 @@ void sepLetters(SDL_Surface *image, line l)
     {
       len = l.letters[i].botR.w - l.letters[i].topL.w;
       hei = l.letters[i].botR.h - l.letters[i].topL.h;
-      if (len > 1.75*av && hei < 1.2*av2)
+      if (len > 2*av && hei < 1.2*av2)
 	{
 	  int w = l.letters[i].topL.w + (len/2.4);
 	  trace_vert_red_line(image, l.letters[i].topL.h, w, l.letters[i].botR.h, w);

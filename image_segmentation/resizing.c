@@ -25,8 +25,8 @@ matrix interpolation(double* image, int width, int height, int size)
 	  new_image[i*size+j] = image[py * width + px];
 	}
     }
+  free(image);
   matrix m = {size, size, new_image};
-  
   return m;
 }
 

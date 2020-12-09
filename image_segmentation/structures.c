@@ -141,7 +141,7 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
       m_fill(&m, 30);
       
       letter = neural_net_ask(nn, m.mat);
-      
+      free(m.mat);
       res[i+space] = letter;
       if (l->letters[i].folBySpace == 1)
 	{
@@ -149,8 +149,6 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
 	  res[i+space] = ' ';
 	}
     }
-  //strcat(res, "\n");
-  free(m.mat);
   sprintf((res+l->nbLetters+l->nbSpaces), "\n");
   return res;
 }

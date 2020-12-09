@@ -237,7 +237,9 @@ void binarize_b(SDL_Surface *image_surface, int w, int h, long *histo)
 */
 void binarize_w(SDL_Surface *image_surface, int w, int h, long *histo)
 {
-  int t = threshold(image_surface, w, h, histo)+1;
+  int t = threshold(image_surface, w, h, histo);
+  if (t==0)
+    t = 1;
   printf("threshold = %d\n", t);
   Uint8 r, g, b;
   for(int i = 0 ; i < h ; i++)

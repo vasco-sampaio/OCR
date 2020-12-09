@@ -10,6 +10,7 @@
 #include "resizing.h"
 
 #include "../neunet_HD/neural_main.h"
+#include "../preprocessing/preprocessing.h"
 
 /*
 Regroups the functions that do the segmentation.
@@ -185,4 +186,14 @@ char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
    free_docMat(test);
    free(nn);
    return res;
+}
+
+char* ocr(char * image_path, char* neunet_path)
+{
+  SDL_Surface *image_surface = preprocessing_SDL(image_path);
+
+  neunet_t *nn = fileToNeuralNet(neunet_path);
+
+  char *res = segmentation_SDL(image_surface, nn);
+  return res;
 }

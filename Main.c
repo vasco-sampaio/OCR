@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 					}
 					int gens = 500;
 					if(optind + 3 < argc)
-						gens = atoi(argv[optind + 2]);
+						gens = atoi(argv[optind + 3]);
 
 					nn_path = argv[optind];
 					char *ds_path = argv[optind + 1];

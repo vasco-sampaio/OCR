@@ -87,6 +87,7 @@ size_t load_dataset(char *path, size_t len, double *inputs, double *outputs)
 		}
 	}
 
+	free(main_dir);
 	return count;
 }
 

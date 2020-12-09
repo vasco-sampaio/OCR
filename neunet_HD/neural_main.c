@@ -63,6 +63,8 @@ void neural_net_run_training(char *nn_path, char *dataset_path, int set_size, in
 			printf("Gen %i : neural net error: %f\n", g, 0.5);//neunet_get_error(nn)); 
 	}
 
+	free(inputs);
+	free(Xoutputs);
 	// Saving of the neural network
 	neuralNetToFile(nn, nn_path);
 	// Free memory

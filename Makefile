@@ -14,7 +14,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= `pkg-config --cflags sdl`$(INC_FLAGS) -MMD -I/usr/include/json-c/
 LDLIBS= `pkg-config --libs sdl` -lSDL_image -lm -ljson-c
-CFLAGS= -g -Wall -Wextra -pedantic-errors -std=c99 -ljson-c
+CFLAGS= -g -Wall -Wextra -Werror -pedantic-errors -std=c99 -ljson-c 
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@ $(LOADLIBES) $(LDLIBS)

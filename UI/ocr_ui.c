@@ -4,7 +4,7 @@
 # include "ui_utils.h"
 # include "../image_segmentation/segmentation.h"
 
-# define GLD_NAME "UI.glade"
+# define GLD_NAME "UI/UI.glade"
 
 
 
@@ -15,6 +15,7 @@
 void on_load_image_click(GtkButton *btn, gpointer user_data)
 {
 	g_print("Pressed load_image button\n");
+	btn = btn; // remove unused warning
 
 	data_t *app_data = user_data;
 	char *filename = ask_file_path(app_data->ui.main_window);
@@ -31,6 +32,7 @@ void on_load_image_click(GtkButton *btn, gpointer user_data)
 void on_load_neural_net_click(GtkButton *btn, gpointer user_data)
 {
 	g_print("Pressed load_nn button\n");
+	btn = btn; // remove unused warning
 
 	data_t *app_data = user_data;
 	char *filename = ask_file_path(app_data->ui.main_window);
@@ -43,11 +45,13 @@ void on_load_neural_net_click(GtkButton *btn, gpointer user_data)
 
 void on_run_OCR_click(GtkButton *btn, gpointer user_data)
 {
-	data_t *app_data = user_data;
 	g_print("Pressed run button\n");
+	btn = btn; // remove unused warning
+
+	data_t *app_data = user_data;
 	char *s = ocr(app_data->img_path, app_data->nn_path);
 	int size = strlen(s);
-	gtk_text_buffer_set_text(app_data->ui.txt_buffer, s, size);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(app_data->ui.txt_buffer), s, size);
 }
 
 
@@ -84,7 +88,9 @@ void launch_GUI()
 		{
 			.main_window = main_window,
 			.img_display = img_display,
-			.img_pix_buf = NULL
+			.img_pix_buf = NULL,
+			.txt_display = txt_display,
+			.txt_buffer = txt_buffer
 		}
 	};
 
@@ -93,7 +99,7 @@ void launch_GUI()
 	g_signal_connect(load_nn_button, "clicked", G_CALLBACK(on_load_neural_net_click), &app_data);
 	g_signal_connect(run_OCR_button, "clicked", G_CALLBACK(on_run_OCR_click), &app_data);
 
-	g_print("TEST");
+	g_print("Running GUI\n");
 	gtk_main();
 	return;
 }

@@ -14,7 +14,7 @@
     <property name="icon-name">gtk-execute</property>
   </object>
   <object class="GtkTextBuffer" id="ocr_text_buffer">
-    <property name="text" translatable="yes">TTTTTTTTTTTTTTTTTTTTTEST</property>
+    <property name="text" translatable="yes">Load an image to run the OCR and extract its text</property>
   </object>
   <object class="GtkImage" id="run_OCR_icon">
     <property name="visible">True</property>
@@ -78,6 +78,20 @@
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">The Sweet OCR - 2020</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">3</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>

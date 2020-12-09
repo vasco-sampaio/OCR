@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	if(argc == 1)
 	{
 		printf("Launching GUI\n");
-		//launch_GUI();
+		launch_GUI();
 	}
 	else
 	{

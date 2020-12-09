@@ -138,7 +138,7 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = interpolation(m.mat, w, h, 20);
-      m_fill(&m);
+      m_fill(&m, 30);
       
       letter = neural_net_ask(nn, m.mat);
       

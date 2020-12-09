@@ -5,6 +5,6 @@
 
 matrix interpolation(double* image, int width, int height, int size);
 void print_m(matrix m);
-void  m_fill(matrix* m);
+void  m_fill(matrix* m, int new_size);
 
 #endif

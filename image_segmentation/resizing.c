@@ -51,29 +51,34 @@ void print_m(matrix m)
 
 
 /*
-  Filling the columns and rows left to make a 20*20 matrix
-  become a 30*30 matrix.
+  Filling the rows and columns of a square matrix to obtain a 
+  larger new_size square matrix
 */
-void m_fill(matrix* m)
+void m_fill(matrix* m, int new_size)
 {
+  int m_size = m->height;  //square matrix so height = width
+  if(m_size >= new_size)
+  	return;
+
+  int diff = (new_size - m_size)/2;
   double* image = m->mat;
-  double* filled = malloc(900 * sizeof(double));
-  size_t c = 0;
-  for(int i = 0; i < 30; ++i)
-    {
-      for(int j = 0; j < 30; ++j)
-	{
-	  if(i>4 && i<25 && j>4 && j<25)
-	    {
-	      filled[i * 30 + j] = image[c++];
-	      continue;
-	    }
-	  filled[i * 30 + j] = 0;
-	}
-    }
+  double* filled = malloc(new_size * new_size * sizeof(double));
+  size_t c = 0; 
+  for(int i = 0; i < new_size; ++i)
+  {
+    for(int j = 0; j < new_size; ++j)
+	  {
+	     if(i>=diff && i<new_size-diff && j>= diff && j<new_size-diff)
+	     {
+	       filled[i * new_size + j] = image[c++];
+	       continue;
+	     }
+	     filled[i * new_size + j] = 0;
+	  }
+  }
 
   free(image);
-  m->height = 30;
-  m->width = 30;
+  m->height = new_size;
+  m->width = new_size;
   m->mat = filled;
 }

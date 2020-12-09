@@ -137,9 +137,10 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
       m = buildMatrix(surface, l->letters[i]);
       w = l->letters[i].botR.w - l->letters[i].topL.w;
       h = l->letters[i].botR.h - l->letters[i].topL.h;
-      m = interpolation(m.mat, w, h, 20);
+      m = interpolation(m.mat, w, h, 10);
       m_fill(&m, 30);
-      
+      print_m(m);
+      printf("\n");
       letter = neural_net_ask(nn, m.mat);
       free(m.mat);
       res[i+space] = letter;

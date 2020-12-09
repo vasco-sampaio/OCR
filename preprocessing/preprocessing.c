@@ -72,6 +72,10 @@ void rotate(SDL_Surface *image, int w, int h, double angle)
 	    resh = h;
 	  if (resw > w)
 	    resw = w;
+	  if(resh < 0)
+	    resh = 0;
+	  if(resw < 0)
+	    resw = 0;
 	  
 	  pixel = get_pixel1(is2, resw, resh);
 	  put_pixel1(image, i, j, pixel); 

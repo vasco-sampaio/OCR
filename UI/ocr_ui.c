@@ -55,6 +55,18 @@ void on_run_OCR_click(GtkButton *btn, gpointer user_data)
 }
 
 
+void on_window_close_click(GtkButton *btn, gpointer user_data)
+{
+	data_t *app_data = user_data;
+	
+	free(app_data->img_path);
+	free(app_data->nn_path);
+	
+
+	gtk_window_close(app_data->ui.main_window);
+}
+
+
 void launch_GUI()
 {
 	gtk_init(NULL, NULL);
@@ -73,6 +85,7 @@ void launch_GUI()
 	GtkButton *load_img_button = GTK_BUTTON(gtk_builder_get_object(builder, "load_img_button"));
 	GtkButton *load_nn_button = GTK_BUTTON(gtk_builder_get_object(builder, "load_nn_button"));
 	GtkButton *run_OCR_button = GTK_BUTTON(gtk_builder_get_object(builder, "run_OCR_button"));
+	GtkButton *close_button = GTK_BUTTON(gtk_builder_get_object(builder, "close_button"));
 
 	GtkImage *img_display = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 	GtkTextView *txt_display = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "text_display"));
@@ -98,8 +111,10 @@ void launch_GUI()
 	g_signal_connect(load_img_button, "clicked", G_CALLBACK(on_load_image_click), &app_data);
 	g_signal_connect(load_nn_button, "clicked", G_CALLBACK(on_load_neural_net_click), &app_data);
 	g_signal_connect(run_OCR_button, "clicked", G_CALLBACK(on_run_OCR_click), &app_data);
+	g_signal_connect(close_button, "clicked", G_CALLBACK(on_window_close_click), &app_data);
 
 	g_print("Running GUI\n");
+	g_object_unref(builder);
 	gtk_main();
 	return;
 }

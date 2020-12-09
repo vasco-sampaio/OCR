@@ -7,6 +7,7 @@
 # include "image_segmentation/segmentation.h"
 # include "preprocessing/preprocessing.h"
 # include "neunet_HD/neural_main.h"
+# include "UI/ocr_ui.h"
 
 // Where to find a default neural net file 
 # define NN_DEFAULT "./neunet_HD/test.nn"

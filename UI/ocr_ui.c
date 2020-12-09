@@ -1,8 +1,11 @@
 # include <gtk/gtk.h>
+# include <string.h>
 
 # include "ui_utils.h"
+# include "../image_segmentation/segmentation.h"
 
 # define GLD_NAME "UI.glade"
+
 
 
 
@@ -38,7 +41,17 @@ void on_load_neural_net_click(GtkButton *btn, gpointer user_data)
 }
 
 
-int main(int argc, char **argv)
+void on_run_OCR_click(GtkButton *btn, gpointer user_data)
+{
+	data_t *app_data = user_data;
+	g_print("Pressed run button\n");
+	char *s = ocr(app_data->img_path, app_data->nn_path);
+	int size = strlen(s);
+	gtk_text_buffer_set_text(app_data->ui.txt_buffer, s, size);
+}
+
+
+void launch_GUI()
 {
 	gtk_init(NULL, NULL);
 
@@ -49,7 +62,7 @@ int main(int argc, char **argv)
 	{
 		g_printerr("Error loading file : %s\n", error->message);
 		g_clear_error(&error);
-		return 1;
+		return;
 	}
 
 	GtkWindow *main_window = GTK_WINDOW(gtk_builder_get_object(builder, "org.gtk.ocr"));
@@ -78,8 +91,9 @@ int main(int argc, char **argv)
     g_signal_connect(main_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(load_img_button, "clicked", G_CALLBACK(on_load_image_click), &app_data);
 	g_signal_connect(load_nn_button, "clicked", G_CALLBACK(on_load_neural_net_click), &app_data);
+	g_signal_connect(run_OCR_button, "clicked", G_CALLBACK(on_run_OCR_click), &app_data);
 
 	g_print("TEST");
 	gtk_main();
-	return 0;
+	return;
 }

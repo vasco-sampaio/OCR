@@ -41,7 +41,7 @@ struct ratio* normalized_ratio(int width, int height, float n_ratio)
 }
 
 /*
-  Function that defines a new square matrix, of size = size.
+  Function that defines a new square matrix
 */
 matrix interpolation(matrix* m, int n_width, int n_height)
 {
@@ -99,7 +99,7 @@ void m_fill(matrix* m, int new_size)
 	  }
   }
 
-  free(image);
+  free(m->mat);
   m->height = new_size;
   m->width = new_size;
   m->mat = filled;
@@ -120,6 +120,7 @@ matrix normalization(matrix *m)
 	}*/
 	matrix res = interpolation(m, norm->w, norm->h);
 	matrix normalized = interpolation(&res, 22, 22);
+	free(res.mat);
 	free(norm);
 	m_fill(&normalized,MATRIX_SIZE);
 	return normalized;

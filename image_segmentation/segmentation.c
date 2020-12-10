@@ -137,8 +137,6 @@ void segmentation(char *path, neunet_t *nn)
   SDL_SaveBMP(image_surface, "line_seg3.bmp");
   doc testtt = keep_letters(image_surface, all);
 
-  docMat test = buildDocMat(image_surface, testtt);
-
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
 
@@ -151,8 +149,7 @@ void segmentation(char *path, neunet_t *nn)
    free(all.zones);
    free_doc(image);
    free_doc(testtt);
-   free_docMat(test);
-   //free(nn);
+   free(nn);
 }
 
 char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
@@ -172,8 +169,6 @@ char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
   SDL_SaveBMP(image_surface, "line_seg3.bmp");
   doc testtt = keep_letters(image_surface, all);
 
-  docMat test = buildDocMat(image_surface, testtt);
-
   detectSpaceDoc(&testtt);
   print_doc(&testtt);
   char *res = doc_string(image_surface, &testtt, nn);
@@ -183,11 +178,15 @@ char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
    free(all.zones);
    free_doc(image);
    free_doc(testtt);
-   free_docMat(test);
    free(nn);
    return res;
 }
 
+
+/*
+Function that links the preprocessing, the segmentation and the
+neural network together.
+*/
 char* ocr(char * image_path, char* neunet_path)
 {
   SDL_Surface *image_surface = preprocessing_SDL(image_path);
@@ -196,4 +195,33 @@ char* ocr(char * image_path, char* neunet_path)
 
   char *res = segmentation_SDL(image_surface, nn);
   return res;
+}
+
+/*
+Function useful to do the segmentation on the datasets
+and to train the neural network.
+*/
+double* dataset(char *path)
+{
+  SDL_Surface *image_surface = preprocessing_dataset(path);
+  int height = image_surface->h;
+  int width = image_surface->w;
+  
+  //getting the letter through segmentation
+  lineZones l = marking_letters(image_surface, width, height);
+  SDL_SaveBMP(image_surface, "marking.bmp");
+  resize(image_surface, l.zones[0]);
+  SDL_SaveBMP(image_surface, "resize.bmp");
+  doc data = keep_letters(image_surface, l);
+  matrix letter = buildMatrix(image_surface, data.allLines[0].letters[0]);
+  letter = normalization(&letter);
+  print_m(letter); //to debug
+  SDL_SaveBMP(image_surface, "dataset.bmp");
+
+  //freeing whatever needs to be freed
+  SDL_FreeSurface(image_surface);
+  free_doc(data);
+  free(l.zones);
+  
+  return letter.mat;
 }

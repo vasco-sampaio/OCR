@@ -458,3 +458,26 @@ SDL_Surface* preprocessing_SDL(char *path)
   free(histo);
   return image_surface;
 }
+
+//Other version that returns a SDL_Surface
+
+SDL_Surface* preprocessing_dataset(char *path)
+{
+  SDL_Surface *image_surface = IMG_Load(path);
+  int height = image_surface->h;
+  int width = image_surface->w;
+  
+  long *histo = calloc(256, sizeof(long));
+  
+  contrast(image_surface, 50, width, height);
+  SDL_SaveBMP(image_surface, "contrast.bmp");
+
+  toGrayscale(image_surface, width, height);
+  SDL_SaveBMP(image_surface, "grayscale.bmp");
+
+  binarize(image_surface, width, height, histo);
+  SDL_SaveBMP(image_surface, "binarize.bmp");
+  
+  free(histo);
+  return image_surface;
+}

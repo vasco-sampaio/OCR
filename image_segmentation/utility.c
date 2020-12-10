@@ -368,9 +368,9 @@ double rect_ratio(coord r)
 {
   double w = r.botR.w - r.topL.w;
   double h = r.botR.h - r.topL.h;
-  if (h == 0)
+  if (w == 0)
     return 0;
-  return w/h;
+  return h/w;
 }
 
 /*
@@ -459,6 +459,8 @@ void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
 {
   double r = rect_ratio(rect);
   int gps = t.nb;
+  printf("gps = %d\n", gps);
+  printf("r = %f\n", r);
   if (gps == 1)
     {
       hori_lines(image, vertHisto, rect);
@@ -466,7 +468,7 @@ void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
   else
     {
       //if the ratio is like a i
-      if (r < 0.35 && gps == 2)
+      if (/*r > 5 &&*/ gps == 2)
 	{
 	  int highr = t.list[0].h;
 	  int lowr = t.list[1].w;

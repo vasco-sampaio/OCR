@@ -127,16 +127,12 @@ char* line_string(SDL_Surface *surface, line *l, neunet_t *nn)
 {
   char *res = calloc((l->nbLetters + l->nbSpaces + 2), sizeof(char)); //+2 for \n
   strcpy(res, "");
-  //int w;
-  //int h;
   char letter;
   matrix m;
   int space = 0;
   for(int i = 0 ; i < l->nbLetters ; ++i)
     {
       m = buildMatrix(surface, l->letters[i]);
-      //w = l->letters[i].botR.w - l->letters[i].topL.w;
-      //h = l->letters[i].botR.h - l->letters[i].topL.h;
       m = normalization(&m);
       print_m(m);
       printf("\n");

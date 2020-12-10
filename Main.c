@@ -53,11 +53,12 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					neunet_t *nn = fileToNeuralNet(nn_path);
-					segmentation(img_path, nn);
-				    char *txt = ocr(img_path, nn_path);
+					/*neunet_t *nn = fileToNeuralNet(nn_path);
+					  segmentation(img_path, nn);*/
+					/*char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);
+					free(txt);*/
+					dataset(img_path);
 					break;
 
 				case 't':

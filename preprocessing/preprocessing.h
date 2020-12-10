@@ -27,5 +27,6 @@ void contrast(SDL_Surface *im, int lvlc, int w, int h);
 
 void preprocessing(char *path);
 SDL_Surface* preprocessing_SDL(char *path);
+SDL_Surface* preprocessing_dataset(char *path);
 
 #endif

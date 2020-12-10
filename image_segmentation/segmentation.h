@@ -22,5 +22,6 @@ void segmentation(char *path, neunet_t *nn);
 char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn);
 
 char* ocr(char * image_path, char* neunet_path);
+double* dataset(char *path);
 
 #endif

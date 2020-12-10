@@ -107,7 +107,7 @@ void m_fill(matrix* m, int new_size)
 
 matrix normalization(matrix *m)
 {
-	struct ratio* norm = normalized_ratio(m->width, m->height, ASPECT_RATIO);	 
+	//struct ratio* norm = normalized_ratio(m->width, m->height, ASPECT_RATIO);	 
 	/*int ty, tx;
 	for(int y = 0; y < height; ++y)
 	{
@@ -118,10 +118,10 @@ matrix normalization(matrix *m)
 			new_image[ty * norm->w + tx] = image[y * width + x];
 		}
 	}*/
-	matrix res = interpolation(m, norm->w, norm->h);
-	matrix normalized = interpolation(&res, 22, 22);
-	free(res.mat);
-	free(norm);
+
+	//matrix res = interpolation(m, norm->w, norm->h);
+	matrix normalized = interpolation(m, 22, 22);
+	//free(norm);
 	m_fill(&normalized,MATRIX_SIZE);
 	return normalized;
 

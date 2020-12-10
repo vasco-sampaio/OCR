@@ -57,13 +57,17 @@ void on_run_OCR_click(GtkButton *btn, gpointer user_data)
 
 void on_window_close_click(GtkButton *btn, gpointer user_data)
 {
+	g_print("Pressed close\n");
+	btn = btn;
+
 	data_t *app_data = user_data;
 	
 	free(app_data->img_path);
 	free(app_data->nn_path);
 	
 
-	gtk_window_close(app_data->ui.main_window);
+	//gtk_window_close(app_data->ui.main_window);
+	gtk_main_quit();
 }
 
 

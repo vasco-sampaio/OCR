@@ -12,8 +12,8 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-CPPFLAGS ?= `pkg-config --cflags sdl` `pkg-config --cflags gtk+-3.0` $(INC_FLAGS) -MMD -I/usr/include/json-c/
-LDLIBS= `pkg-config --libs sdl` `pkg-config --libs gtk+-3.0` -lSDL_image -lm -ljson-c
+CPPFLAGS ?= `pkg-config --cflags sdl gtk+-3.0` $(INC_FLAGS) -MMD -I/usr/include/json-c/
+LDLIBS= `pkg-config --libs sdl gtk+-3.0` -lSDL_image -lm -ljson-c
 CFLAGS= -g -Wall -Wextra -pedantic-errors -std=c99 -ljson-c
 
 $(TARGET): $(OBJS)

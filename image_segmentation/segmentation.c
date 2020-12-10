@@ -152,7 +152,7 @@ void segmentation(char *path, neunet_t *nn)
    free_doc(image);
    free_doc(testtt);
    free_docMat(test);
-   free(nn);
+   //free(nn);
 }
 
 char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)

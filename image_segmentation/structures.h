@@ -10,6 +10,15 @@
 #include "../neunet_HD/neural_main.h"
 
 //------------------------------------------------------------------------------
+/*
+Used for normalization
+Gives the dimension of the normalized matrix and the aspect ratio used
+*/
+struct ratio{
+  float w;
+  float h;
+  float r;
+};
 
 /*
 To keep the coordinates of a pixel in the image.

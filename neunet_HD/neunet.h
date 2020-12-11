@@ -2,6 +2,7 @@
 # define NEUNET_H
 
 # include <stdlib.h>
+# include "../types.h"
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE

@@ -4,7 +4,7 @@
 # include <stdlib.h>
 
 # include "neunet.h"
-# include "../preprocessing/pixel_functions.h"
+# include "../types.h"
 
 void print_output(double *out);
 void print_input(double *in);

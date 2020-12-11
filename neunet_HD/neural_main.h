@@ -4,6 +4,7 @@
 # include "neunet.h"
 # include "neuralIO.h"
 # include "load_set.h"
+# include "../types.h"
 
 # define LEARNING_RATE 0.1
 

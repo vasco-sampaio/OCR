@@ -4,6 +4,14 @@
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
 
+
+# define LEARNING_RATE 0.1
+
+# define IMG_SIDE 30
+# define NN_INPUTS IMG_SIDE*IMG_SIDE
+# define NN_HIDDENS 22
+# define NN_OUTPUTS 62
+
 //------------------------------------------------------------------------------
 
 //STRUCTURES
@@ -287,7 +295,6 @@ char neural_net_ask(neunet_t *nn, double *inputs);
 //------------------------------------------------------------------------------
 //Functions from neural_main.c
 
-# define LEARNING_RATE 0.1
 
 
 void neural_net_run_training(char *nn_path, char *data_set, int set_size, int gens);

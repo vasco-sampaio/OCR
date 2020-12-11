@@ -5,8 +5,8 @@
 # include <string.h>
 # include <errno.h>
 # include <err.h>
-# include <SDL/SDL.h>
-# include <SDL/SDL_image.h>
+//# include <SDL/SDL.h>
+//# include <SDL/SDL_image.h>
 
 
 double is_pixel_true(SDL_Surface *img, int x, int y)
@@ -25,15 +25,18 @@ void load_image(char *path, char *name, double *arr)
 	strcat(full_path, name);
 	//we can get the image with full_path
 	//printf("%s\n",full_path);
-	SDL_Surface *img = IMG_Load(full_path);
-	if(img && img->w == IMG_SIDE && img->h == IMG_SIDE)
-		for(int i = 0; i < img->w; ++i)
-			for(int j = 0; j < img->h; ++j)
-				arr[i * img->w + j] = is_pixel_true(img, j, i);
-	else
-		printf("Error : %s is not a correct dataset image", name);
+	//SDL_Surface *img = IMG_Load(full_path);
+	
+	// By using segmentation functions, create a normalized version
+	// of the image
+	double *normalized = dataset(full_path);
 
-	SDL_FreeSurface(img);
+	for(int i = 0; i < IMG_SIDE; ++i)
+		for(int j = 0; j < IMG_SIDE; ++j)
+			arr[i * IMG_SIDE + j] = normalized[i * IMG_SIDE + j];
+	//printf("Error : %s is not a correct dataset image", name);
+
+	//SDL_FreeSurface(img);
 //	free(img);
 	free(full_path);
 }

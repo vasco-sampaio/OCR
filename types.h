@@ -307,6 +307,7 @@ char neural_net_ask(neunet_t *nn, double *inputs);
 
 // Training functions
 void neunet_train(neunet_t *nn, double *in, double *out, double lr);
+//Give the expected character
 char expected_output(size_t size,double *expOut);
 
 // Get error of the neural net

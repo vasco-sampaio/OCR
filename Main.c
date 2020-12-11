@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 		// Please refer to the help text to learn about the options
 		char *nn_path = NN_DEFAULT;
 		int option = 0;	
-		if((option = getopt(argc, argv, ":hat")) != -1)
+		if((option = getopt(argc, argv, ":hatv")) != -1)
 		{
 			switch(option)
 			{
@@ -54,12 +54,12 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					/*neunet_t *nn = fileToNeuralNet(nn_path);
-					  segmentation(img_path, nn);*/
-					/*char *txt = ocr(img_path, nn_path);
+					neunet_t *nn = fileToNeuralNet(nn_path);
+					segmentation(img_path, nn);
+					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);*/
-					dataset(img_path);
+					free(txt);
+					//dataset(img_path);
 					break;
 
 				case 't':
@@ -79,6 +79,21 @@ int main(int argc, char **argv)
 
 					neural_net_run_training(nn_path, ds_path, set_size, gens);
 					break;
+
+				case 'v':
+					if(optind + 2 >= argc)
+					{
+						printf("-v : bad usage.\n");
+						help();
+						break;
+					}
+					nn_path = argv[optind];
+					char *ds_path1 = argv[optind + 1];
+					int set_size1 = atoi(argv[optind + 2]);
+
+					neural_net_validation(nn_path, ds_path1, set_size1);
+					break;
+
 
 				case 'h':
 				case '?':

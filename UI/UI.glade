@@ -27,6 +27,11 @@
     <property name="icon-name">media-playback-start</property>
     <property name="use-fallback">True</property>
   </object>
+  <object class="GtkImage" id="save_text_icon">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">document-save</property>
+  </object>
   <object class="GtkWindow" id="org.gtk.ocr">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -97,6 +102,20 @@
                 <property name="pack-type">end</property>
                 <property name="position">3</property>
                 <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="save_text_button">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="image">save_text_icon</property>
+                <property name="always-show-image">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>

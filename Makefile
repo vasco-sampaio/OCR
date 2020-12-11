@@ -27,6 +27,7 @@ clean:
 	${RM} *.c~
 	${RM} *.h~
 	${RM} *.bmp
+	${RM} vgcore.*
 	for d in $(SRC_DIRS); \
 		do \
 		make --directory=$$d clean; \

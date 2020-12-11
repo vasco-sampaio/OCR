@@ -12,7 +12,7 @@
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
-# define NN_HIDDENS 22
+# define NN_HIDDENS 40
 # define NN_OUTPUTS 62
 
 //------------------------------------------------------------------------------
@@ -319,6 +319,8 @@ double neunet_get_error(neunet_t *nn);
 
 void neural_net_run_training(char *nn_path, char *data_set, int set_size, int gens);
 
+void neural_net_validation(char *nn_path, char *dataset_path, int set_size);
+
 //------------------------------------------------------------------------------
 //Function from ocr_ui.c
 
@@ -393,11 +395,12 @@ typedef struct
 
 
 
-char *ask_file_path(GtkWindow *parent_window);
-
+char *ask_file_path(GtkWindow *parent_window, GtkFileChooserAction action);
 
 void load_img_pixbuf(gpointer userdata);
 void display_image(gpointer userdata);
+
+void save_text_to_file(gpointer user_data);
 
 
 

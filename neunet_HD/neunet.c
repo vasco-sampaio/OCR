@@ -7,7 +7,7 @@
 # define DEFAULT_ALPHA 0.9
 
 
-// Neural net output disposal
+// Neural net output disposal [1-9]-[a-z]-[A-Z]
 char nn_ocr_out[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ";
 
 // I know global variables aren't good but 

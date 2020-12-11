@@ -17,7 +17,7 @@ chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 def create_letter_image(letter, imgfont, img_size, Xoff = 0, Yoff = 0, angle = 0):
 
         # create a white binary image of img_size 41*41 
-        image = Image.new("RGB", (img_size, img_size), 1)
+        image = Image.new("RGB", (img_size, img_size), 255)
         img_draw = ImageDraw.Draw(image)
 
         (imX, imY) = image.size

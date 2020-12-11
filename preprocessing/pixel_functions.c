@@ -5,7 +5,8 @@
 #include <err.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
+//#include "pixel_functions.h"
+# include "../types.h"
 
 /*
  * Return the pixel value at (x, y)

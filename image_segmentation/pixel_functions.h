@@ -7,9 +7,13 @@
 #include <stdlib.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
-#include "structures.h"
 
+
+# include "../types.h"
+//#include "pixel_functions.h"
+//#include "structures.h"
+
+/*
 Uint32 get_pixel(SDL_Surface *surface, int x, int y);
 void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
@@ -21,5 +25,6 @@ void vert_lines(SDL_Surface *image_surface, int *hori_histo, coord rect);
 
 int is_black(SDL_Surface *image_surface, int w, int h);
 int is_red(SDL_Surface *image_surface, int w, int h);
+*/
 
 #endif

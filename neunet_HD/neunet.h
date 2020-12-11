@@ -60,7 +60,7 @@ typedef struct nn
 //neunet_t *init_neunet();
 
 // Training functions
-//void neunet_train(neunet_t *nn, double *in, double *out, double lr);
+void neunet_train(neunet_t *nn, double *in, double *out, double lr);
 char expected_output(size_t size,double *expOut);
 
 // Get error of the neural net

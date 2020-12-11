@@ -8,12 +8,13 @@
 //# include <SDL/SDL.h>
 //# include <SDL/SDL_image.h>
 
-
+/*
 double is_pixel_true(SDL_Surface *img, int x, int y)
 {
 	Uint32 pix = get_pixel1(img, x, y);
 	return (pix) ? 0.0 : 1.0;
 }
+*/
 
 //place the image in arr
 void load_image(char *path, char *name, double *arr)

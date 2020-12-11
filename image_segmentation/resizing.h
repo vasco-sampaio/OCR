@@ -1,7 +1,7 @@
 #ifndef RESIZING_H_
 #define RESIZING_H_
 
-#include "structures.h"
+# include "../types.h"
 
 struct ratio* normalized_ratio(int width, int height, float n_ratio);
 matrix interpolation(matrix *m, int n_width, int n_height);

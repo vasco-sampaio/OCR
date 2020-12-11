@@ -224,17 +224,27 @@ void print_matrix(matrix m);
 void verti_histo(SDL_Surface *image_surface, int *histo, coord rect);
 void hori_histo(SDL_Surface *image_surface, int *histo, coord rect);
 
+int avLenLetter(line l);
+double avHeiLetter(line l);
+void sepLetters(SDL_Surface *image, line l);
+
+int avSpaceLetter(line *l);
 void detectSpace(line *l);
 void detectSpaceDoc(doc *image);
 
+int r_sum_line(SDL_Surface *image_surface, int wMin, int wMax, int h);
 int bot_sum_line(SDL_Surface *image_surface, int hMin, int hMax, int w);
 
+int r_sum_letter(SDL_Surface *image_surface, int wMin, int wMax, int h);
 int bot_sum_letter(SDL_Surface *image_surface, int hMin, int hMax, int w);
 
+int count_get_lines(SDL_Surface *image_surface, coord rect);
 void get_lines(SDL_Surface *image_surface, coord rect, lineZones all);
 
+int count_get_letters(SDL_Surface *image_surface, coord rect);
 void get_letters(SDL_Surface *image_surface, coord rect, line l);
 
+double rect_ratio(coord r);
 int count_groups(int *histo, int lenH);
 tuples generate_groups(int *histo, int lenH);
 int max_tuples(tuples t);
@@ -295,8 +305,6 @@ char neural_net_ask(neunet_t *nn, double *inputs);
 //------------------------------------------------------------------------------
 //Functions from neural_main.c
 
-
-
 void neural_net_run_training(char *nn_path, char *data_set, int set_size, int gens);
 
 //------------------------------------------------------------------------------
@@ -305,4 +313,9 @@ void neural_net_run_training(char *nn_path, char *data_set, int set_size, int ge
 void launch_GUI();
 
 //------------------------------------------------------------------------------
+//Functions from neuralIO.c
+void neuralNetToFile(neunet_t *nn, char *path);
+neunet_t *fileToNeuralNet(char *path);
+
+
 #endif

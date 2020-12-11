@@ -3,7 +3,7 @@
 
 # include <stdlib.h>
 
-# include "neunet.h"
+//# include "neunet.h"
 # include "../types.h"
 
 void print_output(double *out);

@@ -5,9 +5,12 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include <stdlib.h>
-#include "pixel_functions.h"
-#include "structures.h"
 
+# include "../types.h"
+//#include "pixel_functions.h"
+//#include "structures.h"
+
+/*
 void verti_histo(SDL_Surface *image_surface, int *histo, coord rect);
 void hori_histo(SDL_Surface *image_surface, int *histo, coord rect);
 
@@ -35,6 +38,7 @@ double rect_ratio(coord r);
 int count_groups(int *histo, int lenH);
 tuples generate_groups(int *histo, int lenH);
 int max_tuples(tuples t);
-void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t);
+//void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t);
+*/
 
 #endif 

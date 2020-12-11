@@ -30,6 +30,7 @@ void help(void)
 
 int main(int argc, char **argv)
 {
+	printf("Neural net actual size: %i, %i, %i", NN_INPUTS, NN_HIDDENS, NN_OUTPUTS);
 	if(argc == 1)
 	{
 		printf("Launching GUI\n");
@@ -54,12 +55,12 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					/*neunet_t *nn = fileToNeuralNet(nn_path);
-					  segmentation(img_path, nn);*/
-					/*char *txt = ocr(img_path, nn_path);
+					neunet_t *nn = fileToNeuralNet(nn_path);
+					  segmentation(img_path, nn);
+					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);*/
-					dataset(img_path);
+					free(txt);
+					//dataset(img_path);
 					break;
 
 				case 't':

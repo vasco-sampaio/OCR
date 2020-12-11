@@ -12,7 +12,7 @@
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
-# define NN_HIDDENS 22
+# define NN_HIDDENS 60
 # define NN_OUTPUTS 62
 
 //------------------------------------------------------------------------------

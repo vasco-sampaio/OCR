@@ -313,6 +313,8 @@ char expected_output(size_t size,double *expOut);
 // Get error of the neural net
 double neunet_get_error(neunet_t *nn);
 
+//Get the squared error of the neunet
+double squared_error(neunet_t *nn);
 
 //------------------------------------------------------------------------------
 //Functions from neural_main.c

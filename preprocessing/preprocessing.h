@@ -1,11 +1,15 @@
 #ifndef PREPROCESSING_H_
 #define PREPROCESSING_H_
 
+# include "../types.h"
+
+/*
 typedef struct
 {
   double b;
   double f;
 }duo;
+*/
 
 void toGrayscale(SDL_Surface *image_surface, int w, int h);
 void histogram(SDL_Surface *image_surface, int w, int h, long *histo);

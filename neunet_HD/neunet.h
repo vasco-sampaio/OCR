@@ -4,6 +4,7 @@
 # include <stdlib.h>
 # include "../types.h"
 
+/*
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
 # define NN_HIDDENS 22
@@ -53,19 +54,20 @@ typedef struct nn
 
 
 } neunet_t;
+*/
 
 // Neural net initialisation function
-neunet_t *init_neunet();
+//neunet_t *init_neunet();
 
 // Training functions
-void neunet_train(neunet_t *nn, double *in, double *out, double lr);
+//void neunet_train(neunet_t *nn, double *in, double *out, double lr);
 char expected_output(size_t size,double *expOut);
 
 // Get error of the neural net
 double neunet_get_error(neunet_t *nn);
 
 // Main neural net function
-char neural_net_ask(neunet_t *nn, double *inputs);
+//char neural_net_ask(neunet_t *nn, double *inputs);
 
 
 

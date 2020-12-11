@@ -2,10 +2,11 @@
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
+/*#include "pixel_functions.h"
 #include "segmentation.h"
 #include "matrix_letters.h"
-#include "structures.h"
+#include "structures.h"*/
+#include "../types.h"
 
 /*
 This file regroups the functions that uses matrices

@@ -3,8 +3,9 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include <stdlib.h>
-#include "pixel_functions.h"
-#include "structures.h"
+/*#include "pixel_functions.h"
+  #include "structures.h"*/
+#include "../types.h"
 
 /*
 Regroups all the functions that contribute to detect the letters

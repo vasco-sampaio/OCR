@@ -1,7 +1,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
-#include "preprocessing.h"
+//#include "pixel_functions.h"
+#include "../types.h"
 #include <math.h>
 
 /*

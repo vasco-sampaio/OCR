@@ -1,6 +1,6 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "segmentation.h"
+/*#include "segmentation.h"
 #include "pixel_functions.h"
 #include "utility.h"
 #include "structures.h"
@@ -8,7 +8,9 @@
 #include "resizing.h"
 
 #include "../neunet_HD/neural_main.h"
-#include "../preprocessing/preprocessing.h"
+#include "../preprocessing/preprocessing.h"*/
+
+#include "../types.h"
 
 #include <stdlib.h>
 #include <err.h>

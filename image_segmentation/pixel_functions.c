@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
-#include "structures.h"
+//#include "pixel_functions.h"
+//#include "structures.h"
+#include "../types.h"
 
 /*
 Regroups functions to manipulate the pixels of an image

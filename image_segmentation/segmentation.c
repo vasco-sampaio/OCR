@@ -2,15 +2,12 @@
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "pixel_functions.h"
-#include "segmentation.h"
+/*
 #include "structures.h"
 #include "utility.h"
-#include "matrix_letters.h"
 #include "resizing.h"
-
-#include "../neunet_HD/neural_main.h"
-#include "../preprocessing/preprocessing.h"
+*/
+#include "../types.h"
 
 /*
 Regroups the functions that do the segmentation.

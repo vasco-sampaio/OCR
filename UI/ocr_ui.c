@@ -1,7 +1,6 @@
 # include <gtk/gtk.h>
 # include <string.h>
 
-# include "ui_utils.h"
 # include "../types.h"
 
 # define GLD_NAME "UI/UI.glade"

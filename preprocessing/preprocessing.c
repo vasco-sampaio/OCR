@@ -374,9 +374,9 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 
 
 /*
-   Function that truncates a value
+   Function that pp_truncates a value
    */
-Uint8 truncate(int val)
+Uint8 pp_truncate(int val)
 {
 	if (val < 0)
 		return 0;
@@ -397,9 +397,9 @@ void contrast(SDL_Surface *im, int lvlc, int w, int h)
 		for(int j = 0 ; j < w ; j++)
 		{
 			SDL_GetRGB(get_pixel(im, j, i), im->format, &r, &g, &b);
-			r = truncate(factor * (r - 128) + 128);
-			g = truncate(factor * (g - 128) + 128);
-			b = truncate(factor * (b - 128) + 128);
+			r = pp_truncate(factor * (r - 128) + 128);
+			g = pp_truncate(factor * (g - 128) + 128);
+			b = pp_truncate(factor * (b - 128) + 128);
 			put_pixel(im, j, i, SDL_MapRGB(im->format, r, g, b));
 		}
 	}

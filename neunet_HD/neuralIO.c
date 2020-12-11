@@ -1,4 +1,4 @@
-# include "neunet.h"
+# include "../types.h"
 
 # include <stdio.h>
 # include <stdlib.h>

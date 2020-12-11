@@ -3,14 +3,14 @@
 #include <err.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "structures.h"
+//#include "structures.h"
 #include <string.h>
-#include "resizing.h"
-#include "matrix_letters.h"
+//#include "resizing.h"
+//#include "matrix_letters.h"
 
-#include "string.h"
+//#include "../neunet_HD/neural_main.h"
 
-#include "../neunet_HD/neural_main.h"
+# include "../types.h"
 
 /*
 Regroups functions to initialize or free the structures.

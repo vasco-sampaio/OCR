@@ -1,7 +1,4 @@
-# include "neunet.h"
-# include "load_set.h"
-# include "neuralIO.h"
-# include "neural_main.h"
+# include "../types.h"
 
 
 # include <stdlib.h>

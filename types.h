@@ -3,6 +3,9 @@
 
 # include <SDL/SDL.h>
 # include <SDL/SDL_image.h>
+# include <gtk/gtk.h>
+# include <gdk/gdkpixbuf.h>
+
 
 
 # define LEARNING_RATE 0.1
@@ -302,6 +305,14 @@ neunet_t *init_neunet();
 // Main neural net function
 char neural_net_ask(neunet_t *nn, double *inputs);
 
+// Training functions
+void neunet_train(neunet_t *nn, double *in, double *out, double lr);
+char expected_output(size_t size,double *expOut);
+
+// Get error of the neural net
+double neunet_get_error(neunet_t *nn);
+
+
 //------------------------------------------------------------------------------
 //Functions from neural_main.c
 
@@ -316,6 +327,83 @@ void launch_GUI();
 //Functions from neuralIO.c
 void neuralNetToFile(neunet_t *nn, char *path);
 neunet_t *fileToNeuralNet(char *path);
+
+//------------------------------------------------------------------------------
+// Functions from neunet_HG/utils.c
+double sigmoid(double x);
+double dSigmoid(double x);
+
+// Return a random value in 0-1
+double uniform(); 
+
+double xavier_init(int n);
+
+
+double dot_product(double *a, double *b, int len);
+
+void apply_fct(double *a, double (*fvt)(double), int n);
+
+
+void swap(int *a, int *b);
+
+void shuffledList(int size, int *dst);
+
+//------------------------------------------------------------------------------
+// Functions from load_set.c
+
+void print_output(double *out);
+void print_input(double *in);
+size_t load_dataset(char *path, size_t max_len, double *inputs, double *outputs);
+
+
+//#############################################################################
+//#############################################################################
+//							USER INTERFACE
+//#############################################################################
+//#############################################################################
+
+
+
+// Funcions from ocr_ui.c
+void launch_GUI();
+
+
+
+//------------------------------------------------------------------------------
+// Functions and structures from ui_utils.c
+
+typedef struct
+{
+	GtkWindow *main_window;
+
+	GtkImage *img_display;
+	GdkPixbuf *img_pix_buf;
+
+	GtkTextView *txt_display;
+	GtkTextBuffer *txt_buffer;
+} UI_t;
+
+typedef struct
+{
+	char* img_path;
+	char* nn_path;
+	UI_t ui;
+} data_t;
+
+
+
+char *ask_file_path(GtkWindow *parent_window);
+
+
+void load_img_pixbuf(gpointer userdata);
+void display_image(gpointer userdata);
+
+
+
+
+
+
+
 
 
 #endif

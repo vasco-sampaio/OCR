@@ -30,6 +30,7 @@ void help(void)
 
 int main(int argc, char **argv)
 {
+	printf("Neural net actual size: %i, %i, %i", NN_INPUTS, NN_HIDDENS, NN_OUTPUTS);
 	if(argc == 1)
 	{
 		printf("Launching GUI\n");

@@ -12,7 +12,7 @@
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
-# define NN_HIDDENS 22
+# define NN_HIDDENS 40 
 # define NN_OUTPUTS 62
 
 //------------------------------------------------------------------------------
@@ -187,6 +187,8 @@ typedef struct nn
 void toGrayscale(SDL_Surface *image_surface, int w, int h);
 void histogram(SDL_Surface *image_surface, int w, int h, long *histo);
 
+double find_angle(SDL_Surface *image);
+SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle);
 void rotate(SDL_Surface *image, int w, int h, double angle);
 
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);

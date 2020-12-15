@@ -56,10 +56,15 @@ int main(int argc, char **argv)
 
 					/*neunet_t *nn = fileToNeuralNet(nn_path);
 					  segmentation(img_path, nn);*/
-					/*char *txt = ocr(img_path, nn_path);
+					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);*/
-					dataset(img_path);
+					free(txt);
+					/*SDL_Surface *image_surface = IMG_Load(img_path);
+				        double a = find_angle(image_surface);
+					printf("a = %f\n", a);
+					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, a), "rotation.bmp");
+					SDL_FreeSurface(image_surface);*/
+					//dataset(img_path);
 					break;
 
 				case 't':

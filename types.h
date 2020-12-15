@@ -12,7 +12,7 @@
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
-# define NN_HIDDENS 40 
+# define NN_HIDDENS 60
 # define NN_OUTPUTS 62
 
 //------------------------------------------------------------------------------
@@ -315,11 +315,15 @@ char expected_output(size_t size,double *expOut);
 // Get error of the neural net
 double neunet_get_error(neunet_t *nn);
 
+//Get the squared error of the neunet
+double squared_error(neunet_t *nn);
 
 //------------------------------------------------------------------------------
 //Functions from neural_main.c
 
 void neural_net_run_training(char *nn_path, char *data_set, int set_size, int gens);
+
+void neural_net_validation(char *nn_path, char *dataset_path, int set_size);
 
 //------------------------------------------------------------------------------
 //Function from ocr_ui.c
@@ -395,11 +399,12 @@ typedef struct
 
 
 
-char *ask_file_path(GtkWindow *parent_window);
-
+char *ask_file_path(GtkWindow *parent_window, GtkFileChooserAction action);
 
 void load_img_pixbuf(gpointer userdata);
 void display_image(gpointer userdata);
+
+void save_text_to_file(gpointer user_data);
 
 
 

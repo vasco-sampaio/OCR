@@ -2,16 +2,12 @@
 
 
 
-
 // Open a file choosing window and return the path of the choosen file
-char *ask_file_path(GtkWindow *parent_window)
+char *ask_file_path(GtkWindow *parent_window, GtkFileChooserAction action)
 {
-
 	GtkWidget *dialog;
-	GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	//GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	gint res;
-	GError *error;
-	gboolean read_file_status;
 	char *filename = NULL;
 
 	dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -23,19 +19,14 @@ char *ask_file_path(GtkWindow *parent_window)
 			GTK_RESPONSE_ACCEPT,
 			NULL);
 
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),TRUE);
+
 	res = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (res == GTK_RESPONSE_ACCEPT) {
+	if (res == GTK_RESPONSE_ACCEPT)
+	{
 		g_print("Success\n");
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		g_print("%s\n",filename);
-		char *contents;
-		read_file_status = g_file_get_contents(filename,&contents,NULL, &error);
-
-		if (read_file_status == FALSE) {
-			g_error("error opening file: %s\n",error && error->message ? error->message : "No Detail");
-			return NULL;
-		}
-
 	}
 	gtk_widget_destroy (dialog);
 
@@ -61,6 +52,7 @@ void load_img_pixbuf(gpointer user_data)
 }
 
 
+// set the image shown with the one present in the image buffer
 void display_image(gpointer user_data)
 {
 	data_t *app = user_data;
@@ -91,6 +83,28 @@ void display_image(gpointer user_data)
 				app->ui.img_pix_buf);
 				
 	}
+}
+
+
+void save_text_to_file(gpointer user_data)
+{
+	data_t *app = user_data;
+	
+	char *file_path = ask_file_path(app->ui.main_window, GTK_FILE_CHOOSER_ACTION_SAVE);
+	if(file_path)
+	{
+		FILE *fp = fopen(file_path, "w");
+
+		GtkTextIter start;
+		GtkTextIter end;
+		gtk_text_buffer_get_bounds(app->ui.txt_buffer, &start, &end);
+
+		char *text = gtk_text_buffer_get_text(app->ui.txt_buffer, &start, &end,  FALSE);
+		fprintf(fp, text);
+
+		fclose(fp);
+	}
+
 }
 
 

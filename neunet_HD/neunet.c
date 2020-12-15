@@ -204,3 +204,17 @@ char expected_output(size_t size,double *expOut)
 	}
 	return nn_ocr_out[res];
 }
+
+
+//determine the squqred_error of the neunet
+double squared_error(neunet_t *nn)
+{
+    double s_error = 0;
+    double tmp = 0;
+    for(int i = 0; i < NN_OUTPUTS;i++)
+    {
+        tmp = nn->exp_outputs[i] - nn->act_o[i];
+        s_error += tmp*tmp;
+    }
+    return s_error/2;
+}

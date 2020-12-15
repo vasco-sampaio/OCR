@@ -7,7 +7,13 @@
 
 
 
+void on_save_clicked(GtkButton *btn, gpointer user_data)
+{
+	g_print("Pressed save button\n");
+	btn = btn;
 
+	save_text_to_file(user_data);
+}
 
 
 
@@ -17,7 +23,7 @@ void on_load_image_click(GtkButton *btn, gpointer user_data)
 	btn = btn; // remove unused warning
 
 	data_t *app_data = user_data;
-	char *filename = ask_file_path(app_data->ui.main_window);
+	char *filename = ask_file_path(app_data->ui.main_window, GTK_FILE_CHOOSER_ACTION_OPEN);
 	if(filename)
 	{
 		app_data->img_path = filename;
@@ -34,7 +40,7 @@ void on_load_neural_net_click(GtkButton *btn, gpointer user_data)
 	btn = btn; // remove unused warning
 
 	data_t *app_data = user_data;
-	char *filename = ask_file_path(app_data->ui.main_window);
+	char *filename = ask_file_path(app_data->ui.main_window, GTK_FILE_CHOOSER_ACTION_OPEN);
 	if(filename)
 	{
 		app_data->nn_path = filename;
@@ -89,6 +95,7 @@ void launch_GUI()
 	GtkButton *load_nn_button = GTK_BUTTON(gtk_builder_get_object(builder, "load_nn_button"));
 	GtkButton *run_OCR_button = GTK_BUTTON(gtk_builder_get_object(builder, "run_OCR_button"));
 	GtkButton *close_button = GTK_BUTTON(gtk_builder_get_object(builder, "close_button"));
+	GtkButton *save_button = GTK_BUTTON(gtk_builder_get_object(builder, "save_text_button"));
 
 	GtkImage *img_display = GTK_IMAGE(gtk_builder_get_object(builder, "image_display"));
 	GtkTextView *txt_display = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "text_display"));
@@ -115,6 +122,7 @@ void launch_GUI()
 	g_signal_connect(load_nn_button, "clicked", G_CALLBACK(on_load_neural_net_click), &app_data);
 	g_signal_connect(run_OCR_button, "clicked", G_CALLBACK(on_run_OCR_click), &app_data);
 	g_signal_connect(close_button, "clicked", G_CALLBACK(on_window_close_click), &app_data);
+	g_signal_connect(save_button, "clicked", G_CALLBACK(on_save_clicked), &app_data);
 
 	g_print("Running GUI\n");
 	g_object_unref(builder);

@@ -27,6 +27,29 @@ void testNeuralNet(neunet_t *nn,double *inputs,double *outputs)
 }
 
 
+void neural_net_validation(char *nn_path, char *dataset_path, int set_size)
+{
+	neunet_t *nn;
+	if(access(nn_path, F_OK) == 0)
+		nn = fileToNeuralNet(nn_path);
+	else
+	{
+		printf("Error : %s : no such file", nn_path);
+		return;
+	}
+
+	double *inputs = calloc(set_size * NN_INPUTS, sizeof(double));
+	double *Xoutputs = calloc(set_size * NN_OUTPUTS, sizeof(double));
+	set_size = (int) load_dataset(dataset_path, set_size, inputs, Xoutputs);
+	printf("Loaded %i validating images from %s\n", set_size, dataset_path);
+	
+	testNeuralNet(nn, inputs, Xoutputs);
+
+	free(nn);
+
+}
+
+
 
 // Function to call to train a neural network
 void neural_net_run_training(char *nn_path, char *dataset_path, int set_size, int gens)

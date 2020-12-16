@@ -1,7 +1,12 @@
+//rotation.c file
+
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "../types.h"
 #include <math.h>
+
+//------------------------------------------------------------------------------
+//Brute force method to try to get the angle of rotation
 
 
 /*
@@ -13,6 +18,7 @@ double degree_to_rad(double deg)
 	printf("rad = %f", res);
 	return res;
 }
+
 
 /*
 Function that calculates the average of a histogram
@@ -27,6 +33,10 @@ double av(int *histo, size_t len)
 	return sum / len;
 }
 
+
+/*
+  Function that builds the vertical histogram of the image
+*/
 void build_histo(SDL_Surface *image_surface, int *histo, int w, int h)
 {
   for(int i = 0 ; i < h ; i++)
@@ -111,6 +121,82 @@ void make_img_white(SDL_Surface *image, int w, int h)
 				}
 		}
 }
+
+//------------------------------------------------------------------------------
+//Hough transform to try to get the angle of rotation
+
+/*
+  Function that returns a value between 0 and 255
+*/
+Uint8 clamp(Uint8 nb)
+{
+	if (nb > 255)
+		return 255;
+	if (nb < 0)
+		return 0;
+	return nb;
+}
+
+
+/*
+Function that verifies if the coordinates are valid in the image
+*/
+int is_valid(int w, int h, SDL_Surface *image)
+{
+	if (w < image->w && w >= 0)
+		{
+			if(h < image->h && h >=0)
+				return 1; //the coordinates are valid
+		}
+	return 0;
+}
+
+/*
+  Function to convolute a given matrix.
+  Useful for edge / line detection
+*/
+SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
+{
+ 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, image->w, image->h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
+	SDL_BlitSurface(image, NULL, is2, &is2->clip_rect);
+
+	int offset = dim/2;
+	Uint8 r, g, b;
+	Uint8 red, green, blue;
+	Uint32 pixel;
+	double coef;
+	for(int i = 0 ; i < image->w ; i++)
+		{
+			for(int j = 0 ; j < image->h ; j++)
+				{
+					red = 0;
+					green = 0;
+					blue = 0;
+					for(int di = -offset ; di <= offset ; di++)
+						{
+							for(int dj = -offset ; dj <= offset ; dj++)
+								{
+									if(is_valid(i+di, j+dj,image))
+										{
+											pixel = get_pixel(image, i+di, j+dj);
+											SDL_GetRGB(pixel, image->format, &r, &g, &b);
+											coef = conv[(dj+offset)*dim + (di+offset)];
+											red += r*coef;
+											green += g*coef;
+											blue += b*coef;
+										}
+								}
+						}
+					pixel = SDL_MapRGB(image->format, red, green, blue);
+					put_pixel(image, i, j, pixel);
+				}
+		}
+	return is2;
+}
+
+
+//------------------------------------------------------------------------------
+//Rotation algorithm
 
 
 /*

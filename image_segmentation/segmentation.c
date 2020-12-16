@@ -212,7 +212,7 @@ double* dataset(char *path)
   doc data = keep_letters(image_surface, l);
   matrix letter = buildMatrix(image_surface, data.allLines[0].letters[0]);
   letter = normalization(&letter);
-  print_m(letter); //to debug
+  //print_m(letter); //to debug
   SDL_SaveBMP(image_surface, "dataset.bmp");
 
   //freeing whatever needs to be freed

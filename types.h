@@ -187,6 +187,8 @@ typedef struct nn
 void toGrayscale(SDL_Surface *image_surface, int w, int h);
 void histogram(SDL_Surface *image_surface, int w, int h, long *histo);
 
+double find_angle(SDL_Surface *image);
+SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle);
 void rotate(SDL_Surface *image, int w, int h, double angle);
 
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);

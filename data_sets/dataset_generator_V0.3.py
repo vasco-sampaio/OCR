@@ -59,10 +59,10 @@ def create_datasets(path, fonts, img_size):
             f.close()
 
 # Where to save the images
-folder = "arial_25_train"
+folder = "training_set"
 
 # path to the font file
-fonts = [("arial.ttf", 30), ("open_sans.ttf", 30), ("lato.ttf", 30), ("source_code.ttf", 30)]
+fonts = [("times_bold.ttf", 30), ("times.ttf", 30), ("arial_bold.ttf", 30), ("arial.ttf", 30), ("open_sans.ttf", 30), ("lato.ttf", 30), ("source_code.ttf", 30)]
 
 # Image size
 default_size = 30

@@ -11,7 +11,7 @@
 # include "types.h"
 
 // Where to find a default neural net file 
-# define NN_DEFAULT "./neunet_HD/test.nn"
+# define NN_DEFAULT "./test.nn"
 
 // Just print the help text
 void help(void)

@@ -8,11 +8,11 @@
 
 
 
-# define LEARNING_RATE 0.1
+# define LEARNING_RATE 0.3
 
 # define IMG_SIDE 30
 # define NN_INPUTS IMG_SIDE*IMG_SIDE
-# define NN_HIDDENS 40
+# define NN_HIDDENS 200
 # define NN_OUTPUTS 62
 
 //------------------------------------------------------------------------------

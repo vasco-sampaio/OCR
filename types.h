@@ -187,10 +187,6 @@ typedef struct nn
 void toGrayscale(SDL_Surface *image_surface, int w, int h);
 void histogram(SDL_Surface *image_surface, int w, int h, long *histo);
 
-double find_angle(SDL_Surface *image);
-SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle);
-void rotate(SDL_Surface *image, int w, int h, double angle);
-
 int threshold(SDL_Surface *image_surface, int w, int h, long *histo);
 void binarize(SDL_Surface *image_surface, int w, int h, long *histo);
 
@@ -200,6 +196,19 @@ void contrast(SDL_Surface *im, int lvlc, int w, int h);
 void preprocessing(char *path);
 SDL_Surface* preprocessing_SDL(char *path);
 SDL_Surface* preprocessing_dataset(char *path);
+
+//------------------------------------------------------------------------------
+//Functions from rotate.c
+
+double degree_to_rad(double deg);
+double av(int *histo, size_t len);
+void build_histo(SDL_Surface *image_surface, int *histo, int w, int h);
+double av_histo(SDL_Surface *image, int w, int h);
+double find_angle(SDL_Surface *image);
+void make_img_white(SDL_Surface *image, int w, int h);
+
+SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle);
+void rotate(SDL_Surface *image, int w, int h, double angle);
 
 //------------------------------------------------------------------------------
 //Functions from structures.c

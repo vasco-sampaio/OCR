@@ -15,7 +15,7 @@ import sys
 chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-def create_letter_image(letter, imgfont, img_size, Xoff = 0, Yoff = 0, angle = 0):
+def create_letter_image(letter, imgfont, img_size):
 
     # create a white binary image of img_size 41*41 
     image = Image.new("RGB", (img_size, img_size), 'rgb(255,255,255)')
@@ -24,13 +24,9 @@ def create_letter_image(letter, imgfont, img_size, Xoff = 0, Yoff = 0, angle = 0
     (imX, imY) = image.size
     (tX, tY) = img_draw.textsize(letter, imgfont)
 
-    img_draw.text(((imX - tX)/2 + Xoff,(imY - tY)/2 + Yoff), letter, font = imgfont, fill = 'rgb(0,0,0)')
+    img_draw.text(((imX - tX)/2 ,(imY - tY)/2 - 4), letter, font = imgfont, fill = 'rgb(0,0,0)')
 
-    if angle == 0:
-        return image
-    var = image.rotate(angle, fillcolor = 'rgb(255,255,255)')
-
-    return var
+    return image
 
 
 
@@ -49,7 +45,8 @@ def create_datasets(path, fonts, img_size):
 
     for (fontpath, font_size) in fonts:
 
-        #font_size = img_size // 2 + 2
+        print("yeet")
+        font_size = 30 if not font_size else font_size
         img_font = ImageFont.truetype(fontpath, size = font_size)
         ft_name = fontpath.split('.')[0]
 
@@ -65,7 +62,7 @@ def create_datasets(path, fonts, img_size):
 folder = "arial_25_train"
 
 # path to the font file
-fonts = [("arial.ttf", 30)]
+fonts = [("arial.ttf", 30), ("open_sans.ttf", 30), ("lato.ttf", 30), ("source_code.ttf", 30)]
 
 # Image size
 default_size = 30

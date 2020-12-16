@@ -1,6 +1,5 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-//#include "pixel_functions.h"
 #include "../types.h"
 #include <math.h>
 
@@ -30,15 +29,13 @@ double av(int *histo, size_t len)
 
 void build_histo(SDL_Surface *image_surface, int *histo, int w, int h)
 {
-  int ind = 0;
   for(int i = 0 ; i < h ; i++)
     {
       for(int j = 0 ; j < w ; j++)
 	{
 	  if (is_black(image_surface, j, i) == 1)
-	      *(histo + ind) += 1;
+	      histo[i] += 1;
 	}
-      ind++;
     }
 }
 
@@ -140,7 +137,6 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
 	SDL_BlitSurface(image, NULL, is2, &is2->clip_rect);
 	make_img_white(is2, w, h); 
-	SDL_SaveBMP(is2, "rotation5.bmp");
 	for(int i = 0 ; i < w ; i++)
 	{
 		distw = i - cw;

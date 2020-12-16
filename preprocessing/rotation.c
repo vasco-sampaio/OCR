@@ -15,7 +15,7 @@
 double degree_to_rad(double deg)
 {
 	double res = (M_PI*deg)/180;
-	printf("rad = %f", res);
+	//printf("rad = %f\n", res);
 	return res;
 }
 
@@ -62,17 +62,6 @@ double av_histo(SDL_Surface *image, int w, int h)
 		}
 	double a = av(histo, h);
 	printf("av = %f\n", a);
-	/*double a = 0;
-	int max = histo[0];
-	for(int i = 0 ; i < h ; i++)
-		{
-			if(max < histo[i])
-				{
-					a = i;
-					max = histo[i];
-				}
-		}
-		printf("a = %f\n", a);*/
 	free(histo);
 	return a;
 }
@@ -85,7 +74,7 @@ double find_angle(SDL_Surface *image)
 {
 	double *averages = malloc(180*sizeof(double));
 	SDL_Surface *tmp;
-	for(size_t i = 0 ; i < 180 ; i++)
+	for(size_t i = -90 ; i < 90 ; i++)
 		{
 			tmp = rotate2(image, image->w, image->h, degree_to_rad(i));
 			averages[i] = av_histo(tmp, image->w, image->h);
@@ -101,6 +90,7 @@ double find_angle(SDL_Surface *image)
 					deg = i;
 				}
 		}
+	free(averages);
 	return degree_to_rad(deg);
 }
 
@@ -128,7 +118,7 @@ void make_img_white(SDL_Surface *image, int w, int h)
 /*
   Function that returns a value between 0 and 255
 */
-Uint8 clamp(Uint8 nb)
+int clamp(int nb)
 {
 	if (nb > 255)
 		return 255;
@@ -158,11 +148,11 @@ int is_valid(int w, int h, SDL_Surface *image)
 SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
 {
  	SDL_Surface *is2 = SDL_CreateRGBSurface(0, image->w, image->h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
-	SDL_BlitSurface(image, NULL, is2, &is2->clip_rect);
+	SDL_BlitSurface(image, NULL, is2, NULL);
 
 	int offset = dim/2;
 	Uint8 r, g, b;
-	Uint8 red, green, blue;
+	int red, green, blue;
 	Uint32 pixel;
 	double coef;
 	for(int i = 0 ; i < image->w ; i++)
@@ -176,7 +166,7 @@ SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
 						{
 							for(int dj = -offset ; dj <= offset ; dj++)
 								{
-									if(is_valid(i+di, j+dj,image))
+									if(is_valid(i+di, j+dj,image)==1)
 										{
 											pixel = get_pixel(image, i+di, j+dj);
 											SDL_GetRGB(pixel, image->format, &r, &g, &b);
@@ -187,16 +177,103 @@ SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
 										}
 								}
 						}
-					pixel = SDL_MapRGB(image->format, red, green, blue);
-					put_pixel(image, i, j, pixel);
+					pixel = SDL_MapRGB(is2->format, clamp(red), clamp(green), clamp(blue));
+					put_pixel(is2, i, j, pixel);
 				}
 		}
+	SDL_SaveBMP(is2, "conv.bmp");
 	return is2;
+}
+
+/*
+Function that is calculating the diagonal of an image
+*/
+int diagonal(SDL_Surface *image)
+{
+	int w = image->w;
+	int h = image->h;
+	return sqrt(w*w+h*h);
+}
+
+
+/*
+Function that calculates the angle after a Hough Transform.
+Looks for the angles where there is the highest count
+in the Hough matrix.
+Makes an average of these angles. Returns in degrees.
+*/
+int angle(int *H, int diag)
+{
+	int sum = 0;
+	int nb = 0;
+	int nb_sum = 0;
+	for(int i = 0 ; i < diag ; i++)
+		{
+			for(int j = 0 ; j < 90 ; j++)
+				{
+					if (H[j*90+i] == nb)
+						{
+							sum += j;
+							nb_sum += 1;
+						}
+					if(H[j*90+i] > nb)
+						{
+							nb = H[j*90+i];
+							sum = j;
+							nb_sum = 0;
+						}
+				}
+		}
+	if (nb_sum == 0)
+		nb_sum = 1;
+	return sum/nb_sum;
+}
+
+/*
+Function that is looking for the angle with the Hough transformation
+*/
+double hough(SDL_Surface *image)
+{
+	int line_detec[] = {-1,-1,-1,2,2,2,-1,-1,-1};
+	int edges[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+	int sobel[] = {-1,-2,-1,0,0,0,1,2,1};
+	SDL_Surface *conv = convolution(image, line_detec, 3);
+	int diag = diagonal(image);
+	printf("diag = %d\n", diag);
+	int *H = calloc(diag*90, sizeof(int));
+	printf("diag*90 = %d\n", diag*90);
+	int d;
+	double theta;
+	for(int i = 0 ; i < image->w -1 ; i++)
+		{
+			for(int j = 1 ; j < image->h -1 ; j++)
+				{
+					if(is_black(conv, i, j) == 0)
+						{
+							for(int t = 0 ; t < 90 ; t++)
+								{
+									theta = degree_to_rad(t);
+									d = j*cos(theta)-i*sin(theta);
+									if(d >= diag)
+										d = diag-1;
+									if(d < 0)
+										d = 0;
+									//printf("d*diag+t = %d and d = %d and theta = %f and t = %d\n", d*diag+t, d, theta, t);
+									//printf("H = %d\n", H[t*90+d]);
+									H[t*90+d] +=1;
+								}
+						}
+				}
+		}
+	SDL_FreeSurface(conv);
+	double res = degree_to_rad(angle(H, diag));
+	free(H);
+	return res;		
 }
 
 
 //------------------------------------------------------------------------------
-//Rotation algorithm
+//Rotation algorithms
 
 
 /*
@@ -208,7 +285,7 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 {
 	int cw = w / 2;
 	int ch = h / 2;
-
+	printf("angle = %f\n", angle);
 	double a_cos = cos(angle);
 	double a_sin = sin(angle);
 
@@ -221,7 +298,7 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 	Uint32 pixel;
 
 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
-	SDL_BlitSurface(image, NULL, is2, &is2->clip_rect);
+	SDL_BlitSurface(image, NULL, is2, NULL);
 	make_img_white(is2, w, h); 
 	for(int i = 0 ; i < w ; i++)
 	{
@@ -233,17 +310,13 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 			resh = distw*a_sin + disth*a_cos + ch;
 
 			if (resh > h)
-				continue;
-				//resh = h;
+				resh = h;
 			if (resw > w)
-				continue;
-				//resw = w;
+				resw = w;
 			if(resh < 0)
-				continue;
-				//resh = 0;
+				resh = 0;
 			if(resw < 0)
-				continue;
-				//resw = 0;
+				resw = 0;
 
 			pixel = get_pixel(image, resw, resh);
 			put_pixel(is2, i, j, pixel); 

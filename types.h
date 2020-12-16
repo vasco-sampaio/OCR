@@ -210,6 +210,9 @@ void make_img_white(SDL_Surface *image, int w, int h);
 SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle);
 void rotate(SDL_Surface *image, int w, int h, double angle);
 
+SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim);
+double hough(SDL_Surface *image);
+
 //------------------------------------------------------------------------------
 //Functions from structures.c
 

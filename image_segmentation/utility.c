@@ -138,7 +138,7 @@ void detectSpace(line *l)
   for(int i = 0 ; i < l->nbLetters - 1 ; i++)
     {
       len = l->letters[i+1].topL.w - l->letters[i].botR.w;
-      if (len > av*1.2)
+      if (len > av*1.3)
 	{
 	  l->nbSpaces +=1;
 	  l->letters[i].folBySpace = 1; //letter is followed by a space

@@ -30,7 +30,7 @@ void help(void)
 
 int main(int argc, char **argv)
 {
-	printf("Neural net actual size: %i, %i, %i", NN_INPUTS, NN_HIDDENS, NN_OUTPUTS);
+	printf("Neural net actual size: %i, %i, %i\n", NN_INPUTS, NN_HIDDENS, NN_OUTPUTS);
 	if(argc == 1)
 	{
 		printf("Launching GUI\n");
@@ -55,16 +55,23 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					/*SDL_Surface *image_surface = IMG_Load(img_path);
-				        double a = find_angle(image_surface);
+					SDL_Surface *image_surface = IMG_Load(img_path);
+				        /*double a = find_angle(image_surface);
 					printf("a = %f\n", a);
-					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, a), "rotation.bmp");
-					SDL_FreeSurface(image_surface);*/
-					neunet_t *nn = fileToNeuralNet(nn_path);
+					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, a), "rotation.bmp");*/
+					double a = hough(image_surface);
+					SDL_Surface *test =rotate2(image_surface, image_surface->w, image_surface->h, a);
+					SDL_SaveBMP(test, "rotation.bmp");
+					SDL_FreeSurface(test);
+					SDL_FreeSurface(image_surface);
+					/*neunet_t *nn = fileToNeuralNet(nn_path);
 					segmentation(img_path, nn);
 					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);
+					free(txt);*/
+					/*int c[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+					SDL_Surface *t = convolution(image_surface, c , 3);
+					SDL_SaveBMP(t, "conv.bmp");*/
 					//dataset(img_path);
 					break;
 

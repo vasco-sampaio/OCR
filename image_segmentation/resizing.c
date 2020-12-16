@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define ASPECT_RATIO 0.9       //aspect ratio applied to every matrix
+//#define ASPECT_RATIO 0.9       //aspect ratio applied to every matrix
 #define MATRIX_SIZE 30
 
 //Functions that resizes the letter matrix so that they can be processed
@@ -18,26 +18,24 @@
 	of the original matrix
 */
 
-struct ratio* normalized_ratio(int width, int height, float n_ratio)
+struct ratio* normalized_ratio(int width, int height)
 {
 	struct ratio* r2 = malloc(sizeof(struct ratio));
 	//float n_ratio = 0;
-	//float r1 = 0;  										//we are not determining r2 in function of r1
+	float r1 = 0;  										//we are not determining r2 in function of r1
 	if(width > height)
 	{
-		r2->h = height; 
-		//r1 = height/(float)width;
-		//n_ratio = sqrt(r1); 
-		r2->w = (int)height/n_ratio;
+		r2->w = MATRIX_SIZE; 
+		r1 = height/(float)width; 
+		r2->h = (int)r2->w * r1;
 	}
 	else
 	{
-		r2->w = width;
-		//r1 = width/(float)height;
-		//n_ratio = sqrt(r1); 
-		r2->h = (int)width/n_ratio; 
+		r2->h = MATRIX_SIZE;
+		r1 = width/(float)height; 
+		r2->w = (int)r2->h * r1; 
 	}
-	r2->r = n_ratio;
+	r2->r = r1;
 	return r2;
 }
 
@@ -108,7 +106,7 @@ void m_fill(matrix* m, int new_size)
 
 matrix normalization(matrix *m)
 {
-	//struct ratio* norm = normalized_ratio(m->width, m->height, ASPECT_RATIO);	 
+	struct ratio* norm = normalized_ratio(m->width, m->height);	 
 	/*int ty, tx;
 	for(int y = 0; y < height; ++y)
 	{
@@ -120,12 +118,11 @@ matrix normalization(matrix *m)
 		}
 	}*/
 
-	//matrix res = interpolation(m, norm->w, norm->h);
-	matrix normalized = interpolation(m, 22, 22);
-	//free(norm);
-	m_fill(&normalized,MATRIX_SIZE);
-	return normalized;
-
+	matrix res = interpolation(m, norm->w, norm->h);
+	//matrix normalized = interpolation(m, 22, 22);
+	free(norm);
+	m_fill(&res,MATRIX_SIZE);                  
+	return res;
 }
 
 /*
@@ -133,16 +130,16 @@ matrix normalization(matrix *m)
 */
 void print_m(matrix m)
 {
-  int height = m.height;
-  int width = m.width;
-  printf("Matrix of %d x %d :\n", height, width);
-  for(int i = 0 ; i < height ; i++)
-    {
-      for(int j = 0 ; j < width ; j++)
-	{
-	  printf("%c", (m.mat[i*m.width+j]!=1) ? '-' : '#');
-	  if((j+1) % m.width == 0)
-	    printf("\n");
-	}
-    }
+  	int height = m.height;
+  	int width = m.width;
+  	printf("Matrix of %d x %d :\n", height, width);
+  	for(int i = 0 ; i < height ; i++)
+  	{
+    	for(int j = 0 ; j < width ; j++)
+		{
+	  		printf("%c", (m.mat[i*m.width+j]!=1) ? '-' : '#');
+	  		if((j+1) % m.width == 0)
+	    		printf("\n");
+		}
+  	}
 }

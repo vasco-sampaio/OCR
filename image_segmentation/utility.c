@@ -101,7 +101,7 @@ void sepLetters(SDL_Surface *image, line l)
     {
       len = l.letters[i].botR.w - l.letters[i].topL.w;
       hei = l.letters[i].botR.h - l.letters[i].topL.h;
-      if (len > 2*av && hei < 1.2*av2)
+      if (len > 1.8*av && hei < 1.2*av2)
 	{
 	  int w = l.letters[i].topL.w + (len/2.4);
 	  trace_vert_red_line(image, l.letters[i].topL.h, w, l.letters[i].botR.h, w);
@@ -458,10 +458,8 @@ in rows with no foreground pixels and in attributed columns.
 */
 void hori_lines_define(SDL_Surface *image, int *vertHisto, coord rect, tuples t)
 {
-  double r = rect_ratio(rect);
+	//double r = rect_ratio(rect);
   int gps = t.nb;
-  printf("gps = %d\n", gps);
-  printf("r = %f\n", r);
   if (gps == 1)
     {
       hori_lines(image, vertHisto, rect);

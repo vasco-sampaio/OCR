@@ -56,9 +56,8 @@ int main(int argc, char **argv)
 						nn_path = argv[optind + 1];
 
 					SDL_Surface *image_surface = IMG_Load(img_path);
-				        /*double a = find_angle(image_surface);
-					printf("a = %f\n", a);
-					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, a), "rotation.bmp");*/
+				        double angle = find_angle(image_surface);
+					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, angle), "rotationbf.bmp");
 					double a = hough(image_surface);
 					SDL_Surface *test =rotate2(image_surface, image_surface->w, image_surface->h, a);
 					SDL_SaveBMP(test, "rotation.bmp");

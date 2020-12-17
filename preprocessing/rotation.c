@@ -15,7 +15,6 @@
 double degree_to_rad(double deg)
 {
 	double res = (M_PI*deg)/180;
-	//printf("rad = %f\n", res);
 	return res;
 }
 
@@ -72,21 +71,21 @@ double av_histo(SDL_Surface *image, int w, int h)
 */
 double find_angle(SDL_Surface *image)
 {
-	double *averages = malloc(180*sizeof(double));
+	double *averages = calloc(180, sizeof(double));
 	SDL_Surface *tmp;
-	for(size_t i = -90 ; i < 90 ; i++)
+	for(size_t i = -90 ; i < 90 ; i++) //trying with a +90° rotation to the left and right
 		{
 			tmp = rotate2(image, image->w, image->h, degree_to_rad(i));
-			averages[i] = av_histo(tmp, image->w, image->h);
+			averages[i+90] = av_histo(tmp, image->w, image->h);
 			SDL_FreeSurface(tmp);
 		}
-	int deg = 0;
+	int deg = -90;
 	double max = averages[0];
-	for(int i = 1 ; i < 180 ; i++)
+	for(int i = -89 ; i < 90 ; i++)
 		{
-			if (max < averages[i])
+			if (max < averages[i+90])
 				{
-					max = averages[i];
+					max = averages[i+90];
 					deg = i;
 				}
 		}
@@ -235,8 +234,8 @@ Function that is looking for the angle with the Hough transformation
 double hough(SDL_Surface *image)
 {
 	int line_detec[] = {-1,-1,-1,2,2,2,-1,-1,-1};
-	int edges[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
-	int sobel[] = {-1,-2,-1,0,0,0,1,2,1};
+	//int edges[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+	//int sobel[] = {-1,-2,-1,0,0,0,1,2,1};
 	SDL_Surface *conv = convolution(image, line_detec, 3);
 	int diag = diagonal(image);
 	printf("diag = %d\n", diag);
@@ -299,7 +298,8 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 
 	SDL_Surface *is2 = SDL_CreateRGBSurface(0, w, h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
 	SDL_BlitSurface(image, NULL, is2, NULL);
-	make_img_white(is2, w, h); 
+	make_img_white(is2, w, h);
+	SDL_SaveBMP(is2, "test.bmp");
 	for(int i = 0 ; i < w ; i++)
 	{
 		distw = i - cw;
@@ -309,10 +309,10 @@ SDL_Surface* rotate2(SDL_Surface *image, int w, int h, double angle)
 			resw = distw*a_cos - disth*a_sin + cw;
 			resh = distw*a_sin + disth*a_cos + ch;
 
-			if (resh > h)
-				resh = h;
-			if (resw > w)
-				resw = w;
+			if (resh >= h)
+				resh = h-1;
+			if (resw >= w)
+				resw = w-1;
 			if(resh < 0)
 				resh = 0;
 			if(resw < 0)

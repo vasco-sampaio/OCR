@@ -123,15 +123,15 @@ void segmentation(char *path, neunet_t *nn)
   int width = image_surface->w;
 
   marking_lines(image_surface, height, width);
-  SDL_SaveBMP(image_surface, "line_seg.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg.bmp");
   
   lineZones all = marking_letters(image_surface, width, height);
-  SDL_SaveBMP(image_surface, "line_seg2.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg2.bmp");
 
   doc image = keep_letters(image_surface, all);
   resize_letter(image_surface, image);
 
-  SDL_SaveBMP(image_surface, "line_seg3.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg3.bmp");
   doc testtt = keep_letters(image_surface, all);
 
   detectSpaceDoc(&testtt);
@@ -155,15 +155,15 @@ char* segmentation_SDL(SDL_Surface * image_surface, neunet_t *nn)
   int width = image_surface->w;
 
   marking_lines(image_surface, height, width);
-  SDL_SaveBMP(image_surface, "line_seg.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg.bmp");
   
   lineZones all = marking_letters(image_surface, width, height);
-  SDL_SaveBMP(image_surface, "line_seg2.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg2.bmp");
 
   doc image = keep_letters(image_surface, all);
   resize_letter(image_surface, image);
 
-  SDL_SaveBMP(image_surface, "line_seg3.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/line_seg3.bmp");
   doc testtt = keep_letters(image_surface, all);
 
   detectSpaceDoc(&testtt);
@@ -206,14 +206,14 @@ double* dataset(char *path)
   
   //getting the letter through segmentation
   lineZones l = marking_letters(image_surface, width, height);
-  SDL_SaveBMP(image_surface, "marking.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/marking.bmp");
   resize(image_surface, l.zones[0]);
-  SDL_SaveBMP(image_surface, "resize.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/resize.bmp");
   doc data = keep_letters(image_surface, l);
   matrix letter = buildMatrix(image_surface, data.allLines[0].letters[0]);
   letter = normalization(&letter);
   //print_m(letter); //to debug
-  SDL_SaveBMP(image_surface, "dataset.bmp");
+  SDL_SaveBMP(image_surface, "result_pictures/dataset.bmp");
 
   //freeing whatever needs to be freed
   SDL_FreeSurface(image_surface);

@@ -55,19 +55,19 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
-					SDL_Surface *image_surface = IMG_Load(img_path);
+					/*SDL_Surface *image_surface = IMG_Load(img_path);
 				        double angle = find_angle(image_surface);
 					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, angle), "rotationbf.bmp");
 					double a = hough(image_surface);
 					SDL_Surface *test =rotate2(image_surface, image_surface->w, image_surface->h, a);
 					SDL_SaveBMP(test, "rotation.bmp");
 					SDL_FreeSurface(test);
-					SDL_FreeSurface(image_surface);
+					SDL_FreeSurface(image_surface);*/
 					/*neunet_t *nn = fileToNeuralNet(nn_path);
-					segmentation(img_path, nn);
+					  segmentation(img_path, nn);*/
 					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
-					free(txt);*/
+					free(txt);
 					/*int c[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
 					SDL_Surface *t = convolution(image_surface, c , 3);
 					SDL_SaveBMP(t, "conv.bmp");*/

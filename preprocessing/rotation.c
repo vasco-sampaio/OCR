@@ -238,12 +238,10 @@ double hough(SDL_Surface *image)
 	//int sobel[] = {-1,-2,-1,0,0,0,1,2,1};
 	SDL_Surface *conv = convolution(image, line_detec, 3);
 	int diag = diagonal(image);
-	printf("diag = %d\n", diag);
 	int *H = calloc(diag*90, sizeof(int));
-	printf("diag*90 = %d\n", diag*90);
 	int d;
 	double theta;
-	for(int i = 0 ; i < image->w -1 ; i++)
+	for(int i = 1 ; i < image->w -1 ; i++)
 		{
 			for(int j = 1 ; j < image->h -1 ; j++)
 				{
@@ -252,7 +250,7 @@ double hough(SDL_Surface *image)
 							for(int t = 0 ; t < 90 ; t++)
 								{
 									theta = degree_to_rad(t);
-									d = j*cos(theta)-i*sin(theta);
+									d = j*cos(theta)+i*sin(theta);
 									if(d >= diag)
 										d = diag-1;
 									if(d < 0)

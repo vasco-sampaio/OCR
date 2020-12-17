@@ -364,16 +364,16 @@ void preprocessing(char *path)
 	long *histo = calloc(256, sizeof(long));
 
 	contrast(image_surface, 50, width, height);
-	SDL_SaveBMP(image_surface, "contrast.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/contrast.bmp");
 
 	toGrayscale(image_surface, width, height);
-	SDL_SaveBMP(image_surface, "grayscale.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
 	reduce_noise(image_surface, width, height);
-	SDL_SaveBMP(image_surface,"noise.bmp");
+	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
 
 	binarize(image_surface, width, height, histo);
-	SDL_SaveBMP(image_surface, "binarize.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/binarize.bmp");
 
 	free(histo);
 	SDL_FreeSurface(image_surface);
@@ -390,16 +390,16 @@ SDL_Surface* preprocessing_SDL(char *path)
 	long *histo = calloc(256, sizeof(long));
 
 	contrast(image_surface, 50, width, height);
-	SDL_SaveBMP(image_surface, "contrast.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/contrast.bmp");
 
 	toGrayscale(image_surface, width, height);
-	SDL_SaveBMP(image_surface, "grayscale.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
 	reduce_noise(image_surface, width, height);
-	SDL_SaveBMP(image_surface,"noise.bmp");
+	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
 
 	binarize(image_surface, width, height, histo);
-	SDL_SaveBMP(image_surface, "binarize.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/binarize.bmp");
 
 	free(histo);
 	return image_surface;
@@ -416,13 +416,13 @@ SDL_Surface* preprocessing_dataset(char *path)
 	long *histo = calloc(256, sizeof(long));
 
 	contrast(image_surface, 50, width, height);
-	SDL_SaveBMP(image_surface, "contrast.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/contrast.bmp");
 
 	toGrayscale(image_surface, width, height);
-	SDL_SaveBMP(image_surface, "grayscale.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
 	binarize(image_surface, width, height, histo);
-	SDL_SaveBMP(image_surface, "binarize.bmp");
+	SDL_SaveBMP(image_surface, "result_pictures/binarize.bmp");
 
 	free(histo);
 	return image_surface;

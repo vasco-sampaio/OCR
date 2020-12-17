@@ -1,1 +1,0 @@
-Load an image to run the OCR and extract its text

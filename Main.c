@@ -55,6 +55,7 @@ int main(int argc, char **argv)
 					if(optind + 1 < argc)
 						nn_path = argv[optind + 1];
 
+					//To test rotation
 					/*SDL_Surface *image_surface = IMG_Load(img_path);
 				        double angle = find_angle(image_surface);
 					SDL_SaveBMP(rotate2(image_surface, image_surface->w, image_surface->h, angle), "rotationbf.bmp");
@@ -63,14 +64,22 @@ int main(int argc, char **argv)
 					SDL_SaveBMP(test, "rotation.bmp");
 					SDL_FreeSurface(test);
 					SDL_FreeSurface(image_surface);*/
+
+					//To test segmentation
 					/*neunet_t *nn = fileToNeuralNet(nn_path);
 					  segmentation(img_path, nn);*/
+
+					//To test OCR
 					char *txt = ocr(img_path, nn_path);
 					printf("text :\n%s\n", txt);
 					free(txt);
+
+					//To test convolution
 					/*int c[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
 					SDL_Surface *t = convolution(image_surface, c , 3);
-					SDL_SaveBMP(t, "conv.bmp");*/
+					SDL_SaveBMP(t, "result_pictures/conv.bmp");*/
+
+					//To train neural network with dataset
 					//dataset(img_path);
 					break;
 

@@ -5,6 +5,9 @@
 #include "../types.h"
 #include <math.h>
 
+//Tried to implement 2 ways of making automatic rotation
+//Both doesn't work but they compile.
+
 //------------------------------------------------------------------------------
 //Brute force method to try to get the angle of rotation
 
@@ -144,8 +147,9 @@ int is_valid(int w, int h, SDL_Surface *image)
   Function to convolute a given matrix.
   Useful for edge / line detection
 */
-SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
+SDL_Surface* convolution(SDL_Surface *image, double *conv, size_t dim)
 {
+	//to duplicate SDL_Surface 
  	SDL_Surface *is2 = SDL_CreateRGBSurface(0, image->w, image->h, image->format->BitsPerPixel, image->format->Rmask, image->format->Gmask, image->format->Bmask, image->format->Amask);
 	SDL_BlitSurface(image, NULL, is2, NULL);
 
@@ -180,7 +184,7 @@ SDL_Surface* convolution(SDL_Surface *image, int *conv, size_t dim)
 					put_pixel(is2, i, j, pixel);
 				}
 		}
-	SDL_SaveBMP(is2, "conv.bmp");
+	//SDL_SaveBMP(is2, "result_pictures/conv.bmp");
 	return is2;
 }
 
@@ -233,9 +237,9 @@ Function that is looking for the angle with the Hough transformation
 */
 double hough(SDL_Surface *image)
 {
-	int line_detec[] = {-1,-1,-1,2,2,2,-1,-1,-1};
-	//int edges[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
-	//int sobel[] = {-1,-2,-1,0,0,0,1,2,1};
+	double line_detec[] = {-1,-1,-1,2,2,2,-1,-1,-1};
+	//double edges[] = {-1,-1,-1,-1,8,-1,-1,-1,-1};
+	//double sobel[] = {-1,-2,-1,0,0,0,1,2,1};
 	SDL_Surface *conv = convolution(image, line_detec, 3);
 	int diag = diagonal(image);
 	int *H = calloc(diag*90, sizeof(int));

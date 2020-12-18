@@ -309,7 +309,7 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 				k++;
 			}
 			sort(pixels_val, k);
-			Uint8 median = get_average(pixels_val, k);
+			Uint8 median = get_median(pixels_val, k);
 			Uint32 pixel = SDL_MapRGB(is->format, median, median, median);
 			put_pixel(is, i, j, pixel);
 			free(pixels_val);
@@ -317,7 +317,6 @@ void reduce_noise(SDL_Surface *is, int w, int h)
 	}
 	SDL_FreeSurface(is2);
 }
-
 
 /*
    Function that pp_truncates a value
@@ -369,7 +368,7 @@ void preprocessing(char *path)
 	toGrayscale(image_surface, width, height);
 	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
-	//reduce_noise(image_surface, width, height);
+	reduce_noise(image_surface, width, height);
 	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
 
 	binarize(image_surface, width, height, histo);
@@ -395,8 +394,8 @@ SDL_Surface* preprocessing_SDL(char *path)
 	toGrayscale(image_surface, width, height);
 	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
-	//reduce_noise(image_surface, width, height);
-	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
+	reduce_noise(image_surface, width, height);
+	SDL_SaveBMP(image_surface,"result_pictures/noise2.bmp");
 
 	binarize(image_surface, width, height, histo);
 	SDL_SaveBMP(image_surface, "result_pictures/binarize.bmp");

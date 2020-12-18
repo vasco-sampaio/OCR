@@ -369,7 +369,7 @@ void preprocessing(char *path)
 	toGrayscale(image_surface, width, height);
 	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
-	reduce_noise(image_surface, width, height);
+	//reduce_noise(image_surface, width, height);
 	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
 
 	binarize(image_surface, width, height, histo);
@@ -395,7 +395,7 @@ SDL_Surface* preprocessing_SDL(char *path)
 	toGrayscale(image_surface, width, height);
 	SDL_SaveBMP(image_surface, "result_pictures/grayscale.bmp");
 
-	reduce_noise(image_surface, width, height);
+	//reduce_noise(image_surface, width, height);
 	SDL_SaveBMP(image_surface,"result_pictures/noise.bmp");
 
 	binarize(image_surface, width, height, histo);
